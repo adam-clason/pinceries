@@ -1,0 +1,45 @@
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Main$pinsTranslator = _user$project$Pins_Update$translator(_user$project$Messages$translationDictionary);
+var _user$project$Main$commandFromRoute = function (currentRoute) {
+	var _p0 = currentRoute;
+	switch (_p0.ctor) {
+		case 'BoardsRoute':
+			return A2(_elm_lang$core$Platform_Cmd$map, _user$project$Messages$BoardsMsg, _user$project$Boards_Commands$fetchAll);
+		case 'BoardRoute':
+			return A2(
+				_elm_lang$core$Platform_Cmd$map,
+				_user$project$Main$pinsTranslator,
+				_user$project$Pins_Commands$fetchPins(_p0._0));
+		default:
+			return _elm_lang$core$Platform_Cmd$none;
+	}
+};
+var _user$project$Main$init = function (result) {
+	var currentRoute = _user$project$Routing$routeFromResult(result);
+	var routeCommand = _user$project$Main$commandFromRoute(currentRoute);
+	return {
+		ctor: '_Tuple2',
+		_0: _user$project$Models$initialModel(currentRoute),
+		_1: routeCommand
+	};
+};
+var _user$project$Main$urlUpdate = F2(
+	function (result, model) {
+		var currentRoute = _user$project$Routing$routeFromResult(result);
+		var routeCommand = _user$project$Main$commandFromRoute(currentRoute);
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{route: currentRoute}),
+			_1: routeCommand
+		};
+	});
+var _user$project$Main$main = {
+	main: A2(
+		_elm_lang$navigation$Navigation$program,
+		_user$project$Routing$parser,
+		{init: _user$project$Main$init, view: _user$project$View$view, update: _user$project$Update$update, urlUpdate: _user$project$Main$urlUpdate, subscriptions: _user$project$Main$subscriptions})
+};

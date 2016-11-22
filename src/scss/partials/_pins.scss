@@ -1,0 +1,28 @@
+
+
+
+
+
+.pin {
+	position: relative; 
+	
+	.button {
+		position: absolute;
+		top: 0;
+
+		@include breakpoint(medium) {
+			right: 0.9375rem;
+		}
+
+		@include breakpoint(small) {
+			right: 0.625rem;
+		}
+	}
+
+	.pin-image {
+		max-height: 350px;
+		overflow: hidden;
+	}
+
+
+}

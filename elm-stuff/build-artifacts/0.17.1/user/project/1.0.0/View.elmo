@@ -1,0 +1,108 @@
+var _user$project$View$notFoundView = A2(
+	_elm_lang$html$Html$div,
+	_elm_lang$core$Native_List.fromArray(
+		[]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html$text('Not found')
+		]));
+var _user$project$View$groceryList = function (model) {
+	return A2(
+		_elm_lang$html$Html_App$map,
+		_user$project$Messages$GroceriesMsg,
+		_user$project$Groceries_List$view(model.groceryList));
+};
+var _user$project$View$navbar = function (model) {
+	return A2(
+		_elm_lang$html$Html$nav,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('top-bar')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('top-bar-left')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$ul,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('dropdown menu')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$li,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$class('menu-text')
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Pinceries')
+									]))
+							]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('top-bar-right')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$ul,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('menu dropdown')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$li,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_user$project$View$groceryList(model)
+									]))
+							]))
+					]))
+			]));
+};
+var _user$project$View$pinsTranslator = _user$project$Pins_Update$translator(_user$project$Messages$translationDictionary);
+var _user$project$View$page = function (model) {
+	var _p0 = model.route;
+	switch (_p0.ctor) {
+		case 'BoardsRoute':
+			return A2(
+				_elm_lang$html$Html_App$map,
+				_user$project$Messages$BoardsMsg,
+				_user$project$Boards_List$view(model.boards));
+		case 'BoardRoute':
+			return A2(
+				_elm_lang$html$Html_App$map,
+				_user$project$View$pinsTranslator,
+				_user$project$Pins_List$view(model.pins));
+		default:
+			return _user$project$View$notFoundView;
+	}
+};
+var _user$project$View$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$View$navbar(model),
+				_user$project$View$page(model)
+			]));
+};

@@ -1,0 +1,41 @@
+.top-bar {
+	position: fixed;
+	width: 100%;
+	z-index: 2;
+	background-color: black;
+	color: white;
+
+	.mini-grocery-list {
+		background-color: black;
+
+		.fa-shopping-cart {
+			font-size: 36px;
+		}
+
+		.count-container {
+			display: inline-block;
+    		margin-left: 13px;
+
+    		.count-wrapper {
+    			display: table;
+
+    			.count {
+    			    display: table-cell;
+				    width: 25px;
+				    height: 25px;
+				    text-align: center;
+				    border-radius: 50%;
+				    background-color: red;
+				    font-size: 13px;
+				    line-height: 25px;
+    			}
+    		}
+		}
+	}
+
+}
+
+.container {
+	padding-top: 54px;
+
+}

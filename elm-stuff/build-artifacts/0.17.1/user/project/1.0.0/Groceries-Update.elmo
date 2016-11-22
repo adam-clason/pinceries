@@ -1,0 +1,65 @@
+var _user$project$Groceries_Update$foldCategory = F2(
+	function (_p0, groceryList) {
+		var _p1 = _p0;
+		var _p3 = _p1._1;
+		var updatedDict = A3(
+			_elm_lang$core$Dict$update,
+			_p1._0,
+			function (value) {
+				var _p2 = value;
+				if (_p2.ctor === 'Just') {
+					return _elm_lang$core$Maybe$Just(
+						A2(_elm_lang$core$List$append, _p2._0, _p3));
+				} else {
+					return _elm_lang$core$Maybe$Just(_p3);
+				}
+			},
+			groceryList);
+		return updatedDict;
+	});
+var _user$project$Groceries_Update$addCategories = F2(
+	function (pin, groceryList) {
+		var categories = A2(
+			_elm_lang$core$List$map,
+			function (c) {
+				return {
+					ctor: '_Tuple2',
+					_0: c.category,
+					_1: A2(
+						_elm_lang$core$List$map,
+						function (i) {
+							return A2(_user$project$Groceries_Models$Ingredient, i.amount, i.name);
+						},
+						c.ingredients)
+				};
+			},
+			pin.ingredients);
+		return A3(_elm_lang$core$List$foldl, _user$project$Groceries_Update$foldCategory, groceryList, categories);
+	});
+var _user$project$Groceries_Update$update = F2(
+	function (message, groceryList) {
+		var _p4 = message;
+		if (_p4.ctor === 'AddToGroceryList') {
+			var updatedGroceryList = A2(_user$project$Groceries_Update$addCategories, _p4._0, groceryList);
+			return {ctor: '_Tuple2', _0: updatedGroceryList, _1: _elm_lang$core$Platform_Cmd$none};
+		} else {
+			var updatedGroceryList = _elm_lang$core$Dict$fromList(
+				A2(
+					_elm_lang$core$List$map,
+					function (_p5) {
+						var _p6 = _p5;
+						return {
+							ctor: '_Tuple2',
+							_0: _p6._0,
+							_1: A2(
+								_elm_lang$core$List$filter,
+								function (i) {
+									return !_elm_lang$core$Native_Utils.eq(i, _p4._0);
+								},
+								_p6._1)
+						};
+					},
+					_elm_lang$core$Dict$toList(groceryList)));
+			return {ctor: '_Tuple2', _0: updatedGroceryList, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});

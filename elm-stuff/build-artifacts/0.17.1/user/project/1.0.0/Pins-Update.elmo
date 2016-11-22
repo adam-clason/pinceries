@@ -1,0 +1,23 @@
+var _user$project$Pins_Update$update = F2(
+	function (message, pins) {
+		var _p0 = message;
+		if (_p0.ctor === 'FetchAllDone') {
+			return {ctor: '_Tuple2', _0: _p0._0, _1: _elm_lang$core$Platform_Cmd$none};
+		} else {
+			return {ctor: '_Tuple2', _0: pins, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _user$project$Pins_Update$translator = F2(
+	function (_p1, msg) {
+		var _p2 = _p1;
+		var _p3 = msg;
+		if (_p3.ctor === 'ForSelf') {
+			return _p2.onInternalMessage(_p3._0);
+		} else {
+			return _p2.onAddToGroceryList(_p3._0._0);
+		}
+	});
+var _user$project$Pins_Update$TranslationDictionary = F2(
+	function (a, b) {
+		return {onInternalMessage: a, onAddToGroceryList: b};
+	});
