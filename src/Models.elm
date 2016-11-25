@@ -18,6 +18,6 @@ initialModel : Routing.Route -> Model
 initialModel route =
     { boards = []
     , pins = [] 
-    , groceryList = Dict.empty
+    , groceryList = GroceryList Dict.empty 0 False False
     , route = route
     }

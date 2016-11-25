@@ -1,5 +1,9 @@
-module Groceries.Update exposing (..)
+port module Groceries.Update exposing (..)
 
+import Process
+import Task exposing (Task)
+import Basics exposing (Never)
+import Time
 import Dict
 import Groceries.Messages exposing (Msg(..))
 import Groceries.Models exposing (..)
@@ -10,33 +14,50 @@ update message groceryList =
     case message of 
         AddToGroceryList pin ->
             let 
-                updatedGroceryList = addCategories pin groceryList
+                updatedIngredientsList 
+                    = addCategories pin groceryList.list
+                updatedCount 
+                    = ingredientCount updatedIngredientsList
 
             in 
-                ( updatedGroceryList, Cmd.none )
+                ( { groceryList | list = updatedIngredientsList, show = True, count = updatedCount }, delayHideList Hide )
 
         RemoveIngredient ingredient ->
             let 
-                updatedGroceryList = Dict.toList groceryList 
+                updatedIngredientsList = Dict.toList groceryList.list
                     |> List.map (\(category, ingredients) -> (category, List.filter (\i -> i /= ingredient) ingredients))
                     |> Dict.fromList
             in
-                ( updatedGroceryList, Cmd.none)
+                ( { groceryList | list = updatedIngredientsList,  show = True }, Cmd.none)
+
+        Show -> 
+            ( { groceryList | show = True, hovering = True }, Cmd.none)
+
+        HoverOut ->
+            ( { groceryList | show = False }, Cmd.none)
+
+        Hide -> 
+            let hideList 
+                = case groceryList.hovering of 
+                    True -> False
+                    False -> True
+            in
+                ( { groceryList | show = not hideList }, Cmd.none)
 
 
-addCategories : Pin -> GroceryList -> GroceryList
-addCategories pin groceryList =
+addCategories : Pin -> IngredientsList -> IngredientsList
+addCategories pin ingredientsList =
     let 
         categories = List.map (\c -> 
                         (c.category, (List.map (\i -> Ingredient i.amount i.name ) c.ingredients))) pin.ingredients
 
           
     in 
-        List.foldl foldCategory groceryList categories
+        List.foldl foldCategory ingredientsList categories
 
 
-foldCategory : (String, List Ingredient) -> GroceryList -> GroceryList
-foldCategory (category, newIngredients) groceryList =
+foldCategory : (String, List Ingredient) -> IngredientsList -> IngredientsList
+foldCategory (category, newIngredients) ingredientsList =
     let 
         updatedDict = Dict.update category (\value -> 
                         case value of 
@@ -45,10 +66,30 @@ foldCategory (category, newIngredients) groceryList =
 
                             Nothing ->
                                 Just newIngredients
-                        ) groceryList
+                        ) ingredientsList
 
     in 
         updatedDict
     
+ingredientCount : IngredientsList -> Int
+ingredientCount ingredientsList =
+    Dict.toList ingredientsList
+        |> List.map (\(category, ingredients) -> ingredients)
+        |> List.concat
+        |> List.length
+
+
+
+delayHideList : msg -> Cmd msg
+delayHideList msg =
+    Process.sleep (Time.second * 3)
+    |> Task.perform never (always msg)
+
+never : Never -> a
+never n = never n
+
+
+
+
 
 

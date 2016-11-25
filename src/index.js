@@ -3,9 +3,8 @@
 // Require index.html so it gets copied to dist
 require('./index.html');
 
-require('font-awesome-webpack')
-require('./scss/style.scss')
-
+require('font-awesome-webpack');
+require('./scss/style.scss');
 
 var Elm = require('./Main.elm');
 var mountNode = document.getElementById('main');

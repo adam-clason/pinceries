@@ -6,3 +6,6 @@ import Groceries.Models exposing (Ingredient)
 type Msg 
     = AddToGroceryList Pin
     | RemoveIngredient Ingredient
+    | Show
+    | HoverOut
+    | Hide

@@ -7,6 +7,7 @@
 
 	.mini-grocery-list {
 		background-color: black;
+		position: relative; 
 
 		.fa-shopping-cart {
 			font-size: 36px;
@@ -30,6 +31,66 @@
 				    line-height: 25px;
     			}
     		}
+		}
+
+		.grocery-list-wrapper {
+
+			.vertical.menu {
+				background-color: white;
+				position: absolute;
+				right: 0;
+				top: 51px;
+				width: 300px;
+				box-shadow: -3px 3px 2px gray;
+
+				ul { 
+					background-color: white;
+				}
+
+				> li > a {
+					font-weight: bold;
+					
+				}
+
+				li a {
+					color: black;
+				}
+
+				.ingredients {
+					list-style-type: none;
+				}
+			}
+
+			&.show {
+				&:before {
+					content: "";
+				    width: 0;
+				    height: 0;
+				    z-index: 2;
+				    border-left: 13px solid transparent;
+				    position: absolute;
+				    border-right: 13px solid transparent;
+				    border-bottom: 13px solid white;
+				    right: 43px;
+				}
+				.vertical.menu {
+					overflow-y: scroll;
+					transition-property: all;
+					transition-duration: 1s;
+					transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+					max-height: 60vh;
+				}
+			}
+			&.slide-up {
+				.vertical.menu {
+					transition-property: all;
+					transition-duration: .5s;
+					transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+					max-height: 0;
+					overflow: hidden;
+				}
+
+			}
 		}
 	}
 

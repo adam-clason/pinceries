@@ -4,7 +4,19 @@ module.exports = {
 	entry: {
 		app: [
 			'./src/index.js'
+		],
+		vendor: [
+			"!!script!jquery/dist/jquery.min.js",
+			"!!script!foundation-sites/dist/foundation.min.js",
+			"!!script!foundation-sites/dist/plugins/foundation.util.keyboard.js",
+			"!!script!foundation-sites/dist/plugins/foundation.util.motion.js",
+			"!!script!foundation-sites/dist/plugins/foundation.util.nest.js",
+			"!!script!foundation-sites/dist/plugins/foundation.drilldown.js"
 		]
+	},
+
+	externals: {
+		jquery: "jQuery"
 	},
 
 	output: {
@@ -20,7 +32,7 @@ module.exports = {
 				loaders: [
 					'style',
 					'css',
-					'sass'
+					'sass',
 				]
 			},
 			{
@@ -41,6 +53,12 @@ module.exports = {
 				test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
 				loader: 'file-loader',
 			},
+			/*{
+				test: /\.js/,
+				exclude: /node_modules/,
+				loader: "script"
+
+			}*/
 		],
 
 		noParse: /\.elm$/
