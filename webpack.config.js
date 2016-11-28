@@ -36,7 +36,7 @@ module.exports = {
 				]
 			},
 			{
-				test: /\.html$/,
+				test: /\.(html)$/,
 				exclude: /node_modules/,
 				loader: 'file?name=[name].[ext]',
 			},
@@ -53,6 +53,11 @@ module.exports = {
 				test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
 				loader: 'file-loader',
 			},
+			{
+				test: /\.png$/,
+				loader: 'file-loader?name=[name].[ext]',
+			},
+
 			/*{
 				test: /\.js/,
 				exclude: /node_modules/,
@@ -72,6 +77,7 @@ module.exports = {
 	devServer: {
 		inline: true,
 		stats: { colors : true },
+		historyApiFallback: true
 	},
 
 };

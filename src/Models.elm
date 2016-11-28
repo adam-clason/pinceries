@@ -7,16 +7,24 @@ import Routing
 import Dict
 
 type alias Model =
-    { boards : List Board
+    { accessToken : String
+    , jwt : String
+    , boards : List Board
     , pins : List Pin
     , groceryList : GroceryList
     , route : Routing.Route
     }
 
+type alias Flags =
+    { accessToken : String
+    , jwt : String
+    }
 
-initialModel : Routing.Route -> Model
-initialModel route =
-    { boards = []
+initialModel : Flags -> Routing.Route -> Model
+initialModel flags route =
+    { accessToken = flags.accessToken
+    , jwt = flags.jwt
+    , boards = []
     , pins = [] 
     , groceryList = GroceryList Dict.empty 0 False False
     , route = route

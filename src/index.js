@@ -3,11 +3,25 @@
 // Require index.html so it gets copied to dist
 require('./index.html');
 
+require('./assets/images/groceries_bg.png');
+
 require('font-awesome-webpack');
 require('./scss/style.scss');
 
 var Elm = require('./Main.elm');
 var mountNode = document.getElementById('main');
 
-// .embed() can take an optional second argument. This would be an object describing the data we need to start a program, i.e. a userID or some token
-var app = Elm.Main.embed(mountNode);
+var flags = {
+	jwt : localStorage.getItem('jwt') || "",
+	accessToken : localStorage.getItem('access-token') || ""
+};
+
+var app = Elm.Main.embed(mountNode, flags);
+
+app.ports.setAccessToken.subscribe(function (token) {
+	localStorage.setItem('access-token', token);
+});
+
+app.ports.setJwt.subscribe(function (jwt) {
+	localStorage.setItem('jwt', jwt);
+});

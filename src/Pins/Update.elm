@@ -1,5 +1,6 @@
 module Pins.Update exposing (..)
 
+import Http
 import Navigation
 import Pins.Messages exposing (InternalMsg(..), Msg(..), OutMsg(..))
 import Groceries.Messages
@@ -28,8 +29,8 @@ translator { onInternalMessage, onAddToGroceryList } msg =
 update : InternalMsg -> List Pin -> ( List Pin, Cmd Msg )
 update message pins =
     case message of
-        FetchAllDone newPins ->
+        FetchAllDone (Ok newPins) ->
             ( newPins, Cmd.none )
 
-        FetchAllFail error ->
+        FetchAllDone (Err  _) ->
             ( pins, Cmd.none )

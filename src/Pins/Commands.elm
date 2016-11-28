@@ -1,51 +1,51 @@
 module Pins.Commands exposing (..)
 
 import Http
-import Json.Decode as Decode exposing ((:=))
+import Json.Decode exposing (..)
 import Task
 import Pins.Models exposing (PinId, Pin, Category, Ingredient)
 import Boards.Models exposing (BoardId, Board)
 import Pins.Messages exposing (..)
 
-fetchPins : BoardId -> Cmd Msg
-fetchPins boardId =
-    Http.get collectionDecoder (fetchPinsUrl boardId)
-        |> Task.perform (\a -> ForSelf (FetchAllFail a)) (\a -> ForSelf (FetchAllDone a))
+fetchPins : String -> BoardId -> Cmd Msg
+fetchPins accessToken boardId =
+    Http.get (fetchPinsUrl accessToken boardId) collectionDecoder 
+        |> Http.send (\a -> ForSelf (FetchAllDone a))
 
-fetchPinsUrl : BoardId -> String
-fetchPinsUrl boardId =
+fetchPinsUrl : String -> BoardId -> String
+fetchPinsUrl accessToken boardId =
     let url = 
-        "https://api.pinterest.com/v1/boards/" ++ boardId ++ "/pins/?access_token=AQzVp2qDwSy0lloYDh0R9rSNGHTJFIdhtkg6Q0FDjk-3wcA37wAAAAA&fields=id%2Clink%2Cnote%2Curl%2Cmetadata%2Cimage"
+        "https://api.pinterest.com/v1/boards/" ++ boardId ++ "/pins/?access_token=" ++ accessToken ++ "&fields=id%2Clink%2Cnote%2Curl%2Cmetadata%2Cimage"
     in
         url
 
-collectionDecoder : Decode.Decoder (List Pin)
+collectionDecoder : Decoder (List Pin)
 collectionDecoder =
-    Decode.at ["data"] (Decode.list memberDecoder)
+    at ["data"] ( list memberDecoder)
 
 
-memberDecoder : Decode.Decoder Pin
+memberDecoder : Decoder Pin
 memberDecoder =
-    Decode.object5 Pin
-        ("id" := Decode.string)
-        ("url" := Decode.string)
-        (Decode.at ["image", "original"] ("url" := Decode.string))
-        ("note" := Decode.string)
-        (Decode.oneOf [ Decode.at ["metadata", "recipe", "ingredients"] categoryDecoder, Decode.succeed [] ]) 
+    map5 Pin
+        (field "id" string)
+        (field "url" string)
+        (at ["image", "original"] (field "url" string))
+        (field "note" string)
+        (oneOf [ at ["metadata", "recipe", "ingredients"] categoryDecoder, succeed [] ]) 
         
 
-categoryDecoder : Decode.Decoder (List Category)
+categoryDecoder : Decoder (List Category)
 categoryDecoder =
-    Decode.list <|
-        Decode.object2 Category
-            ("category" := Decode.string)
-            (Decode.at ["ingredients"] (Decode.list ingredientDecoder) )
+    list <|
+        map2 Category
+            (field "category" string)
+            (at ["ingredients"] (list ingredientDecoder) )
 
-ingredientDecoder: Decode.Decoder Ingredient
+ingredientDecoder: Decoder Ingredient
 ingredientDecoder =
-    Decode.object2 Ingredient
-        ("amount" := Decode.string)
-        ("name" := Decode.string)
+    map2 Ingredient
+        (field "amount" string)
+        (field "name" string)
 
 
 

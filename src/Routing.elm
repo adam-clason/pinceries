@@ -1,43 +1,59 @@
 module Routing exposing (..)
 
+import Debug
 import String
 import Navigation
 import UrlParser exposing (..)
+
 import Boards.Models exposing (BoardId)
 
 
-type Route
+type InnerRoute
     = BoardsRoute
     | BoardRoute BoardId
+    | Authorize (Maybe String)
+
+
+type Route 
+    = Authenticated InnerRoute
+    | Anonymous InnerRoute
     | NotFoundRoute
 
 
-matchers : Parser (Route -> a) a
-matchers =
+pathMatchers : Parser (Route -> a) a
+pathMatchers = 
+    oneOf 
+        [ map (\ac -> Anonymous (Authorize ac)) (s "authorize" <?> stringParam "code")
+        ] 
+
+
+hashMatchers : Parser (Route -> a) a
+hashMatchers =
     oneOf
-        [ format BoardsRoute (s "")
-        , format BoardRoute (s "boards" </> string)
-        , format BoardsRoute (s "boards")
+        [ map (Authenticated BoardsRoute) (s "")
+        , map (\b -> Authenticated (BoardRoute b)) (s "boards" </> string)
+        , map (Authenticated BoardsRoute) (s "boards")
         ]
 
+urlParser : Navigation.Location -> Maybe Route
+urlParser location = 
+    if not (String.isEmpty location.hash) then 
+        location |> parseHash hashMatchers
+    else 
+        location |> parsePath pathMatchers
+       
+  
 
-hashParser : Navigation.Location -> Result String Route
-hashParser location =
-    location.hash
-        |> String.dropLeft 1
-        |> parse identity matchers
+parser : Navigation.Location -> Maybe Route
+parser location =
+    urlParser location
 
 
-parser : Navigation.Parser (Result String Route)
-parser =
-    Navigation.makeParser hashParser
-
-
-routeFromResult : Result String Route -> Route
-routeFromResult result =
-    case result of
-        Ok route ->
+routeFromMaybe : Maybe Route -> Route
+routeFromMaybe maybe =
+    case maybe of
+        Just route ->
             route
 
-        Err string ->
+        Nothing ->
             NotFoundRoute

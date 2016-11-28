@@ -3,8 +3,8 @@ module Boards.Messages exposing (..)
 import Http
 import Boards.Models exposing (BoardId, Board)
 
+type alias BoardList = List Board
 
 type Msg
-    = FetchAllDone (List Board)
-    | FetchAllFail Http.Error
+    = FetchAllDone (Result Http.Error BoardList)
     | ShowPins BoardId

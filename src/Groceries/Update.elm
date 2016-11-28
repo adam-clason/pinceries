@@ -83,7 +83,8 @@ ingredientCount ingredientsList =
 delayHideList : msg -> Cmd msg
 delayHideList msg =
     Process.sleep (Time.second * 3)
-    |> Task.perform never (always msg)
+    |> Task.andThen (always <| Task.succeed msg)
+    |> Task.perform identity
 
 never : Never -> a
 never n = never n

@@ -3,13 +3,13 @@ module Groceries.List exposing (..)
 import Dict
 import Html exposing (..)
 import Html.Events exposing (onClick, onMouseOver, onMouseOut)
-import Html.Attributes exposing (attribute, type', class, src, value, href, style)
+import Html.Attributes exposing (attribute, type_, class, src, value, href, style)
 import Groceries.Models exposing (..)
 import Groceries.Messages exposing (..)
 
 view : GroceryList -> Html Msg
 view groceryList =
-    div [ class "mini-grocery-list", onMouseOver Show, onMouseOut HoverOut, onClick Show ]
+    div [ class "mini-grocery-list", onMouseOver Show, onMouseOut Show, onClick Show ]
         [ i [ class "fa fa-shopping-cart" ] [] 
         , div [ class "count-container" ] 
             [ div [ class "count-wrapper"] [ span [ class "count" ] [ text (toString groceryList.count) ] ]
@@ -31,7 +31,10 @@ groceryListClassName showMenu =
 category : (String, List Ingredient) -> Html Msg 
 category (name, ingredients) =
     li [ ]
-        [ a [ ] [ text name ]
+        [ a [ ] 
+            [ text name 
+            , i [ class "fa fa-chevron-down float-right" ] [] 
+            ]
         , ul [ class "ingredients" ] 
             (List.map ingredientsListItem ingredients)
         ]

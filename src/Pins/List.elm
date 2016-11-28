@@ -2,7 +2,7 @@ module Pins.List exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
-import Html.Attributes exposing (type', class, src, value, href, style)
+import Html.Attributes exposing (type_, class, src, value, href, style)
 import Pins.Models exposing (..)
 import Pins.Messages exposing (..)
 
@@ -30,7 +30,7 @@ pinThumbnail pin =
             [ img [ src pin.img ] [] ]
         , div [ class "caption" ] 
             [ h5 [] [ text pin.note ] ]
-        , button [ type' "button", class "button ", onClick (ForParent (AddToGroceryList pin) ) ] [ text "Add" ] 
+        , button [ type_ "button", class "button ", onClick (ForParent (AddToGroceryList pin) ) ] [ text "Add" ] 
         ]
       
             

@@ -8,10 +8,10 @@ import Boards.Models exposing (Board)
 update : Msg -> List Board -> ( List Board, Cmd Msg )
 update message boards =
     case message of
-        FetchAllDone newBoards ->
+        FetchAllDone (Ok newBoards) ->
             ( newBoards, Cmd.none )
 
-        FetchAllFail error ->
+        FetchAllDone (Err _) ->
             ( boards, Cmd.none)
 
         ShowPins boardId ->

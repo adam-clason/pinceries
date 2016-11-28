@@ -1,68 +1,43 @@
 module Main exposing (..)
 
 import Navigation
+import Storage
 import Messages exposing (Msg(..), translationDictionary)
-import Models exposing (Model, initialModel)
+import Models exposing (Model, Flags, initialModel)
 import View exposing (view)
-import Update exposing (update)
+import Update exposing (update, commandFromRoute)
 import Boards.Commands exposing (fetchAll)
 import Pins.Commands exposing (fetchPins)
 import Pins.Update
-import Routing exposing (Route(..))
+import Routing exposing (Route(..), InnerRoute(..))
 
 pinsTranslator = Pins.Update.translator translationDictionary
 
-init : Result String Route -> ( Model, Cmd Msg )
-init result =
+init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
+init flags location =
     let
         currentRoute =
-            Routing.routeFromResult result
-        routeCommand = 
-            commandFromRoute currentRoute
+            Routing.parser location |> Routing.routeFromMaybe
+        model =
+            initialModel flags currentRoute
+        command = 
+            commandFromRoute model currentRoute
 
     in
-        ( initialModel currentRoute, routeCommand )
+        ( model, command )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
-
-
-urlUpdate : Result String Route -> Model -> ( Model, Cmd Msg )
-urlUpdate result model =
-    let
-        currentRoute =
-            Routing.routeFromResult result
-        routeCommand = 
-            commandFromRoute currentRoute
-
-    in
-        ( { model | route = currentRoute }, routeCommand )
-
-
-
-commandFromRoute : Route ->  Cmd Msg
-commandFromRoute currentRoute  =
-    case currentRoute of 
-        BoardsRoute ->
-            Cmd.map BoardsMsg fetchAll
-
-        BoardRoute id ->
-            Cmd.map pinsTranslator (fetchPins id)
-            
-        NotFoundRoute ->
-            Cmd.none
-
+    Sub.none
 
 -- MAIN
 
-main : Program Never
+main : Program Flags Model Msg
 main =
-    Navigation.program Routing.parser
+    Navigation.programWithFlags UrlChange
         { init = init
         , view = view
         , update = update
-        , urlUpdate = urlUpdate
         , subscriptions = subscriptions
         }
