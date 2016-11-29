@@ -4,18 +4,26 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
+var cors = require('cors');
 var User = require('./app/models/user');
 
 var app = express();
 
 var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
+
+if (!isProduction) {
+	var dotenv = require('dotenv');
+	dotenv.load();
+}
+
 var publicPath = path.resolve(__dirname, 'dist');
 
 app.set('secret', process.env.SECRET);
 
 mongoose.connect(process.env.MONGODB_URI);
 
+app.use(cors());
 app.use(express.static(publicPath));
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());

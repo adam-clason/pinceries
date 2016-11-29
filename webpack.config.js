@@ -1,4 +1,7 @@
 var path = require('path');
+var webpack = require('webpack');
+
+require('dotenv').load();
 
 module.exports = {
 	entry: {
@@ -66,6 +69,14 @@ module.exports = {
 	sassLoader: {
 		includePaths: [path.resolve(__dirname, "scss"), path.resolve(__dirname, "node_modules/foundation-sites/scss")]
 	},
+
+	plugins: [
+		new webpack.DefinePlugin({
+		  'process.env': {
+		    'API_URL': JSON.stringify(process.env.API_URL)
+		  }
+		})
+	],
 
 	devServer: {
 		inline: true,
