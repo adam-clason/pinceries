@@ -1,0 +1,25 @@
+var _user$project$Messages$JwtReceived = function (a) {
+	return {ctor: 'JwtReceived', _0: a};
+};
+var _user$project$Messages$AuthorizeDone = function (a) {
+	return {ctor: 'AuthorizeDone', _0: a};
+};
+var _user$project$Messages$UrlChange = function (a) {
+	return {ctor: 'UrlChange', _0: a};
+};
+var _user$project$Messages$GroceriesMsg = function (a) {
+	return {ctor: 'GroceriesMsg', _0: a};
+};
+var _user$project$Messages$PinsMsg = function (a) {
+	return {ctor: 'PinsMsg', _0: a};
+};
+var _user$project$Messages$translationDictionary = {
+	onInternalMessage: _user$project$Messages$PinsMsg,
+	onAddToGroceryList: function (a) {
+		return _user$project$Messages$GroceriesMsg(
+			_user$project$Groceries_Messages$AddToGroceryList(a));
+	}
+};
+var _user$project$Messages$BoardsMsg = function (a) {
+	return {ctor: 'BoardsMsg', _0: a};
+};

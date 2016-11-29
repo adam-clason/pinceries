@@ -1,0 +1,8 @@
+var _user$project$Groceries_Models$GroceryList = F4(
+	function (a, b, c, d) {
+		return {list: a, count: b, show: c, hovering: d};
+	});
+var _user$project$Groceries_Models$Ingredient = F2(
+	function (a, b) {
+		return {name: a, amount: b};
+	});

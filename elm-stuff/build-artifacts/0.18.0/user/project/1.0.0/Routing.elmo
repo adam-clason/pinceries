@@ -1,0 +1,72 @@
+var _user$project$Routing$Authorize = function (a) {
+	return {ctor: 'Authorize', _0: a};
+};
+var _user$project$Routing$BoardRoute = function (a) {
+	return {ctor: 'BoardRoute', _0: a};
+};
+var _user$project$Routing$BoardsRoute = {ctor: 'BoardsRoute'};
+var _user$project$Routing$NotFoundRoute = {ctor: 'NotFoundRoute'};
+var _user$project$Routing$routeFromMaybe = function (maybe) {
+	var _p0 = maybe;
+	if (_p0.ctor === 'Just') {
+		return _p0._0;
+	} else {
+		return _user$project$Routing$NotFoundRoute;
+	}
+};
+var _user$project$Routing$Anonymous = function (a) {
+	return {ctor: 'Anonymous', _0: a};
+};
+var _user$project$Routing$pathMatchers = _evancz$url_parser$UrlParser$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_evancz$url_parser$UrlParser$map,
+			function (ac) {
+				return _user$project$Routing$Anonymous(
+					_user$project$Routing$Authorize(ac));
+			},
+			A2(
+				_evancz$url_parser$UrlParser_ops['<?>'],
+				_evancz$url_parser$UrlParser$s('authorize'),
+				_evancz$url_parser$UrlParser$stringParam('code'))),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Routing$Authenticated = function (a) {
+	return {ctor: 'Authenticated', _0: a};
+};
+var _user$project$Routing$hashMatchers = _evancz$url_parser$UrlParser$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_evancz$url_parser$UrlParser$map,
+			_user$project$Routing$Authenticated(_user$project$Routing$BoardsRoute),
+			_evancz$url_parser$UrlParser$s('')),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_evancz$url_parser$UrlParser$map,
+				function (b) {
+					return _user$project$Routing$Authenticated(
+						_user$project$Routing$BoardRoute(b));
+				},
+				A2(
+					_evancz$url_parser$UrlParser_ops['</>'],
+					_evancz$url_parser$UrlParser$s('boards'),
+					_evancz$url_parser$UrlParser$string)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_evancz$url_parser$UrlParser$map,
+					_user$project$Routing$Authenticated(_user$project$Routing$BoardsRoute),
+					_evancz$url_parser$UrlParser$s('boards')),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$Routing$urlParser = function (location) {
+	return (!_elm_lang$core$String$isEmpty(location.hash)) ? A2(_evancz$url_parser$UrlParser$parseHash, _user$project$Routing$hashMatchers, location) : A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Routing$pathMatchers, location);
+};
+var _user$project$Routing$parser = function (location) {
+	return _user$project$Routing$urlParser(location);
+};

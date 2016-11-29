@@ -13,6 +13,7 @@ type Msg
     | GroceriesMsg Groceries.Messages.Msg
     | UrlChange Navigation.Location
     | AuthorizeDone (Result Http.Error String)
+    | JwtReceived (Result Http.Error String)
 
 
 translationDictionary

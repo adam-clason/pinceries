@@ -1,0 +1,39 @@
+var _user$project$Commands$fetchPinceriesApiJwtDecoder = A2(_elm_lang$core$Json_Decode$field, 'jwt', _elm_lang$core$Json_Decode$string);
+var _user$project$Commands$fetchPinceriesApiJwtBody = function (accessToken) {
+	return A2(
+		_elm_lang$http$Http$stringBody,
+		'application/x-www-form-urlencoded',
+		A2(_elm_lang$core$Basics_ops['++'], 'token=', accessToken));
+};
+var _user$project$Commands$fetchPinceriesApiJwtUrl = function (baseUrl) {
+	return A2(_elm_lang$core$Basics_ops['++'], baseUrl, '/api/authenticate');
+};
+var _user$project$Commands$fetchPinceriesApiJwt = function (model) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Messages$JwtReceived,
+		A3(
+			_elm_lang$http$Http$post,
+			_user$project$Commands$fetchPinceriesApiJwtUrl(model.pinceriesApiBaseUrl),
+			_user$project$Commands$fetchPinceriesApiJwtBody(model.accessToken),
+			_user$project$Commands$fetchPinceriesApiJwtDecoder));
+};
+var _user$project$Commands$accessTokenDecoder = A2(_elm_lang$core$Json_Decode$field, 'access_token', _elm_lang$core$Json_Decode$string);
+var _user$project$Commands$fetchAccessTokenBody = function (authCode) {
+	return A2(
+		_elm_lang$http$Http$stringBody,
+		'application/x-www-form-urlencoded',
+		A2(_elm_lang$core$Basics_ops['++'], 'grant_type=authorization_code&client_id=4869854870047304425&client_secret=8c6a41e11b9c6594d5d52da8c98c929fb9a43c6c23197a7a20792d3118454f7c&code=', authCode));
+};
+var _user$project$Commands$fetchAccessTokenUrl = 'https://api.pinterest.com/v1/oauth/token';
+var _user$project$Commands$fetchAccessToken = F2(
+	function (model, authCode) {
+		return A2(
+			_elm_lang$http$Http$send,
+			_user$project$Messages$AuthorizeDone,
+			A3(
+				_elm_lang$http$Http$post,
+				_user$project$Commands$fetchAccessTokenUrl,
+				_user$project$Commands$fetchAccessTokenBody(authCode),
+				_user$project$Commands$accessTokenDecoder));
+	});

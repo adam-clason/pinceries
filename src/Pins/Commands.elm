@@ -3,13 +3,14 @@ module Pins.Commands exposing (..)
 import Http
 import Json.Decode exposing (..)
 import Task
+import Models exposing (Model)
 import Pins.Models exposing (PinId, Pin, Category, Ingredient)
 import Boards.Models exposing (BoardId, Board)
 import Pins.Messages exposing (..)
 
-fetchPins : String -> BoardId -> Cmd Msg
-fetchPins accessToken boardId =
-    Http.get (fetchPinsUrl accessToken boardId) collectionDecoder 
+fetchPins : Model -> BoardId -> Cmd Msg
+fetchPins model boardId =
+    Http.get (fetchPinsUrl model.accessToken boardId) collectionDecoder 
         |> Http.send (\a -> ForSelf (FetchAllDone a))
 
 fetchPinsUrl : String -> BoardId -> String

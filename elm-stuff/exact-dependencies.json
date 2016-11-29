@@ -1,9 +1,11 @@
 {
-    "elm-lang/navigation": "1.0.0",
-    "elm-lang/virtual-dom": "1.1.1",
-    "evancz/url-parser": "1.0.0",
-    "evancz/elm-http": "3.0.1",
-    "elm-lang/dom": "1.1.0",
-    "elm-lang/html": "1.1.0",
-    "elm-lang/core": "4.0.5"
+    "elm-lang/navigation": "2.0.1",
+    "elm-lang/virtual-dom": "2.0.2",
+    "simonh1000/elm-jwt": "4.0.3",
+    "evancz/url-parser": "2.0.1",
+    "truqu/elm-base64": "1.0.5",
+    "elm-lang/dom": "1.1.1",
+    "elm-lang/html": "2.0.0",
+    "elm-lang/http": "1.0.0",
+    "elm-lang/core": "5.0.0"
 }

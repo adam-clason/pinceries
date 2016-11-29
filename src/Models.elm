@@ -13,17 +13,20 @@ type alias Model =
     , pins : List Pin
     , groceryList : GroceryList
     , route : Routing.Route
+    , pinceriesApiBaseUrl : String
     }
 
 type alias Flags =
     { accessToken : String
     , jwt : String
+    , pinceriesApiBaseUrl : String
     }
 
 initialModel : Flags -> Routing.Route -> Model
 initialModel flags route =
     { accessToken = flags.accessToken
     , jwt = flags.jwt
+    , pinceriesApiBaseUrl = flags.pinceriesApiBaseUrl
     , boards = []
     , pins = [] 
     , groceryList = GroceryList Dict.empty 0 False False

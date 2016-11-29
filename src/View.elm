@@ -1,8 +1,8 @@
 module View exposing (..)
 
 import String
-import Html exposing (Html, a, div, text, nav, button, span, ul, li, form, p, h3)
-import Html.Attributes exposing (class, attribute, href, action, type_)
+import Html exposing (Html, a, div, text, nav, button, span, ul, li, form, p, h3, img)
+import Html.Attributes exposing (class, attribute, href, action, type_, src)
 import Messages exposing (Msg(..), translationDictionary)
 import Models exposing (Model)
 import Boards.List
@@ -90,7 +90,10 @@ loginView =
         [ div [ class "login-form" ]
             [ h3 [] [ text "Hi There!"]
             , p [] [ text "We are here to help you gather your next grocery list as easily and quickly as possible. Please login with Pinterest to get started!" ]
-            , a [ href "https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=https://localhost:3000/authorize", class "button" ] [ text "Login with Pinterest" ] 
+            , a [ href "https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=https://localhost:3000/authorize", class "button" ] 
+                [ span [] [ text "Login with Pinterest" ]
+                , img [ src "./pinterest_badge.png" ] [] 
+                ] 
             ]
         ]
 

@@ -56,14 +56,7 @@ module.exports = {
 			{
 				test: /\.png$/,
 				loader: 'file-loader?name=[name].[ext]',
-			},
-
-			/*{
-				test: /\.js/,
-				exclude: /node_modules/,
-				loader: "script"
-
-			}*/
+			}
 		],
 
 		noParse: /\.elm$/

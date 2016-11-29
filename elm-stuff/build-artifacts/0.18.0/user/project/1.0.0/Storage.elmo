@@ -1,0 +1,10 @@
+var _user$project$Storage$setAccessToken = _elm_lang$core$Native_Platform.outgoingPort(
+	'setAccessToken',
+	function (v) {
+		return v;
+	});
+var _user$project$Storage$setJwt = _elm_lang$core$Native_Platform.outgoingPort(
+	'setJwt',
+	function (v) {
+		return v;
+	});

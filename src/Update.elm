@@ -55,12 +55,22 @@ update msg model =
                 ( { model | route = updatedRoute }, routeCommand)
 
         AuthorizeDone (Ok updatedAccessToken) ->
-            ( { model | accessToken = updatedAccessToken }, 
-                    Cmd.batch 
-                        [ Storage.setAccessToken updatedAccessToken
-                        , Navigation.newUrl "/#boards"] )
+            let 
+                updatedModel = { model | accessToken = updatedAccessToken }
+
+            in
+                ( updatedModel, Cmd.batch 
+                    [ Storage.setAccessToken updatedAccessToken
+                    , Commands.fetchPinceriesApiJwt model
+                    , Navigation.newUrl "/#boards"] )
 
         AuthorizeDone (Err _) ->
+            ( model, Cmd.none)
+
+        JwtReceived (Ok updatedJwt) ->
+            ( { model | jwt = updatedJwt }, Storage.setJwt updatedJwt)
+
+        JwtReceived (Err _) ->
             ( model, Cmd.none)
 
 
@@ -70,13 +80,13 @@ commandFromRoute model currentRoute  =
         Authenticated innerRoute ->
              case innerRoute of 
                 BoardsRoute ->
-                    Cmd.map BoardsMsg (Boards.Commands.fetchAll model.accessToken)
+                    Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
 
                 BoardRoute id ->
-                    Cmd.map pinsTranslator (Pins.Commands.fetchPins model.accessToken id)
+                    Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
 
                 Authorize (Just authCode) ->
-                    (Commands.fetchAccessToken authCode)
+                    (Commands.fetchAccessToken model authCode)
 
                 Authorize Nothing ->
                     Cmd.none
@@ -84,13 +94,13 @@ commandFromRoute model currentRoute  =
         Anonymous innerRoute ->
              case innerRoute of 
                 BoardsRoute ->
-                    Cmd.map BoardsMsg (Boards.Commands.fetchAll model.accessToken)
+                    Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
 
                 BoardRoute id ->
-                    Cmd.map pinsTranslator (Pins.Commands.fetchPins model.accessToken id)
+                    Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
 
                 Authorize (Just authCode) -> 
-                    (Commands.fetchAccessToken authCode)
+                    (Commands.fetchAccessToken model authCode)
 
                 Authorize Nothing ->
                     Cmd.none

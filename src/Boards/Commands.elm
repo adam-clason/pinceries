@@ -3,13 +3,14 @@ module Boards.Commands exposing (..)
 import Http
 import Json.Decode as Decode exposing (..)
 import Task
+import Models exposing (Model)
 import Boards.Models exposing (BoardId, Board)
 import Boards.Messages exposing (..)
 
 
-fetchAll : String -> Cmd Msg
-fetchAll accessToken =
-    Http.get (fetchAllUrl accessToken) collectionDecoder 
+fetchAll : Model -> Cmd Msg
+fetchAll model =
+    Http.get (fetchAllUrl model.accessToken) collectionDecoder 
         |> Http.send FetchAllDone
 
 
