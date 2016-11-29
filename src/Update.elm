@@ -61,7 +61,7 @@ update msg model =
             in
                 ( updatedModel, Cmd.batch 
                     [ Storage.setAccessToken updatedAccessToken
-                    , Commands.fetchPinceriesApiJwt model
+                    , Commands.fetchPinceriesApiJwt updatedModel
                     , Navigation.newUrl "/#boards"] )
 
         AuthorizeDone (Err _) ->

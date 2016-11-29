@@ -110,7 +110,7 @@ var _user$project$Update$update = F2(
 								_0: _user$project$Storage$setAccessToken(_p7),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Commands$fetchPinceriesApiJwt(model),
+									_0: _user$project$Commands$fetchPinceriesApiJwt(updatedModel),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$navigation$Navigation$newUrl('/#boards'),

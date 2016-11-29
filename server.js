@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
 var cors = require('cors');
 var User = require('./app/models/user');
+var https = require('https');
 
 var app = express();
 
