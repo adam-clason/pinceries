@@ -1,5 +1,0 @@
-var _user$project$Boards_Models$new = {id: '', url: '', name: '', count: 0, img: ''};
-var _user$project$Boards_Models$Board = F5(
-	function (a, b, c, d, e) {
-		return {id: a, url: b, name: c, count: d, img: e};
-	});

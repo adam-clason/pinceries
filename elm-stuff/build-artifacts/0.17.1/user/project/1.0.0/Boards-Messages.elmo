@@ -1,9 +1,0 @@
-var _user$project$Boards_Messages$ShowPins = function (a) {
-	return {ctor: 'ShowPins', _0: a};
-};
-var _user$project$Boards_Messages$FetchAllFail = function (a) {
-	return {ctor: 'FetchAllFail', _0: a};
-};
-var _user$project$Boards_Messages$FetchAllDone = function (a) {
-	return {ctor: 'FetchAllDone', _0: a};
-};
