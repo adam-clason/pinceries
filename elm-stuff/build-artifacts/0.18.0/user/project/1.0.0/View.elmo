@@ -217,6 +217,11 @@ var _user$project$View$page = function (model) {
 							_elm_lang$html$Html$map,
 							_user$project$View$pinsTranslator,
 							_user$project$Pins_List$view(model.pins));
+					case 'GroceriesRoute':
+						return A2(
+							_elm_lang$html$Html$map,
+							_user$project$Messages$GroceriesMsg,
+							_user$project$Groceries_New$view(model.groceryList));
 					default:
 						return _user$project$View$accessView;
 				}
@@ -234,6 +239,11 @@ var _user$project$View$page = function (model) {
 						_elm_lang$html$Html$map,
 						_user$project$View$pinsTranslator,
 						_user$project$Pins_List$view(model.pins));
+				case 'GroceriesRoute':
+					return A2(
+						_elm_lang$html$Html$map,
+						_user$project$Messages$GroceriesMsg,
+						_user$project$Groceries_New$view(model.groceryList));
 				default:
 					return _user$project$View$accessView;
 			}

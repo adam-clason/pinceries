@@ -1,0 +1,3 @@
+var _user$project$Groceries_Commands$saveGroceryList = function (groceryList) {
+	return _elm_lang$core$Platform_Cmd$none;
+};

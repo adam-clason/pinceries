@@ -1,6 +1,7 @@
 module Messages exposing (..)
 
 import Http
+import Models exposing (AuthorizeInfo)
 import Pins.Models exposing (Pin)
 import Navigation
 import Boards.Messages
@@ -12,8 +13,7 @@ type Msg
     | PinsMsg Pins.Messages.InternalMsg
     | GroceriesMsg Groceries.Messages.Msg
     | UrlChange Navigation.Location
-    | AuthorizeDone (Result Http.Error String)
-    | JwtReceived (Result Http.Error String)
+    | Authorized (Result Http.Error AuthorizeInfo)
 
 
 translationDictionary

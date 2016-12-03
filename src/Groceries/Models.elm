@@ -7,10 +7,13 @@ type alias IngredientsList
     =  Dict String (List Ingredient)
 
 type alias GroceryList =
-    { list : IngredientsList
+    { id : String
+    , name : String
+    , list : IngredientsList
     , count : Int
     , show : Bool
     , hovering : Bool  
+    , apiUrl : String
     }
 
 type alias Ingredient = 

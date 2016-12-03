@@ -120,7 +120,7 @@ var _user$project$Groceries_Update$update = F2(
 						{show: false}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'Hide':
 				var hideList = function () {
 					var _p9 = groceryList.hovering;
 					if (_p9 === true) {
@@ -135,6 +135,20 @@ var _user$project$Groceries_Update$update = F2(
 						groceryList,
 						{show: !hideList}),
 					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Name':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						groceryList,
+						{name: _p6._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: groceryList,
+					_1: _user$project$Groceries_Commands$saveGroceryList(groceryList)
 				};
 		}
 	});

@@ -11,6 +11,7 @@ import Boards.Models exposing (BoardId)
 type InnerRoute
     = BoardsRoute
     | BoardRoute BoardId
+    | GroceriesRoute
     | Authorize (Maybe String)
 
 
@@ -23,7 +24,8 @@ type Route
 pathMatchers : Parser (Route -> a) a
 pathMatchers = 
     oneOf 
-        [ map (\ac -> Anonymous (Authorize ac)) (s "authorize" <?> stringParam "code")
+        [ map (Authenticated BoardsRoute) top
+        , map (\ac -> Anonymous (Authorize ac)) (s "authorize" <?> stringParam "code")
         ] 
 
 
@@ -33,6 +35,7 @@ hashMatchers =
         [ map (Authenticated BoardsRoute) (s "")
         , map (\b -> Authenticated (BoardRoute b)) (s "boards" </> string)
         , map (Authenticated BoardsRoute) (s "boards")
+        , map (Authenticated GroceriesRoute) (s "groceries")
         ]
 
 urlParser : Navigation.Location -> Maybe Route

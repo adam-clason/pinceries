@@ -6,9 +6,18 @@ import Groceries.Models exposing (..)
 import Routing
 import Dict
 
+
+type alias User = 
+    { id : String
+    , firstName : String
+    , lastName : String
+    , activeGroceryListId : String
+    }
+
 type alias Model =
     { accessToken : String
     , jwt : String
+    , user : User
     , boards : List Board
     , pins : List Pin
     , groceryList : GroceryList
@@ -22,13 +31,19 @@ type alias Flags =
     , pinceriesApiBaseUrl : String
     }
 
+type alias AuthorizeInfo =
+    { accessToken : String
+    , jwt : String 
+    }
+
 initialModel : Flags -> Routing.Route -> Model
 initialModel flags route =
     { accessToken = flags.accessToken
     , jwt = flags.jwt
+    , user = User "" "" "" ""
     , pinceriesApiBaseUrl = flags.pinceriesApiBaseUrl
     , boards = []
     , pins = [] 
-    , groceryList = GroceryList Dict.empty 0 False False
+    , groceryList = GroceryList "" "" Dict.empty 0 False False flags.pinceriesApiBaseUrl
     , route = route
     }

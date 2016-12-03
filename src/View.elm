@@ -8,6 +8,7 @@ import Models exposing (Model)
 import Boards.List
 import Pins.List
 import Groceries.List
+import Groceries.New
 import Pins.Update exposing (..)
 
 import Routing exposing (Route(..), InnerRoute(..))
@@ -38,19 +39,25 @@ page model =
                     BoardRoute id ->
                         Html.map pinsTranslator (Pins.List.view model.pins)
 
+                    GroceriesRoute ->
+                        Html.map GroceriesMsg (Groceries.New.view model.groceryList)
+
                     Authorize authCode ->
                         accessView
 
         Anonymous innerRoute ->
             case innerRoute of
-                    BoardsRoute ->
-                        Html.map BoardsMsg (Boards.List.view model.boards)
+                BoardsRoute ->
+                    Html.map BoardsMsg (Boards.List.view model.boards)
 
-                    BoardRoute id ->
-                        Html.map pinsTranslator (Pins.List.view model.pins)
+                BoardRoute id ->
+                    Html.map pinsTranslator (Pins.List.view model.pins)
 
-                    Authorize authCode ->
-                        accessView
+                GroceriesRoute ->
+                    Html.map GroceriesMsg (Groceries.New.view model.groceryList)
+
+                Authorize authCode ->
+                    accessView
 
         NotFoundRoute ->
             notFoundView

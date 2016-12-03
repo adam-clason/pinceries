@@ -1,8 +1,5 @@
-var _user$project$Messages$JwtReceived = function (a) {
-	return {ctor: 'JwtReceived', _0: a};
-};
-var _user$project$Messages$AuthorizeDone = function (a) {
-	return {ctor: 'AuthorizeDone', _0: a};
+var _user$project$Messages$Authorized = function (a) {
+	return {ctor: 'Authorized', _0: a};
 };
 var _user$project$Messages$UrlChange = function (a) {
 	return {ctor: 'UrlChange', _0: a};

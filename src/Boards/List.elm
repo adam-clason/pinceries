@@ -11,31 +11,32 @@ import Boards.Models exposing (Board)
 view : List Board -> Html Msg
 view boards =
     div [ class "container" ]
-        [ list boards ]
+        [ h1 [ class "columns" ] 
+            [ span [] [ text "Boards " ]
+            , small [] [ text "Select a board"]
+            ] 
+        , 
+
+        list boards ]
 
 
 list : List Board -> Html Msg
 list boards =
-    ul [ class "list-group" ]
+    div [ class "row small-up-2 medium-up-3 larg-up-4" ]
         (List.map boardRow boards)
 
 
 boardRow : Board -> Html Msg
 boardRow board =
-    li [ class "list-group-item" ]
-        [ span [ class "badge" ] [ text (toString board.count) ]
-        , a [ onClick (ShowPins board.id) ] [
-            div [ class "media" ] 
-                [ div [ class "media-left" ] [ img [ class "media-object", src board.img , style [ ("width", "60px"), ("height", "60px"), ("max-width", "none") ] ] [] ] 
-                , div [ class "media-body" ] 
-                    [ h4 [ class "media-heading" ] [ text board.name ]
-                    , span [ ] [ text board.url ] 
-                    ]
+    div [ class "column" ]
+        [ a [ class "board", onClick (ShowPins board.id) ]
+            [ div [ ]
+                [ div [ class "board-img" ] [ img [ src board.img ] [] ] ]
+            , div [ ]
+                [ h4 [ ] [ text board.name ]     
                 ]
-                
             ]
-        ]
-            
+        ]            
 
 
        

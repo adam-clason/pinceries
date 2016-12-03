@@ -1,6 +1,6 @@
-var _user$project$Groceries_Models$GroceryList = F4(
-	function (a, b, c, d) {
-		return {list: a, count: b, show: c, hovering: d};
+var _user$project$Groceries_Models$GroceryList = F7(
+	function (a, b, c, d, e, f, g) {
+		return {id: a, name: b, list: c, count: d, show: e, hovering: f, apiUrl: g};
 	});
 var _user$project$Groceries_Models$Ingredient = F2(
 	function (a, b) {

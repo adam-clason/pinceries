@@ -1,20 +1,29 @@
+var _user$project$Models$User = F4(
+	function (a, b, c, d) {
+		return {id: a, firstName: b, lastName: c, activeGroceryListId: d};
+	});
 var _user$project$Models$initialModel = F2(
 	function (flags, route) {
 		return {
 			accessToken: flags.accessToken,
 			jwt: flags.jwt,
+			user: A4(_user$project$Models$User, '', '', '', ''),
 			pinceriesApiBaseUrl: flags.pinceriesApiBaseUrl,
 			boards: {ctor: '[]'},
 			pins: {ctor: '[]'},
-			groceryList: A4(_user$project$Groceries_Models$GroceryList, _elm_lang$core$Dict$empty, 0, false, false),
+			groceryList: A7(_user$project$Groceries_Models$GroceryList, '', '', _elm_lang$core$Dict$empty, 0, false, false, flags.pinceriesApiBaseUrl),
 			route: route
 		};
 	});
-var _user$project$Models$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {accessToken: a, jwt: b, boards: c, pins: d, groceryList: e, route: f, pinceriesApiBaseUrl: g};
+var _user$project$Models$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {accessToken: a, jwt: b, user: c, boards: d, pins: e, groceryList: f, route: g, pinceriesApiBaseUrl: h};
 	});
 var _user$project$Models$Flags = F3(
 	function (a, b, c) {
 		return {accessToken: a, jwt: b, pinceriesApiBaseUrl: c};
+	});
+var _user$project$Models$AuthorizeInfo = F2(
+	function (a, b) {
+		return {accessToken: a, jwt: b};
 	});

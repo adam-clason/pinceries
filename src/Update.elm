@@ -6,6 +6,7 @@ import Models exposing (Model)
 import Groceries.Messages
 import Pins.Messages exposing (OutMsg(..))
 
+import Task
 import Navigation
 import Commands
 import Storage
@@ -54,24 +55,23 @@ update msg model =
             in
                 ( { model | route = updatedRoute }, routeCommand)
 
-        AuthorizeDone (Ok updatedAccessToken) ->
+        Authorized (Ok authorizeInfo) ->
             let 
-                updatedModel = { model | accessToken = updatedAccessToken }
+                decodeJwtResult = 
+                    Commands.decodeJwt authorizeInfo.jwt
 
-            in
-                ( updatedModel, Cmd.batch 
-                    [ Storage.setAccessToken updatedAccessToken
-                    , Commands.fetchPinceriesApiJwt updatedModel
-                    , Navigation.newUrl "/#boards"] )
+            in 
+                case decodeJwtResult of 
+                    Ok updatedUser ->
+                        ({ model | user = updatedUser, accessToken = authorizeInfo.accessToken, jwt = authorizeInfo.jwt }
+                         , Cmd.batch [ Storage.setAccessToken authorizeInfo.accessToken, Storage.setJwt authorizeInfo.jwt ] )
 
-        AuthorizeDone (Err _) ->
-            ( model, Cmd.none)
+                    Err _ ->
+                        ({ model | accessToken = "", jwt = "" }, Cmd.none)
 
-        JwtReceived (Ok updatedJwt) ->
-            ( { model | jwt = updatedJwt }, Storage.setJwt updatedJwt)
+        Authorized (Err _) ->
+            ( model, Cmd.none )
 
-        JwtReceived (Err _) ->
-            ( model, Cmd.none)
 
 
 commandFromRoute : Model -> Route ->  Cmd Msg
@@ -85,8 +85,19 @@ commandFromRoute model currentRoute  =
                 BoardRoute id ->
                     Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
 
+                GroceriesRoute ->
+                    Cmd.none
+
                 Authorize (Just authCode) ->
-                    (Commands.fetchAccessToken model authCode)
+                    let 
+                        fetchToken =
+                            Commands.fetchAccessToken model authCode
+                        fetchJwt =
+                            Commands.fetchPinceriesApiJwt model
+                    in
+                        fetchToken 
+                            |> Task.andThen fetchJwt 
+                            |> Task.attempt Authorized 
 
                 Authorize Nothing ->
                     Cmd.none
@@ -99,8 +110,19 @@ commandFromRoute model currentRoute  =
                 BoardRoute id ->
                     Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
 
+                GroceriesRoute ->
+                    Cmd.none
+
                 Authorize (Just authCode) -> 
-                    (Commands.fetchAccessToken model authCode)
+                    let 
+                        fetchToken =
+                            Commands.fetchAccessToken model authCode
+                        fetchJwt =
+                            Commands.fetchPinceriesApiJwt model
+                    in
+                        fetchToken 
+                            |> Task.andThen fetchJwt 
+                            |> Task.attempt Authorized 
 
                 Authorize Nothing ->
                     Cmd.none

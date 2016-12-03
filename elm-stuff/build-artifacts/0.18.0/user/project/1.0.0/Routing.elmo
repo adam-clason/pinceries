@@ -1,6 +1,7 @@
 var _user$project$Routing$Authorize = function (a) {
 	return {ctor: 'Authorize', _0: a};
 };
+var _user$project$Routing$GroceriesRoute = {ctor: 'GroceriesRoute'};
 var _user$project$Routing$BoardRoute = function (a) {
 	return {ctor: 'BoardRoute', _0: a};
 };
@@ -17,24 +18,31 @@ var _user$project$Routing$routeFromMaybe = function (maybe) {
 var _user$project$Routing$Anonymous = function (a) {
 	return {ctor: 'Anonymous', _0: a};
 };
+var _user$project$Routing$Authenticated = function (a) {
+	return {ctor: 'Authenticated', _0: a};
+};
 var _user$project$Routing$pathMatchers = _evancz$url_parser$UrlParser$oneOf(
 	{
 		ctor: '::',
 		_0: A2(
 			_evancz$url_parser$UrlParser$map,
-			function (ac) {
-				return _user$project$Routing$Anonymous(
-					_user$project$Routing$Authorize(ac));
-			},
-			A2(
-				_evancz$url_parser$UrlParser_ops['<?>'],
-				_evancz$url_parser$UrlParser$s('authorize'),
-				_evancz$url_parser$UrlParser$stringParam('code'))),
-		_1: {ctor: '[]'}
+			_user$project$Routing$Authenticated(_user$project$Routing$BoardsRoute),
+			_evancz$url_parser$UrlParser$top),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_evancz$url_parser$UrlParser$map,
+				function (ac) {
+					return _user$project$Routing$Anonymous(
+						_user$project$Routing$Authorize(ac));
+				},
+				A2(
+					_evancz$url_parser$UrlParser_ops['<?>'],
+					_evancz$url_parser$UrlParser$s('authorize'),
+					_evancz$url_parser$UrlParser$stringParam('code'))),
+			_1: {ctor: '[]'}
+		}
 	});
-var _user$project$Routing$Authenticated = function (a) {
-	return {ctor: 'Authenticated', _0: a};
-};
 var _user$project$Routing$hashMatchers = _evancz$url_parser$UrlParser$oneOf(
 	{
 		ctor: '::',
@@ -60,7 +68,14 @@ var _user$project$Routing$hashMatchers = _evancz$url_parser$UrlParser$oneOf(
 					_evancz$url_parser$UrlParser$map,
 					_user$project$Routing$Authenticated(_user$project$Routing$BoardsRoute),
 					_evancz$url_parser$UrlParser$s('boards')),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_evancz$url_parser$UrlParser$map,
+						_user$project$Routing$Authenticated(_user$project$Routing$GroceriesRoute),
+						_evancz$url_parser$UrlParser$s('groceries')),
+					_1: {ctor: '[]'}
+				}
 			}
 		}
 	});

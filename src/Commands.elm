@@ -1,18 +1,18 @@
 module Commands exposing (..)
 
+import Jwt exposing (decodeToken, JwtError)
 import Http
 import Json.Decode exposing (..)
-import Task
+import Task exposing (Task)
 import Pins.Models exposing (PinId, Pin, Category, Ingredient)
 import Boards.Models exposing (BoardId, Board)
 import Messages exposing (Msg(..))
-import Models exposing (Model)
-
-
-fetchAccessToken : Model -> String -> Cmd Msg
+import Models exposing (Model, AuthorizeInfo, User)
+    
+fetchAccessToken : Model -> String -> Task Http.Error String
 fetchAccessToken model authCode =
     Http.post fetchAccessTokenUrl (fetchAccessTokenBody authCode) accessTokenDecoder 
-        |> Http.send AuthorizeDone
+        |> Http.toTask
 
 fetchAccessTokenUrl =
     "https://api.pinterest.com/v1/oauth/token"
@@ -26,10 +26,10 @@ accessTokenDecoder =
     field "access_token" string
 
 
-fetchPinceriesApiJwt : Model -> Cmd Msg
-fetchPinceriesApiJwt model =
-    Http.post (fetchPinceriesApiJwtUrl model.pinceriesApiBaseUrl) (fetchPinceriesApiJwtBody model.accessToken) fetchPinceriesApiJwtDecoder
-        |> Http.send JwtReceived
+fetchPinceriesApiJwt : Model -> String -> Task Http.Error AuthorizeInfo
+fetchPinceriesApiJwt model accessToken =
+    Http.post (fetchPinceriesApiJwtUrl model.pinceriesApiBaseUrl) (fetchPinceriesApiJwtBody accessToken) (fetchPinceriesApiJwtDecoder accessToken)
+        |> Http.toTask
 
 
 fetchPinceriesApiJwtUrl : String -> String
@@ -40,8 +40,25 @@ fetchPinceriesApiJwtBody : String -> Http.Body
 fetchPinceriesApiJwtBody accessToken = 
     Http.stringBody "application/x-www-form-urlencoded" ("token=" ++ accessToken) 
 
-fetchPinceriesApiJwtDecoder : Decoder String
-fetchPinceriesApiJwtDecoder = 
-    field "jwt" string
+fetchPinceriesApiJwtDecoder : String ->  Decoder AuthorizeInfo
+fetchPinceriesApiJwtDecoder accessToken = 
+    map2 AuthorizeInfo
+        (succeed accessToken)
+        (field "jwt" string)
+
+
+decodeJwt : String -> Result JwtError User
+decodeJwt jwt =
+
+    let 
+        jwtDecoder = 
+            map4 User
+            (field "id" string)
+            (field "firstName" string)
+            (field "lastName" string)
+            (field "activeGroceryListId" string)
+
+    in 
+        decodeToken jwtDecoder jwt
 
 

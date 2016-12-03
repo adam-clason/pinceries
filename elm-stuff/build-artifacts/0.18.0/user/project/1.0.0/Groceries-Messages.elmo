@@ -1,3 +1,7 @@
+var _user$project$Groceries_Messages$Save = {ctor: 'Save'};
+var _user$project$Groceries_Messages$Name = function (a) {
+	return {ctor: 'Name', _0: a};
+};
 var _user$project$Groceries_Messages$Hide = {ctor: 'Hide'};
 var _user$project$Groceries_Messages$HoverOut = {ctor: 'HoverOut'};
 var _user$project$Groceries_Messages$Show = {ctor: 'Show'};

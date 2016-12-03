@@ -16,9 +16,16 @@ var _user$project$Update$commandFromRoute = F2(
 							_elm_lang$core$Platform_Cmd$map,
 							_user$project$Update$pinsTranslator,
 							A2(_user$project$Pins_Commands$fetchPins, model, _p1._0));
+					case 'GroceriesRoute':
+						return _elm_lang$core$Platform_Cmd$none;
 					default:
 						if (_p1._0.ctor === 'Just') {
-							return A2(_user$project$Commands$fetchAccessToken, model, _p1._0._0);
+							var fetchJwt = _user$project$Commands$fetchPinceriesApiJwt(model);
+							var fetchToken = A2(_user$project$Commands$fetchAccessToken, model, _p1._0._0);
+							return A2(
+								_elm_lang$core$Task$attempt,
+								_user$project$Messages$Authorized,
+								A2(_elm_lang$core$Task$andThen, fetchJwt, fetchToken));
 						} else {
 							return _elm_lang$core$Platform_Cmd$none;
 						}
@@ -36,9 +43,16 @@ var _user$project$Update$commandFromRoute = F2(
 							_elm_lang$core$Platform_Cmd$map,
 							_user$project$Update$pinsTranslator,
 							A2(_user$project$Pins_Commands$fetchPins, model, _p2._0));
+					case 'GroceriesRoute':
+						return _elm_lang$core$Platform_Cmd$none;
 					default:
 						if (_p2._0.ctor === 'Just') {
-							return A2(_user$project$Commands$fetchAccessToken, model, _p2._0._0);
+							var fetchJwt = _user$project$Commands$fetchPinceriesApiJwt(model);
+							var fetchToken = A2(_user$project$Commands$fetchAccessToken, model, _p2._0._0);
+							return A2(
+								_elm_lang$core$Task$attempt,
+								_user$project$Messages$Authorized,
+								A2(_elm_lang$core$Task$andThen, fetchJwt, fetchToken));
 						} else {
 							return _elm_lang$core$Platform_Cmd$none;
 						}
@@ -95,43 +109,37 @@ var _user$project$Update$update = F2(
 						{route: updatedRoute}),
 					_1: routeCommand
 				};
-			case 'AuthorizeDone':
-				if (_p3._0.ctor === 'Ok') {
-					var _p7 = _p3._0._0;
-					var updatedModel = _elm_lang$core$Native_Utils.update(
-						model,
-						{accessToken: _p7});
-					return {
-						ctor: '_Tuple2',
-						_0: updatedModel,
-						_1: _elm_lang$core$Platform_Cmd$batch(
-							{
-								ctor: '::',
-								_0: _user$project$Storage$setAccessToken(_p7),
-								_1: {
-									ctor: '::',
-									_0: _user$project$Commands$fetchPinceriesApiJwt(updatedModel),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$navigation$Navigation$newUrl('/#boards'),
-										_1: {ctor: '[]'}
-									}
-								}
-							})
-					};
-				} else {
-					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-				}
 			default:
 				if (_p3._0.ctor === 'Ok') {
 					var _p8 = _p3._0._0;
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{jwt: _p8}),
-						_1: _user$project$Storage$setJwt(_p8)
-					};
+					var decodeJwtResult = _user$project$Commands$decodeJwt(_p8.jwt);
+					var _p7 = decodeJwtResult;
+					if (_p7.ctor === 'Ok') {
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{user: _p7._0, accessToken: _p8.accessToken, jwt: _p8.jwt}),
+							_1: _elm_lang$core$Platform_Cmd$batch(
+								{
+									ctor: '::',
+									_0: _user$project$Storage$setAccessToken(_p8.accessToken),
+									_1: {
+										ctor: '::',
+										_0: _user$project$Storage$setJwt(_p8.jwt),
+										_1: {ctor: '[]'}
+									}
+								})
+						};
+					} else {
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{accessToken: '', jwt: ''}),
+							_1: _elm_lang$core$Platform_Cmd$none
+						};
+					}
 				} else {
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}

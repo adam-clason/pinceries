@@ -1,4 +1,20 @@
-var _user$project$Commands$fetchPinceriesApiJwtDecoder = A2(_elm_lang$core$Json_Decode$field, 'jwt', _elm_lang$core$Json_Decode$string);
+var _user$project$Commands$decodeJwt = function (jwt) {
+	var jwtDecoder = A5(
+		_elm_lang$core$Json_Decode$map4,
+		_user$project$Models$User,
+		A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode$field, 'firstName', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode$field, 'lastName', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode$field, 'activeGroceryListId', _elm_lang$core$Json_Decode$string));
+	return A2(_simonh1000$elm_jwt$Jwt$decodeToken, jwtDecoder, jwt);
+};
+var _user$project$Commands$fetchPinceriesApiJwtDecoder = function (accessToken) {
+	return A3(
+		_elm_lang$core$Json_Decode$map2,
+		_user$project$Models$AuthorizeInfo,
+		_elm_lang$core$Json_Decode$succeed(accessToken),
+		A2(_elm_lang$core$Json_Decode$field, 'jwt', _elm_lang$core$Json_Decode$string));
+};
 var _user$project$Commands$fetchPinceriesApiJwtBody = function (accessToken) {
 	return A2(
 		_elm_lang$http$Http$stringBody,
@@ -8,16 +24,15 @@ var _user$project$Commands$fetchPinceriesApiJwtBody = function (accessToken) {
 var _user$project$Commands$fetchPinceriesApiJwtUrl = function (baseUrl) {
 	return A2(_elm_lang$core$Basics_ops['++'], baseUrl, '/api/authenticate');
 };
-var _user$project$Commands$fetchPinceriesApiJwt = function (model) {
-	return A2(
-		_elm_lang$http$Http$send,
-		_user$project$Messages$JwtReceived,
-		A3(
-			_elm_lang$http$Http$post,
-			_user$project$Commands$fetchPinceriesApiJwtUrl(model.pinceriesApiBaseUrl),
-			_user$project$Commands$fetchPinceriesApiJwtBody(model.accessToken),
-			_user$project$Commands$fetchPinceriesApiJwtDecoder));
-};
+var _user$project$Commands$fetchPinceriesApiJwt = F2(
+	function (model, accessToken) {
+		return _elm_lang$http$Http$toTask(
+			A3(
+				_elm_lang$http$Http$post,
+				_user$project$Commands$fetchPinceriesApiJwtUrl(model.pinceriesApiBaseUrl),
+				_user$project$Commands$fetchPinceriesApiJwtBody(accessToken),
+				_user$project$Commands$fetchPinceriesApiJwtDecoder(accessToken)));
+	});
 var _user$project$Commands$accessTokenDecoder = A2(_elm_lang$core$Json_Decode$field, 'access_token', _elm_lang$core$Json_Decode$string);
 var _user$project$Commands$fetchAccessTokenBody = function (authCode) {
 	return A2(
@@ -28,9 +43,7 @@ var _user$project$Commands$fetchAccessTokenBody = function (authCode) {
 var _user$project$Commands$fetchAccessTokenUrl = 'https://api.pinterest.com/v1/oauth/token';
 var _user$project$Commands$fetchAccessToken = F2(
 	function (model, authCode) {
-		return A2(
-			_elm_lang$http$Http$send,
-			_user$project$Messages$AuthorizeDone,
+		return _elm_lang$http$Http$toTask(
 			A3(
 				_elm_lang$http$Http$post,
 				_user$project$Commands$fetchAccessTokenUrl,

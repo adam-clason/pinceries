@@ -9,3 +9,5 @@ type Msg
     | Show
     | HoverOut
     | Hide
+    | Name String
+    | Save

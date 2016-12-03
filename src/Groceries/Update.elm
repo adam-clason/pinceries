@@ -7,6 +7,7 @@ import Time
 import Dict
 import Groceries.Messages exposing (Msg(..))
 import Groceries.Models exposing (..)
+import Groceries.Commands exposing (saveGroceryList)
 import Pins.Models exposing (Pin)
 
 update : Msg -> GroceryList -> (GroceryList, Cmd Msg)
@@ -43,6 +44,12 @@ update message groceryList =
                     False -> True
             in
                 ( { groceryList | show = not hideList }, Cmd.none)
+
+        Name updatedName ->
+            ( { groceryList | name = updatedName }, Cmd.none )
+
+        Save -> 
+            ( groceryList, saveGroceryList groceryList)
 
 
 addCategories : Pin -> IngredientsList -> IngredientsList
