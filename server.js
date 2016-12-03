@@ -103,14 +103,14 @@ apiRoutes.post('/authenticate', function(req, res) {
 									if (err) {
 										res.json({ success : false, message: "There was an error creating the User"});
 									} else {
-										var token = jwt.sign(jwtUser, app.get('secret'), {
+										var jwtToken = jwt.sign(jwtUser, app.get('secret'), {
 											expiresIn: 60*40*24
 										});
 
 										res.json({
 											success: true,
 											message: "Authorization Successful",
-											token: token 
+											'jwt': jwtToken 
 										});
 									}
 

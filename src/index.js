@@ -15,7 +15,8 @@ var mountNode = document.getElementById('main');
 var flags = {
 	jwt : localStorage.getItem('jwt') || "",
 	accessToken : localStorage.getItem('access-token') || "",
-	pinceriesApiBaseUrl: process.env.API_URL
+	pinceriesApiBaseUrl: process.env.API_URL,
+	pinterestRedirectUrl: process.env.PINTEREST_REDIRECT_URL
 };
 
 var app = Elm.Main.embed(mountNode, flags);

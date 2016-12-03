@@ -30,7 +30,7 @@ page model =
 
         Authenticated innerRoute ->
             if String.isEmpty model.accessToken then
-                loginView  
+                loginView model
             else 
                 case innerRoute of
                     BoardsRoute ->
@@ -91,13 +91,13 @@ accessView =
         [ text "ACCESSING PLZ"
         ]
 
-loginView : Html msg 
-loginView = 
+loginView : Model -> Html msg 
+loginView model = 
     div [ class "login-container" ] 
         [ div [ class "login-form" ]
             [ h3 [] [ text "Hi There!"]
             , p [] [ text "We are here to help you gather your next grocery list as easily and quickly as possible. Please login with Pinterest to get started!" ]
-            , a [ href "https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=https://localhost:3000/authorize", class "button" ] 
+            , a [ href ("https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=" ++ model.pinterestRedirectUrl), class "button" ] 
                 [ span [] [ text "Login with Pinterest" ]
                 , img [ src "./pinterest_badge.png" ] [] 
                 ] 

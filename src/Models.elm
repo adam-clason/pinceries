@@ -23,12 +23,14 @@ type alias Model =
     , groceryList : GroceryList
     , route : Routing.Route
     , pinceriesApiBaseUrl : String
+    , pinterestRedirectUrl : String
     }
 
 type alias Flags =
     { accessToken : String
     , jwt : String
     , pinceriesApiBaseUrl : String
+    , pinterestRedirectUrl : String
     }
 
 type alias AuthorizeInfo =
@@ -42,6 +44,7 @@ initialModel flags route =
     , jwt = flags.jwt
     , user = User "" "" "" ""
     , pinceriesApiBaseUrl = flags.pinceriesApiBaseUrl
+    , pinterestRedirectUrl = flags.pinterestRedirectUrl
     , boards = []
     , pins = [] 
     , groceryList = GroceryList "" "" Dict.empty 0 False False flags.pinceriesApiBaseUrl

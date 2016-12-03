@@ -6,6 +6,9 @@ import Models exposing (Model)
 import Groceries.Messages
 import Pins.Messages exposing (OutMsg(..))
 
+
+import Debug
+import Jwt exposing (JwtError(..))
 import Task
 import Navigation
 import Commands
@@ -63,14 +66,60 @@ update msg model =
             in 
                 case decodeJwtResult of 
                     Ok updatedUser ->
-                        ({ model | user = updatedUser, accessToken = authorizeInfo.accessToken, jwt = authorizeInfo.jwt }
-                         , Cmd.batch [ Storage.setAccessToken authorizeInfo.accessToken, Storage.setJwt authorizeInfo.jwt ] )
 
-                    Err _ ->
-                        ({ model | accessToken = "", jwt = "" }, Cmd.none)
+                        let logged = 
+                            Debug.log "success" "It was a success"
 
-        Authorized (Err _) ->
-            ( model, Cmd.none )
+                        in
+                            ({ model | user = updatedUser, accessToken = authorizeInfo.accessToken, jwt = authorizeInfo.jwt }
+                             , Cmd.batch [ Storage.setAccessToken authorizeInfo.accessToken, Storage.setJwt authorizeInfo.jwt ] )
+
+                    Err jwtError ->
+
+                        case jwtError of  
+                            HttpError error ->
+                                let logged =
+                                    Debug.log "http" error
+                                in 
+                                    ( model, Cmd.none )
+
+                            Unauthorized ->
+                                let logged =
+                                    Debug.log "http" "unauthorized"
+                                in 
+                                    ( model, Cmd.none )
+
+                            TokenExpired ->
+                                let logged =
+                                    Debug.log "http" "tokenexpired"
+                                in 
+                                    ( model, Cmd.none )
+
+                            TokenNotExpired ->
+                                let logged =
+                                    Debug.log "http" "tokennotexpired"
+                                in 
+                                    ( model, Cmd.none )
+
+                            TokenProcessingError error ->
+                                let logged =
+                                    Debug.log "tokenprocessing" error
+                                in 
+                                    ( model, Cmd.none  )
+
+                            TokenDecodeError error ->
+                                let logged =
+                                    Debug.log "tokendecode" error
+                                in 
+                                    ( model, Cmd.none )
+
+        Authorized (Err error) ->
+            
+            let logged =
+                Debug.log "Authorized Error" error
+            
+            in 
+                ( model, Cmd.none )
 
 
 

@@ -21,84 +21,87 @@ var _user$project$View$notFoundView = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
-var _user$project$View$loginView = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('login-container'),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('login-form'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h3,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Hi There!'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
+var _user$project$View$loginView = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('login-container'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('login-form'),
+					_1: {ctor: '[]'}
+				},
+				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$p,
+						_elm_lang$html$Html$h3,
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('We are here to help you gather your next grocery list as easily and quickly as possible. Please login with Pinterest to get started!'),
+							_0: _elm_lang$html$Html$text('Hi There!'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$a,
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$href('https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=https://localhost:3000/authorize'),
-								_1: {
+								_0: _elm_lang$html$Html$text('We are here to help you gather your next grocery list as easily and quickly as possible. Please login with Pinterest to get started!'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('button'),
-									_1: {ctor: '[]'}
-								}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$span,
-									{ctor: '[]'},
-									{
+									_0: _elm_lang$html$Html_Attributes$href(
+										A2(_elm_lang$core$Basics_ops['++'], 'https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=', model.pinterestRedirectUrl)),
+									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Login with Pinterest'),
+										_0: _elm_lang$html$Html_Attributes$class('button'),
 										_1: {ctor: '[]'}
-									}),
-								_1: {
+									}
+								},
+								{
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$img,
+										_elm_lang$html$Html$span,
+										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$src('./pinterest_badge.png'),
+											_0: _elm_lang$html$Html$text('Login with Pinterest'),
 											_1: {ctor: '[]'}
-										},
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$img,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$src('./pinterest_badge.png'),
+												_1: {ctor: '[]'}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
-				}
-			}),
-		_1: {ctor: '[]'}
-	});
+				}),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$View$accessView = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -203,7 +206,7 @@ var _user$project$View$page = function (model) {
 	switch (_p0.ctor) {
 		case 'Authenticated':
 			if (_elm_lang$core$String$isEmpty(model.accessToken)) {
-				return _user$project$View$loginView;
+				return _user$project$View$loginView(model);
 			} else {
 				var _p1 = _p0._0;
 				switch (_p1.ctor) {

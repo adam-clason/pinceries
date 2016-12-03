@@ -53,10 +53,10 @@ decodeJwt jwt =
     let 
         jwtDecoder = 
             map4 User
-            (field "id" string)
-            (field "firstName" string)
-            (field "lastName" string)
-            (field "activeGroceryListId" string)
+                (field "id" string)
+                (field "firstName" string)
+                (field "lastName" string)
+                (field "activeGroceryListId" string)
 
     in 
         decodeToken jwtDecoder jwt

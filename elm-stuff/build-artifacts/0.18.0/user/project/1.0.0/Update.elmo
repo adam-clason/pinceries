@@ -111,36 +111,52 @@ var _user$project$Update$update = F2(
 				};
 			default:
 				if (_p3._0.ctor === 'Ok') {
-					var _p8 = _p3._0._0;
-					var decodeJwtResult = _user$project$Commands$decodeJwt(_p8.jwt);
+					var _p9 = _p3._0._0;
+					var decodeJwtResult = _user$project$Commands$decodeJwt(_p9.jwt);
 					var _p7 = decodeJwtResult;
 					if (_p7.ctor === 'Ok') {
+						var logged = A2(_elm_lang$core$Debug$log, 'success', 'It was a success');
 						return {
 							ctor: '_Tuple2',
 							_0: _elm_lang$core$Native_Utils.update(
 								model,
-								{user: _p7._0, accessToken: _p8.accessToken, jwt: _p8.jwt}),
+								{user: _p7._0, accessToken: _p9.accessToken, jwt: _p9.jwt}),
 							_1: _elm_lang$core$Platform_Cmd$batch(
 								{
 									ctor: '::',
-									_0: _user$project$Storage$setAccessToken(_p8.accessToken),
+									_0: _user$project$Storage$setAccessToken(_p9.accessToken),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Storage$setJwt(_p8.jwt),
+										_0: _user$project$Storage$setJwt(_p9.jwt),
 										_1: {ctor: '[]'}
 									}
 								})
 						};
 					} else {
-						return {
-							ctor: '_Tuple2',
-							_0: _elm_lang$core$Native_Utils.update(
-								model,
-								{accessToken: '', jwt: ''}),
-							_1: _elm_lang$core$Platform_Cmd$none
-						};
+						var _p8 = _p7._0;
+						switch (_p8.ctor) {
+							case 'HttpError':
+								var logged = A2(_elm_lang$core$Debug$log, 'http', _p8._0);
+								return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+							case 'Unauthorized':
+								var logged = A2(_elm_lang$core$Debug$log, 'http', 'unauthorized');
+								return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+							case 'TokenExpired':
+								var logged = A2(_elm_lang$core$Debug$log, 'http', 'tokenexpired');
+								return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+							case 'TokenNotExpired':
+								var logged = A2(_elm_lang$core$Debug$log, 'http', 'tokennotexpired');
+								return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+							case 'TokenProcessingError':
+								var logged = A2(_elm_lang$core$Debug$log, 'tokenprocessing', _p8._0);
+								return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+							default:
+								var logged = A2(_elm_lang$core$Debug$log, 'tokendecode', _p8._0);
+								return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+						}
 					}
 				} else {
+					var logged = A2(_elm_lang$core$Debug$log, 'Authorized Error', _p3._0._0);
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 		}
