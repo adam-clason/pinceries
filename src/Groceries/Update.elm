@@ -7,7 +7,6 @@ import Time
 import Dict
 import Groceries.Messages exposing (Msg(..))
 import Groceries.Models exposing (..)
-import Groceries.Commands exposing (saveGroceryList)
 import Pins.Models exposing (Pin)
 
 update : Msg -> GroceryList -> (GroceryList, Cmd Msg)
@@ -15,21 +14,24 @@ update message groceryList =
     case message of 
         AddToGroceryList pin ->
             let 
-                updatedIngredientsList 
-                    = addCategories pin groceryList.list
-                updatedCount 
-                    = ingredientCount updatedIngredientsList
+                updatedIngredientsList = 
+                    addIngredients pin groceryList.list
+                updatedCount = 
+                    List.length updatedIngredientsList
 
             in 
                 ( { groceryList | list = updatedIngredientsList, show = True, count = updatedCount }, delayHideList Hide )
 
         RemoveIngredient ingredient ->
             let 
-                updatedIngredientsList = Dict.toList groceryList.list
-                    |> List.map (\(category, ingredients) -> (category, List.filter (\i -> i /= ingredient) ingredients))
-                    |> Dict.fromList
+                updatedIngredientsList = 
+                    List.filter (\i -> (i.name /= ingredient.name) ||  (i.amount /= ingredient.amount))  groceryList.list
+
             in
                 ( { groceryList | list = updatedIngredientsList,  show = True }, Cmd.none)
+
+        FetchResult _ ->
+            (groceryList, Cmd.none )
 
         Show -> 
             ( { groceryList | show = True, hovering = True }, Cmd.none)
@@ -45,46 +47,37 @@ update message groceryList =
             in
                 ( { groceryList | show = not hideList }, Cmd.none)
 
-        Name updatedName ->
-            ( { groceryList | name = updatedName }, Cmd.none )
 
-        Save -> 
-            ( groceryList, saveGroceryList groceryList)
-
-
-addCategories : Pin -> IngredientsList -> IngredientsList
-addCategories pin ingredientsList =
+addIngredients : Pin -> IngredientsList -> IngredientsList
+addIngredients pin ingredientsList =
     let 
-        categories = List.map (\c -> 
-                        (c.category, (List.map (\i -> Ingredient i.amount i.name ) c.ingredients))) pin.ingredients
+        addedIngredients = 
+            List.concatMap (\c -> 
+                    (List.map (\i -> Ingredient i.amount i.name c.category 1 ) c.ingredients)) pin.ingredients
 
           
     in 
-        List.foldl foldCategory ingredientsList categories
+        List.foldl foldAddIngredients ingredientsList addedIngredients
 
 
-foldCategory : (String, List Ingredient) -> IngredientsList -> IngredientsList
-foldCategory (category, newIngredients) ingredientsList =
+foldAddIngredients : Ingredient -> IngredientsList -> IngredientsList
+foldAddIngredients addedIngredient ingredientsList =
     let 
-        updatedDict = Dict.update category (\value -> 
-                        case value of 
-                            Just ingredients ->
-                                Just (List.append ingredients newIngredients)
-
-                            Nothing ->
-                                Just newIngredients
-                        ) ingredientsList
-
+        ingredientInList = 
+            (\i -> i.name == addedIngredient.name && i.amount == addedIngredient.amount)
+        ingredientIsInList =
+            List.any ingredientInList ingredientsList
     in 
-        updatedDict
-    
-ingredientCount : IngredientsList -> Int
-ingredientCount ingredientsList =
-    Dict.toList ingredientsList
-        |> List.map (\(category, ingredients) -> ingredients)
-        |> List.concat
-        |> List.length
-
+        if ingredientIsInList then
+            List.map 
+                (\i -> 
+                    if i.name == addedIngredient.name && i.amount == addedIngredient.amount then
+                        { i | count = i.count + 1 }
+                    else 
+                        i
+                ) ingredientsList
+        else 
+            addedIngredient :: ingredientsList
 
 
 delayHideList : msg -> Cmd msg

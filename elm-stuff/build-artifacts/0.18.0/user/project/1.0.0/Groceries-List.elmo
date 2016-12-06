@@ -1,30 +1,4 @@
-var _user$project$Groceries_List$ingredientsListItem = function (ingredient) {
-	return A2(
-		_elm_lang$html$Html$li,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$a,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$href('#'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							ingredient.name,
-							A2(_elm_lang$core$Basics_ops['++'], ' ', ingredient.amount))),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Groceries_List$category = function (_p0) {
-	var _p1 = _p0;
+var _user$project$Groceries_List$category = function (ingredient) {
 	return A2(
 		_elm_lang$html$Html$li,
 		{ctor: '[]'},
@@ -35,32 +9,14 @@ var _user$project$Groceries_List$category = function (_p0) {
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p1._0),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$i,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('fa fa-chevron-down float-right'),
-								_1: {ctor: '[]'}
-							},
-							{ctor: '[]'}),
-						_1: {ctor: '[]'}
-					}
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							ingredient.name,
+							A2(_elm_lang$core$Basics_ops['++'], ' ', ingredient.amount))),
+					_1: {ctor: '[]'}
 				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$ul,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('ingredients'),
-						_1: {ctor: '[]'}
-					},
-					A2(_elm_lang$core$List$map, _user$project$Groceries_List$ingredientsListItem, _p1._1)),
-				_1: {ctor: '[]'}
-			}
+			_1: {ctor: '[]'}
 		});
 };
 var _user$project$Groceries_List$groceryListClassName = function (showMenu) {
@@ -152,10 +108,7 @@ var _user$project$Groceries_List$view = function (groceryList) {
 									_0: _elm_lang$html$Html_Attributes$class('vertical menu'),
 									_1: {ctor: '[]'}
 								},
-								A2(
-									_elm_lang$core$List$map,
-									_user$project$Groceries_List$category,
-									_elm_lang$core$Dict$toList(groceryList.list))),
+								A2(_elm_lang$core$List$map, _user$project$Groceries_List$category, groceryList.list)),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}

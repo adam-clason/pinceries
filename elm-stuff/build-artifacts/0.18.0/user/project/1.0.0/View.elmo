@@ -224,7 +224,7 @@ var _user$project$View$page = function (model) {
 						return A2(
 							_elm_lang$html$Html$map,
 							_user$project$Messages$GroceriesMsg,
-							_user$project$Groceries_New$view(model.groceryList));
+							_user$project$Groceries_List$view(model.groceryList));
 					default:
 						return _user$project$View$accessView;
 				}
@@ -246,7 +246,7 @@ var _user$project$View$page = function (model) {
 					return A2(
 						_elm_lang$html$Html$map,
 						_user$project$Messages$GroceriesMsg,
-						_user$project$Groceries_New$view(model.groceryList));
+						_user$project$Groceries_List$view(model.groceryList));
 				default:
 					return _user$project$View$accessView;
 			}

@@ -4,7 +4,7 @@ import Dict exposing (Dict)
 import Pins.Models exposing (PinId)
 
 type alias IngredientsList 
-    =  Dict String (List Ingredient)
+    = List Ingredient
 
 type alias GroceryList =
     { id : String
@@ -14,9 +14,17 @@ type alias GroceryList =
     , show : Bool
     , hovering : Bool  
     , apiUrl : String
+    , jwt : String
     }
 
 type alias Ingredient = 
     { name : String 
     , amount : String
+    , category : String
+    , count : Int
+    }
+
+type alias ApiResopnse = 
+    { success : Bool
+    , message : String 
     }

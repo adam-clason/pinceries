@@ -3,6 +3,8 @@ module Models exposing (..)
 import Boards.Models exposing (Board)
 import Pins.Models exposing (Pin)
 import Groceries.Models exposing (..)
+import Jwt exposing (decodeToken, JwtError)
+import Json.Decode exposing (..)
 import Routing
 import Dict
 
@@ -40,13 +42,41 @@ type alias AuthorizeInfo =
 
 initialModel : Flags -> Routing.Route -> Model
 initialModel flags route =
-    { accessToken = flags.accessToken
-    , jwt = flags.jwt
-    , user = User "" "" "" ""
-    , pinceriesApiBaseUrl = flags.pinceriesApiBaseUrl
-    , pinterestRedirectUrl = flags.pinterestRedirectUrl
-    , boards = []
-    , pins = [] 
-    , groceryList = GroceryList "" "" Dict.empty 0 False False flags.pinceriesApiBaseUrl
-    , route = route
-    }
+    let 
+        initUser = 
+            userFromJwt flags.jwt |> userFromResult
+
+    in 
+        { accessToken = flags.accessToken
+        , jwt = flags.jwt
+        , user = initUser
+        , pinceriesApiBaseUrl = flags.pinceriesApiBaseUrl
+        , pinterestRedirectUrl = flags.pinterestRedirectUrl
+        , boards = []
+        , pins = [] 
+        , groceryList = GroceryList initUser.activeGroceryListId "" [] 0 False False flags.pinceriesApiBaseUrl flags.jwt
+        , route = route
+        }
+
+
+userFromResult : Result JwtError User -> User
+userFromResult result =
+    case result of 
+        Ok user ->
+            user
+
+        Err _ ->
+            User "" "" "" ""
+
+userFromJwt : String -> Result JwtError User
+userFromJwt jwt =
+    let 
+        jwtDecoder = 
+            map4 User
+                (field "id" string)
+                (field "firstName" string)
+                (field "lastName" string)
+                (field "activeGroceryListId" string)
+
+    in 
+        Jwt.decodeToken jwtDecoder jwt

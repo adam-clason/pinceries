@@ -8,7 +8,6 @@ import Models exposing (Model)
 import Boards.List
 import Pins.List
 import Groceries.List
-import Groceries.New
 import Pins.Update exposing (..)
 
 import Routing exposing (Route(..), InnerRoute(..))
@@ -40,7 +39,7 @@ page model =
                         Html.map pinsTranslator (Pins.List.view model.pins)
 
                     GroceriesRoute ->
-                        Html.map GroceriesMsg (Groceries.New.view model.groceryList)
+                        Html.map GroceriesMsg (Groceries.List.view model.groceryList)
 
                     Authorize authCode ->
                         accessView
@@ -54,7 +53,7 @@ page model =
                     Html.map pinsTranslator (Pins.List.view model.pins)
 
                 GroceriesRoute ->
-                    Html.map GroceriesMsg (Groceries.New.view model.groceryList)
+                    Html.map GroceriesMsg (Groceries.List.view model.groceryList)
 
                 Authorize authCode ->
                     accessView

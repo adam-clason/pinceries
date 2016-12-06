@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 var User = require('./app/models/user');
 var GroceryList = require('./app/models/groceryList');
+
 var https = require('https');
 
 var app = express();
@@ -85,19 +86,20 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 						if (!user) {
 
-							var groceryList = new GroceryList({
-								ingredients : []
-							}); 
-
 							user = new User(userInfo);
+
+							var groceryList = new GroceryList({
+								ingredients : [],
+								userId : user._id 
+							}); 
+							
 							user.activeGroceryListId = groceryList._id;
-					
+							
+							jwtUser.id = user._id;
+							jwtUser.activeGroceryListId = groceryList._id;
 
 							user.save(function(err, doc) {
-
-								jwtUser.id = doc._id;
-								jwtUser.activeGroceryListId = doc.activeGroceryListId;
-
+								
 								groceryList.save(function(err) {
 
 									if (err) {
@@ -185,43 +187,43 @@ apiRoutes.use(function(req, res, next) {
 
 
 
-apiRoutes.post('/groceries/:listId/ingredients', function(req, res) {
+apiRoutes.post('/groceries/:listId', function(req, res) {
 
-	var ingredients = req.body;
+	var updatedGroceryList = req.body;
 
 	if (req.user) {
 		
 		GroceryList.findOne({
-			userId : req.user.id
+			_id : req.params.listId,
+			userId : req.user._id
 		}, function(err, groceryList) {
 
 			if (!groceryList) {
 				// Create a new grocery list
 				groceryList = new GroceryList({
 					userId : req.user.id,
-					ingredients : ingredients
+					ingredients : updatedGroceryList.ingredients
 				});
 
 				groceryList.save(function(err) {
 					if (err) {
-						res.json({ success: false, message: "Error adding items to grocery list" });
+						res.json({ success: false, message: "Error saving grocery list" });
 					} else {
-						res.json(groceryList);
+						res.json({ success: true, message: "Success!" });
 					}
 
 				});
-
-
 			}
 			else {
 				// Update ingredient list 
-				groceryList.ingredients.concat(ingredients);
+				groceryList.name = updatedGroceryList.name;
+				groceryList.ingredients = updatedGroceryList.ingredients
 
 				groceryList.save(function(err) {
 					if (err) {
-						res.json({ success: false, message: "Error adding items to grocery list" });
+						res.json({ success: false, message: "Error saving grocery list" });
 					} else {
-						res.json(groceryList);
+						res.json({ success: true, message: "Success!" });
 					}
 				});
 
@@ -235,18 +237,46 @@ apiRoutes.post('/groceries/:listId/ingredients', function(req, res) {
 
 });
 
-apiRoutes.get('/groceries/:listId/ingredients', function(req, res) {
-
+apiRoutes.get('/groceries/:listId', function(req, res) {
 	GroceryList.findOne({
-		userId : req.user.id
+		userId : req.user._id,
+		_id : req.params.userId
 	}, function(err, groceryList) {
 		if (groceryList) {
 			res.json(groceryList);
 		} else {
 			res.status(404).json({
 				success: false,
-				message: "No grocery list found"
+				message: "Grocery list not found"
 			});
+		}
+	});
+
+});
+
+apiRoutes.post('/groceries/:listId/ingredients', function(req, res) {
+	GroceryList.findOne({
+		userId : req.user.id,
+		listId : req.params.listId
+	}, function(err, groceryList) {
+		if (groceryList) {
+
+			groceryList.ingredients = req.body;
+
+			groceryList.save(function(err, updated) {
+				if (err) {
+					res.json({ success: false, message: ""})
+				} else {
+					res.json({ success: true, message: "Saved ingredients successfully!" });
+				}
+ 
+			});
+
+		} else {
+			res.status(404).json({
+				success: false,
+				message: "Error updating grocery list"
+			})
 		}
 	});
 

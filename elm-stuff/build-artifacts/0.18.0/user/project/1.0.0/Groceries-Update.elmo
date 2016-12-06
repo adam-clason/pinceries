@@ -16,62 +16,43 @@ var _user$project$Groceries_Update$delayHideList = function (msg) {
 				_elm_lang$core$Task$succeed(msg)),
 			_elm_lang$core$Process$sleep(_elm_lang$core$Time$second * 3)));
 };
-var _user$project$Groceries_Update$ingredientCount = function (ingredientsList) {
-	return _elm_lang$core$List$length(
-		_elm_lang$core$List$concat(
-			A2(
-				_elm_lang$core$List$map,
-				function (_p0) {
-					var _p1 = _p0;
-					return _p1._1;
-				},
-				_elm_lang$core$Dict$toList(ingredientsList))));
-};
-var _user$project$Groceries_Update$foldCategory = F2(
-	function (_p2, ingredientsList) {
-		var _p3 = _p2;
-		var _p5 = _p3._1;
-		var updatedDict = A3(
-			_elm_lang$core$Dict$update,
-			_p3._0,
-			function (value) {
-				var _p4 = value;
-				if (_p4.ctor === 'Just') {
-					return _elm_lang$core$Maybe$Just(
-						A2(_elm_lang$core$List$append, _p4._0, _p5));
-				} else {
-					return _elm_lang$core$Maybe$Just(_p5);
-				}
-			},
-			ingredientsList);
-		return updatedDict;
-	});
-var _user$project$Groceries_Update$addCategories = F2(
-	function (pin, ingredientsList) {
-		var categories = A2(
+var _user$project$Groceries_Update$foldAddIngredients = F2(
+	function (addedIngredient, ingredientsList) {
+		var ingredientInList = function (i) {
+			return _elm_lang$core$Native_Utils.eq(i.name, addedIngredient.name) && _elm_lang$core$Native_Utils.eq(i.amount, addedIngredient.amount);
+		};
+		var ingredientIsInList = A2(_elm_lang$core$List$any, ingredientInList, ingredientsList);
+		return ingredientIsInList ? A2(
 			_elm_lang$core$List$map,
+			function (i) {
+				return (_elm_lang$core$Native_Utils.eq(i.name, addedIngredient.name) && _elm_lang$core$Native_Utils.eq(i.amount, addedIngredient.amount)) ? _elm_lang$core$Native_Utils.update(
+					i,
+					{count: i.count + 1}) : i;
+			},
+			ingredientsList) : {ctor: '::', _0: addedIngredient, _1: ingredientsList};
+	});
+var _user$project$Groceries_Update$addIngredients = F2(
+	function (pin, ingredientsList) {
+		var addedIngredients = A2(
+			_elm_lang$core$List$concatMap,
 			function (c) {
-				return {
-					ctor: '_Tuple2',
-					_0: c.category,
-					_1: A2(
-						_elm_lang$core$List$map,
-						function (i) {
-							return A2(_user$project$Groceries_Models$Ingredient, i.amount, i.name);
-						},
-						c.ingredients)
-				};
+				return A2(
+					_elm_lang$core$List$map,
+					function (i) {
+						return A4(_user$project$Groceries_Models$Ingredient, i.amount, i.name, c.category, 1);
+					},
+					c.ingredients);
 			},
 			pin.ingredients);
-		return A3(_elm_lang$core$List$foldl, _user$project$Groceries_Update$foldCategory, ingredientsList, categories);
+		return A3(_elm_lang$core$List$foldl, _user$project$Groceries_Update$foldAddIngredients, ingredientsList, addedIngredients);
 	});
 var _user$project$Groceries_Update$update = F2(
 	function (message, groceryList) {
-		var _p6 = message;
-		switch (_p6.ctor) {
+		var _p0 = message;
+		switch (_p0.ctor) {
 			case 'AddToGroceryList':
-				var updatedIngredientsList = A2(_user$project$Groceries_Update$addCategories, _p6._0, groceryList.list);
-				var updatedCount = _user$project$Groceries_Update$ingredientCount(updatedIngredientsList);
+				var updatedIngredientsList = A2(_user$project$Groceries_Update$addIngredients, _p0._0, groceryList.list);
+				var updatedCount = _elm_lang$core$List$length(updatedIngredientsList);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -80,23 +61,13 @@ var _user$project$Groceries_Update$update = F2(
 					_1: _user$project$Groceries_Update$delayHideList(_user$project$Groceries_Messages$Hide)
 				};
 			case 'RemoveIngredient':
-				var updatedIngredientsList = _elm_lang$core$Dict$fromList(
-					A2(
-						_elm_lang$core$List$map,
-						function (_p7) {
-							var _p8 = _p7;
-							return {
-								ctor: '_Tuple2',
-								_0: _p8._0,
-								_1: A2(
-									_elm_lang$core$List$filter,
-									function (i) {
-										return !_elm_lang$core$Native_Utils.eq(i, _p6._0);
-									},
-									_p8._1)
-							};
-						},
-						_elm_lang$core$Dict$toList(groceryList.list)));
+				var _p1 = _p0._0;
+				var updatedIngredientsList = A2(
+					_elm_lang$core$List$filter,
+					function (i) {
+						return (!_elm_lang$core$Native_Utils.eq(i.name, _p1.name)) || (!_elm_lang$core$Native_Utils.eq(i.amount, _p1.amount));
+					},
+					groceryList.list);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -104,6 +75,8 @@ var _user$project$Groceries_Update$update = F2(
 						{list: updatedIngredientsList, show: true}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'FetchResult':
+				return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'Show':
 				return {
 					ctor: '_Tuple2',
@@ -120,10 +93,10 @@ var _user$project$Groceries_Update$update = F2(
 						{show: false}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'Hide':
+			default:
 				var hideList = function () {
-					var _p9 = groceryList.hovering;
-					if (_p9 === true) {
+					var _p2 = groceryList.hovering;
+					if (_p2 === true) {
 						return false;
 					} else {
 						return true;
@@ -135,20 +108,6 @@ var _user$project$Groceries_Update$update = F2(
 						groceryList,
 						{show: !hideList}),
 					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'Name':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						groceryList,
-						{name: _p6._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				return {
-					ctor: '_Tuple2',
-					_0: groceryList,
-					_1: _user$project$Groceries_Commands$saveGroceryList(groceryList)
 				};
 		}
 	});

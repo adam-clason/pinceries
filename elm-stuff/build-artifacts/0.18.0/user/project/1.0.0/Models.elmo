@@ -2,17 +2,46 @@ var _user$project$Models$User = F4(
 	function (a, b, c, d) {
 		return {id: a, firstName: b, lastName: c, activeGroceryListId: d};
 	});
+var _user$project$Models$userFromResult = function (result) {
+	var _p0 = result;
+	if (_p0.ctor === 'Ok') {
+		return _p0._0;
+	} else {
+		return A4(_user$project$Models$User, '', '', '', '');
+	}
+};
+var _user$project$Models$userFromJwt = function (jwt) {
+	var jwtDecoder = A5(
+		_elm_lang$core$Json_Decode$map4,
+		_user$project$Models$User,
+		A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode$field, 'firstName', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode$field, 'lastName', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode$field, 'activeGroceryListId', _elm_lang$core$Json_Decode$string));
+	return A2(_simonh1000$elm_jwt$Jwt$decodeToken, jwtDecoder, jwt);
+};
 var _user$project$Models$initialModel = F2(
 	function (flags, route) {
+		var initUser = _user$project$Models$userFromResult(
+			_user$project$Models$userFromJwt(flags.jwt));
 		return {
 			accessToken: flags.accessToken,
 			jwt: flags.jwt,
-			user: A4(_user$project$Models$User, '', '', '', ''),
+			user: initUser,
 			pinceriesApiBaseUrl: flags.pinceriesApiBaseUrl,
 			pinterestRedirectUrl: flags.pinterestRedirectUrl,
 			boards: {ctor: '[]'},
 			pins: {ctor: '[]'},
-			groceryList: A7(_user$project$Groceries_Models$GroceryList, '', '', _elm_lang$core$Dict$empty, 0, false, false, flags.pinceriesApiBaseUrl),
+			groceryList: A8(
+				_user$project$Groceries_Models$GroceryList,
+				initUser.activeGroceryListId,
+				'',
+				{ctor: '[]'},
+				0,
+				false,
+				false,
+				flags.pinceriesApiBaseUrl,
+				flags.jwt),
 			route: route
 		};
 	});

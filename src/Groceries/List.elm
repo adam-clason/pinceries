@@ -16,7 +16,7 @@ view groceryList =
             ]
         , div [ class (groceryListClassName groceryList.show) ]
             [ ul [ class "vertical menu" ]
-                (List.map category (Dict.toList groceryList.list))  
+                (List.map category groceryList.list)  
             ]
         ]
  
@@ -28,21 +28,12 @@ groceryListClassName showMenu =
         "grocery-list-wrapper slide-up"
 
 
-category : (String, List Ingredient) -> Html Msg 
-category (name, ingredients) =
+category : Ingredient -> Html Msg 
+category ingredient =
     li [ ]
         [ a [ ] 
-            [ text name 
-            , i [ class "fa fa-chevron-down float-right" ] [] 
+            [ text (ingredient.name ++ " " ++ ingredient.amount)
             ]
-        , ul [ class "ingredients" ] 
-            (List.map ingredientsListItem ingredients)
-        ]
-
-ingredientsListItem : Ingredient -> Html Msg
-ingredientsListItem ingredient =
-    li [ ] 
-        [ a [ href "#" ] [ text (ingredient.name ++ " " ++ ingredient.amount) ]
         ]
 
        

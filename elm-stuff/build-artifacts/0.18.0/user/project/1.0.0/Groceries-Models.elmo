@@ -1,8 +1,12 @@
-var _user$project$Groceries_Models$GroceryList = F7(
-	function (a, b, c, d, e, f, g) {
-		return {id: a, name: b, list: c, count: d, show: e, hovering: f, apiUrl: g};
+var _user$project$Groceries_Models$GroceryList = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {id: a, name: b, list: c, count: d, show: e, hovering: f, apiUrl: g, jwt: h};
 	});
-var _user$project$Groceries_Models$Ingredient = F2(
+var _user$project$Groceries_Models$Ingredient = F4(
+	function (a, b, c, d) {
+		return {name: a, amount: b, category: c, count: d};
+	});
+var _user$project$Groceries_Models$ApiResopnse = F2(
 	function (a, b) {
-		return {name: a, amount: b};
+		return {success: a, message: b};
 	});

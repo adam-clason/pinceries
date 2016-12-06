@@ -1,3 +1,36 @@
-var _user$project$Groceries_Commands$saveGroceryList = function (groceryList) {
-	return _elm_lang$core$Platform_Cmd$none;
+var _user$project$Groceries_Commands$memberDecoder = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_user$project$Groceries_Models$Ingredient,
+	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'amount', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'category', _elm_lang$core$Json_Decode$string),
+	_elm_lang$core$Json_Decode$succeed(0));
+var _user$project$Groceries_Commands$fetchGroceryListDecoder = function (currentModel) {
+	return A9(
+		_elm_lang$core$Json_Decode$map8,
+		_user$project$Groceries_Models$GroceryList,
+		_elm_lang$core$Json_Decode$succeed(currentModel.id),
+		_elm_lang$core$Json_Decode$succeed(currentModel.name),
+		_elm_lang$core$Json_Decode$list(_user$project$Groceries_Commands$memberDecoder),
+		_elm_lang$core$Json_Decode$succeed(currentModel.count),
+		_elm_lang$core$Json_Decode$succeed(currentModel.show),
+		_elm_lang$core$Json_Decode$succeed(currentModel.hovering),
+		_elm_lang$core$Json_Decode$succeed(currentModel.apiUrl),
+		_elm_lang$core$Json_Decode$succeed(currentModel.jwt));
+};
+var _user$project$Groceries_Commands$fetchGroceryListUrl = function (model) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		model.apiUrl,
+		A2(_elm_lang$core$Basics_ops['++'], '/api/groceries/', model.id));
+};
+var _user$project$Groceries_Commands$fetchGroceryList = function (model) {
+	return A2(
+		_simonh1000$elm_jwt$Jwt$send,
+		_user$project$Groceries_Messages$FetchResult,
+		A3(
+			_simonh1000$elm_jwt$Jwt$get,
+			model.jwt,
+			_user$project$Groceries_Commands$fetchGroceryListUrl(model),
+			_user$project$Groceries_Commands$fetchGroceryListDecoder(model)));
 };

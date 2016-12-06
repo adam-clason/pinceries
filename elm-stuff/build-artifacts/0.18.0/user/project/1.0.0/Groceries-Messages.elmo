@@ -1,10 +1,9 @@
-var _user$project$Groceries_Messages$Save = {ctor: 'Save'};
-var _user$project$Groceries_Messages$Name = function (a) {
-	return {ctor: 'Name', _0: a};
-};
 var _user$project$Groceries_Messages$Hide = {ctor: 'Hide'};
 var _user$project$Groceries_Messages$HoverOut = {ctor: 'HoverOut'};
 var _user$project$Groceries_Messages$Show = {ctor: 'Show'};
+var _user$project$Groceries_Messages$FetchResult = function (a) {
+	return {ctor: 'FetchResult', _0: a};
+};
 var _user$project$Groceries_Messages$RemoveIngredient = function (a) {
 	return {ctor: 'RemoveIngredient', _0: a};
 };
