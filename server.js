@@ -36,9 +36,13 @@ var apiRoutes = express.Router();
 if (!isProduction) {
 	apiRoutes.get('/clear', function(req, res) {
 		User.remove({}, function () {
-			res.json({ success: true, message: "Removed Users!" });
+			
+		});
+		GroceryList.remove({}, function () {
+			
 		});
 
+		res.json({ success: true, message : "Removed the users" });
 	});	
 }
 
@@ -195,7 +199,7 @@ apiRoutes.post('/groceries/:listId', function(req, res) {
 		
 		GroceryList.findOne({
 			_id : req.params.listId,
-			userId : req.user._id
+			userId : req.user.id
 		}, function(err, groceryList) {
 
 			if (!groceryList) {
@@ -239,8 +243,8 @@ apiRoutes.post('/groceries/:listId', function(req, res) {
 
 apiRoutes.get('/groceries/:listId', function(req, res) {
 	GroceryList.findOne({
-		userId : req.user._id,
-		_id : req.params.userId
+		_id : req.params.listId,
+		userId : req.user.id
 	}, function(err, groceryList) {
 		if (groceryList) {
 			res.json(groceryList);
@@ -256,8 +260,8 @@ apiRoutes.get('/groceries/:listId', function(req, res) {
 
 apiRoutes.post('/groceries/:listId/ingredients', function(req, res) {
 	GroceryList.findOne({
-		userId : req.user.id,
-		listId : req.params.listId
+		_id : req.params.listId,
+		userId : req.user.id
 	}, function(err, groceryList) {
 		if (groceryList) {
 
