@@ -8,7 +8,6 @@ import Pins.Messages exposing (OutMsg(..))
 
 
 import Debug
-import Jwt exposing (JwtError(..))
 import Task
 import Navigation
 import Commands
@@ -18,6 +17,7 @@ import Boards.Commands
 import Boards.Update
 import Pins.Update
 import Groceries.Update
+import Groceries.Commands
 import Routing exposing (Route(..), InnerRoute(..))
 
 pinsTranslator = Pins.Update.translator translationDictionary
@@ -91,39 +91,23 @@ commandFromRoute model currentRoute  =
         Authenticated innerRoute ->
              case innerRoute of 
                 BoardsRoute ->
-                    Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
-
+                    Cmd.batch 
+                        [ Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
+                        , Cmd.map GroceriesMsg (Groceries.Commands.fetchGroceryList model.groceryList)
+                        ]
+                        
+    
                 BoardRoute id ->
-                    Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
+                    Cmd.batch 
+                        [ Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
+                        , Cmd.map GroceriesMsg (Groceries.Commands.fetchGroceryList model.groceryList)
+                        ]
 
-                GroceriesRoute ->
-                    Cmd.none
-
-                Authorize (Just authCode) ->
-                    let 
-                        fetchToken =
-                            Commands.fetchAccessToken model authCode
-                        fetchJwt =
-                            Commands.fetchPinceriesApiJwt model
-                    in
-                        fetchToken 
-                            |> Task.andThen fetchJwt 
-                            |> Task.attempt Authorized 
-
-                Authorize Nothing ->
+                _ ->
                     Cmd.none
 
         Anonymous innerRoute ->
              case innerRoute of 
-                BoardsRoute ->
-                    Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
-
-                BoardRoute id ->
-                    Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
-
-                GroceriesRoute ->
-                    Cmd.none
-
                 Authorize (Just authCode) -> 
                     let 
                         fetchToken =
@@ -136,6 +120,9 @@ commandFromRoute model currentRoute  =
                             |> Task.attempt Authorized 
 
                 Authorize Nothing ->
+                    Cmd.none
+
+                _ ->
                     Cmd.none
 
         NotFoundRoute ->

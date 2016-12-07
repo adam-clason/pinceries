@@ -7,6 +7,7 @@ import Time
 import Dict
 import Groceries.Messages exposing (Msg(..))
 import Groceries.Models exposing (..)
+import Groceries.Commands exposing (saveGroceryList)
 import Pins.Models exposing (Pin)
 
 update : Msg -> GroceryList -> (GroceryList, Cmd Msg)
@@ -18,20 +19,32 @@ update message groceryList =
                     addIngredients pin groceryList.list
                 updatedCount = 
                     List.length updatedIngredientsList
+                updatedModel =
+                    { groceryList | list = updatedIngredientsList, show = True, count = updatedCount }
 
             in 
-                ( { groceryList | list = updatedIngredientsList, show = True, count = updatedCount }, delayHideList Hide )
+                ( updatedModel, Cmd.batch [ delayHideList Hide, saveGroceryList updatedModel ])
 
         RemoveIngredient ingredient ->
             let 
                 updatedIngredientsList = 
                     List.filter (\i -> (i.name /= ingredient.name) ||  (i.amount /= ingredient.amount))  groceryList.list
+                updatedModel = 
+                    { groceryList | list = updatedIngredientsList,  show = True }
 
             in
-                ( { groceryList | list = updatedIngredientsList,  show = True }, Cmd.none)
+                ( updatedModel , saveGroceryList updatedModel)
 
-        FetchResult _ ->
-            (groceryList, Cmd.none )
+        FetchResult result ->
+            case result of 
+                Ok updatedModel ->
+                    (updatedModel, Cmd.none)
+
+                Err _ ->
+                    (groceryList, Cmd.none)
+
+        SaveResult _ -> 
+            ( groceryList, Cmd.none )
 
         Show -> 
             ( { groceryList | show = True, hovering = True }, Cmd.none)

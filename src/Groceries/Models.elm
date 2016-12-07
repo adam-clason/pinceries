@@ -24,7 +24,7 @@ type alias Ingredient =
     , count : Int
     }
 
-type alias ApiResopnse = 
-    { success : Bool
+type alias ApiResponse = 
+    { success : Bool    
     , message : String 
     }

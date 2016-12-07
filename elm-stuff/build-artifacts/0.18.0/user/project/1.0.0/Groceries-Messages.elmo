@@ -1,6 +1,9 @@
 var _user$project$Groceries_Messages$Hide = {ctor: 'Hide'};
 var _user$project$Groceries_Messages$HoverOut = {ctor: 'HoverOut'};
 var _user$project$Groceries_Messages$Show = {ctor: 'Show'};
+var _user$project$Groceries_Messages$SaveResult = function (a) {
+	return {ctor: 'SaveResult', _0: a};
+};
 var _user$project$Groceries_Messages$FetchResult = function (a) {
 	return {ctor: 'FetchResult', _0: a};
 };

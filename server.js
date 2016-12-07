@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 
 var bodyParser = require('body-parser');
+var bearerToken = require('express-bearer-token');
 var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
 var cors = require('cors');
@@ -28,6 +29,7 @@ mongoose.connect(process.env.MONGODB_URI);
 
 app.use(cors());
 app.use(express.static(publicPath));
+app.use(bearerToken());
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
 
@@ -161,7 +163,7 @@ apiRoutes.post('/authenticate', function(req, res) {
 apiRoutes.use(function(req, res, next) {
 
   // check header or url parameters or post parameters for token
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  var token = req.body.token || req.query.token || req.token || req.headers['x-access-token'];
 
   // decode token
   if (token) {

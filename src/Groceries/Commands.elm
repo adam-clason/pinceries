@@ -3,7 +3,9 @@ module Groceries.Commands exposing (..)
 import Groceries.Models exposing (..)
 import Groceries.Messages exposing (..)
 import Json.Decode exposing (..)
+import Json.Encode
 import Jwt
+import Http exposing (jsonBody)
 
 fetchGroceryList : GroceryList -> Cmd Msg    
 fetchGroceryList model  =
@@ -33,17 +35,42 @@ ingredientDecoder =
         (field "name" string)
         (field "amount" string)
         (field "category" string)
-        (field "count" string)
+        (field "count" int)
 
 saveGroceryList : GroceryList -> Cmd Msg
 saveGroceryList model =
-    Jwt.post model.jwt addIngredientsResponseDecoder { id = model.id, name = model.name, ingredients = model.list }
+    Jwt.post model.jwt (saveGroceryListUrl model) (saveGroceryListJsonBody model) addIngredientsResponseDecoder 
+        |> Jwt.send SaveResult
+
+saveGroceryListJsonBody : GroceryList -> Http.Body
+saveGroceryListJsonBody model =
+    Json.Encode.object
+        [ ("id", Json.Encode.string model.id)
+        , ("name", Json.Encode.string model.id)
+        , ("ingredients", Json.Encode.list <| 
+            List.map 
+                (
+                    \i ->
+                        Json.Encode.object
+                            [ ("name", Json.Encode.string i.name)
+                            , ("amount", Json.Encode.string i.amount)
+                            , ("category", Json.Encode.string i.category)
+                            , ("count", Json.Encode.int i.count)
+                            ]
+                ) model.list
+          )
+        ]
+    |> jsonBody
+
+
+
 
 saveGroceryListUrl : GroceryList -> String 
-    model.apiUrl ++ "/api/groceries/" ++ model.id
-
+saveGroceryListUrl model =
+    (model.apiUrl ++ "/api/groceries/" ++ model.id)
 
 addIngredientsResponseDecoder : Decoder ApiResponse
+addIngredientsResponseDecoder =
     map2 ApiResponse
         (field "success" bool)
         (field "message" string)

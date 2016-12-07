@@ -6,7 +6,7 @@ var _user$project$Groceries_Models$Ingredient = F4(
 	function (a, b, c, d) {
 		return {name: a, amount: b, category: c, count: d};
 	});
-var _user$project$Groceries_Models$ApiResopnse = F2(
+var _user$project$Groceries_Models$ApiResponse = F2(
 	function (a, b) {
 		return {success: a, message: b};
 	});

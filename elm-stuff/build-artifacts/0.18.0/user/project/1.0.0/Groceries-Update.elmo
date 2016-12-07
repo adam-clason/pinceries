@@ -53,12 +53,22 @@ var _user$project$Groceries_Update$update = F2(
 			case 'AddToGroceryList':
 				var updatedIngredientsList = A2(_user$project$Groceries_Update$addIngredients, _p0._0, groceryList.list);
 				var updatedCount = _elm_lang$core$List$length(updatedIngredientsList);
+				var updatedModel = _elm_lang$core$Native_Utils.update(
+					groceryList,
+					{list: updatedIngredientsList, show: true, count: updatedCount});
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						groceryList,
-						{list: updatedIngredientsList, show: true, count: updatedCount}),
-					_1: _user$project$Groceries_Update$delayHideList(_user$project$Groceries_Messages$Hide)
+					_0: updatedModel,
+					_1: _elm_lang$core$Platform_Cmd$batch(
+						{
+							ctor: '::',
+							_0: _user$project$Groceries_Update$delayHideList(_user$project$Groceries_Messages$Hide),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Groceries_Commands$saveGroceryList(updatedModel),
+								_1: {ctor: '[]'}
+							}
+						})
 				};
 			case 'RemoveIngredient':
 				var _p1 = _p0._0;
@@ -68,14 +78,22 @@ var _user$project$Groceries_Update$update = F2(
 						return (!_elm_lang$core$Native_Utils.eq(i.name, _p1.name)) || (!_elm_lang$core$Native_Utils.eq(i.amount, _p1.amount));
 					},
 					groceryList.list);
+				var updatedModel = _elm_lang$core$Native_Utils.update(
+					groceryList,
+					{list: updatedIngredientsList, show: true});
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						groceryList,
-						{list: updatedIngredientsList, show: true}),
-					_1: _elm_lang$core$Platform_Cmd$none
+					_0: updatedModel,
+					_1: _user$project$Groceries_Commands$saveGroceryList(updatedModel)
 				};
 			case 'FetchResult':
+				var _p2 = _p0._0;
+				if (_p2.ctor === 'Ok') {
+					return {ctor: '_Tuple2', _0: _p2._0, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'SaveResult':
 				return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'Show':
 				return {
@@ -95,8 +113,8 @@ var _user$project$Groceries_Update$update = F2(
 				};
 			default:
 				var hideList = function () {
-					var _p2 = groceryList.hovering;
-					if (_p2 === true) {
+					var _p3 = groceryList.hovering;
+					if (_p3 === true) {
 						return false;
 					} else {
 						return true;

@@ -7,55 +7,57 @@ var _user$project$Update$commandFromRoute = F2(
 				var _p1 = _p0._0;
 				switch (_p1.ctor) {
 					case 'BoardsRoute':
-						return A2(
-							_elm_lang$core$Platform_Cmd$map,
-							_user$project$Messages$BoardsMsg,
-							_user$project$Boards_Commands$fetchAll(model));
+						return _elm_lang$core$Platform_Cmd$batch(
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Platform_Cmd$map,
+									_user$project$Messages$BoardsMsg,
+									_user$project$Boards_Commands$fetchAll(model)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$core$Platform_Cmd$map,
+										_user$project$Messages$GroceriesMsg,
+										_user$project$Groceries_Commands$fetchGroceryList(model.groceryList)),
+									_1: {ctor: '[]'}
+								}
+							});
 					case 'BoardRoute':
-						return A2(
-							_elm_lang$core$Platform_Cmd$map,
-							_user$project$Update$pinsTranslator,
-							A2(_user$project$Pins_Commands$fetchPins, model, _p1._0));
-					case 'GroceriesRoute':
-						return _elm_lang$core$Platform_Cmd$none;
+						return _elm_lang$core$Platform_Cmd$batch(
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Platform_Cmd$map,
+									_user$project$Update$pinsTranslator,
+									A2(_user$project$Pins_Commands$fetchPins, model, _p1._0)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$core$Platform_Cmd$map,
+										_user$project$Messages$GroceriesMsg,
+										_user$project$Groceries_Commands$fetchGroceryList(model.groceryList)),
+									_1: {ctor: '[]'}
+								}
+							});
 					default:
-						if (_p1._0.ctor === 'Just') {
-							var fetchJwt = _user$project$Commands$fetchPinceriesApiJwt(model);
-							var fetchToken = A2(_user$project$Commands$fetchAccessToken, model, _p1._0._0);
-							return A2(
-								_elm_lang$core$Task$attempt,
-								_user$project$Messages$Authorized,
-								A2(_elm_lang$core$Task$andThen, fetchJwt, fetchToken));
-						} else {
-							return _elm_lang$core$Platform_Cmd$none;
-						}
+						return _elm_lang$core$Platform_Cmd$none;
 				}
 			case 'Anonymous':
 				var _p2 = _p0._0;
-				switch (_p2.ctor) {
-					case 'BoardsRoute':
+				if (_p2.ctor === 'Authorize') {
+					if (_p2._0.ctor === 'Just') {
+						var fetchJwt = _user$project$Commands$fetchPinceriesApiJwt(model);
+						var fetchToken = A2(_user$project$Commands$fetchAccessToken, model, _p2._0._0);
 						return A2(
-							_elm_lang$core$Platform_Cmd$map,
-							_user$project$Messages$BoardsMsg,
-							_user$project$Boards_Commands$fetchAll(model));
-					case 'BoardRoute':
-						return A2(
-							_elm_lang$core$Platform_Cmd$map,
-							_user$project$Update$pinsTranslator,
-							A2(_user$project$Pins_Commands$fetchPins, model, _p2._0));
-					case 'GroceriesRoute':
+							_elm_lang$core$Task$attempt,
+							_user$project$Messages$Authorized,
+							A2(_elm_lang$core$Task$andThen, fetchJwt, fetchToken));
+					} else {
 						return _elm_lang$core$Platform_Cmd$none;
-					default:
-						if (_p2._0.ctor === 'Just') {
-							var fetchJwt = _user$project$Commands$fetchPinceriesApiJwt(model);
-							var fetchToken = A2(_user$project$Commands$fetchAccessToken, model, _p2._0._0);
-							return A2(
-								_elm_lang$core$Task$attempt,
-								_user$project$Messages$Authorized,
-								A2(_elm_lang$core$Task$andThen, fetchJwt, fetchToken));
-						} else {
-							return _elm_lang$core$Platform_Cmd$none;
-						}
+					}
+				} else {
+					return _elm_lang$core$Platform_Cmd$none;
 				}
 			default:
 				return _elm_lang$core$Platform_Cmd$none;

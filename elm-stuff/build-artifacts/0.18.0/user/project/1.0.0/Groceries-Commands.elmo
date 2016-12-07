@@ -1,17 +1,107 @@
-var _user$project$Groceries_Commands$memberDecoder = A5(
+var _user$project$Groceries_Commands$addIngredientsResponseDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Groceries_Models$ApiResponse,
+	A2(_elm_lang$core$Json_Decode$field, 'success', _elm_lang$core$Json_Decode$bool),
+	A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string));
+var _user$project$Groceries_Commands$saveGroceryListUrl = function (model) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		model.apiUrl,
+		A2(_elm_lang$core$Basics_ops['++'], '/api/groceries/', model.id));
+};
+var _user$project$Groceries_Commands$saveGroceryListJsonBody = function (model) {
+	return _elm_lang$http$Http$jsonBody(
+		_elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'id',
+					_1: _elm_lang$core$Json_Encode$string(model.id)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'name',
+						_1: _elm_lang$core$Json_Encode$string(model.id)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'ingredients',
+							_1: _elm_lang$core$Json_Encode$list(
+								A2(
+									_elm_lang$core$List$map,
+									function (i) {
+										return _elm_lang$core$Json_Encode$object(
+											{
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'name',
+													_1: _elm_lang$core$Json_Encode$string(i.name)
+												},
+												_1: {
+													ctor: '::',
+													_0: {
+														ctor: '_Tuple2',
+														_0: 'amount',
+														_1: _elm_lang$core$Json_Encode$string(i.amount)
+													},
+													_1: {
+														ctor: '::',
+														_0: {
+															ctor: '_Tuple2',
+															_0: 'category',
+															_1: _elm_lang$core$Json_Encode$string(i.category)
+														},
+														_1: {
+															ctor: '::',
+															_0: {
+																ctor: '_Tuple2',
+																_0: 'count',
+																_1: _elm_lang$core$Json_Encode$int(i.count)
+															},
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											});
+									},
+									model.list))
+						},
+						_1: {ctor: '[]'}
+					}
+				}
+			}));
+};
+var _user$project$Groceries_Commands$saveGroceryList = function (model) {
+	return A2(
+		_simonh1000$elm_jwt$Jwt$send,
+		_user$project$Groceries_Messages$SaveResult,
+		A4(
+			_simonh1000$elm_jwt$Jwt$post,
+			model.jwt,
+			_user$project$Groceries_Commands$saveGroceryListUrl(model),
+			_user$project$Groceries_Commands$saveGroceryListJsonBody(model),
+			_user$project$Groceries_Commands$addIngredientsResponseDecoder));
+};
+var _user$project$Groceries_Commands$ingredientDecoder = A5(
 	_elm_lang$core$Json_Decode$map4,
 	_user$project$Groceries_Models$Ingredient,
 	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'amount', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'category', _elm_lang$core$Json_Decode$string),
-	_elm_lang$core$Json_Decode$succeed(0));
+	A2(_elm_lang$core$Json_Decode$field, 'count', _elm_lang$core$Json_Decode$int));
 var _user$project$Groceries_Commands$fetchGroceryListDecoder = function (currentModel) {
 	return A9(
 		_elm_lang$core$Json_Decode$map8,
 		_user$project$Groceries_Models$GroceryList,
 		_elm_lang$core$Json_Decode$succeed(currentModel.id),
 		_elm_lang$core$Json_Decode$succeed(currentModel.name),
-		_elm_lang$core$Json_Decode$list(_user$project$Groceries_Commands$memberDecoder),
+		_elm_lang$core$Json_Decode$list(_user$project$Groceries_Commands$ingredientDecoder),
 		_elm_lang$core$Json_Decode$succeed(currentModel.count),
 		_elm_lang$core$Json_Decode$succeed(currentModel.show),
 		_elm_lang$core$Json_Decode$succeed(currentModel.hovering),
