@@ -29,7 +29,6 @@ mongoose.connect(process.env.MONGODB_URI);
 
 app.use(cors());
 app.use(express.static(publicPath));
-app.use(bearerToken());
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json());
 
@@ -160,6 +159,8 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 });
 
+apiRoutes.use(bearerToken());
+
 apiRoutes.use(function(req, res, next) {
 
   // check header or url parameters or post parameters for token
@@ -171,7 +172,7 @@ apiRoutes.use(function(req, res, next) {
     // verifies secret and checks exp
     jwt.verify(token, app.get('secret'), function(err, user) {      
       if (err) {
-        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+        return res.status(401).json({ success: false, message: 'Failed to authenticate token.' });    
       } else {
         // if everything is good, save to request for use in other routes
         req.user = user;    
