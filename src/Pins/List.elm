@@ -9,15 +9,7 @@ import Pins.Messages exposing (..)
 view : List Pin -> Html Msg
 view pins =
     div [ class "container" ]
-        [ div [ class "pins-header columns" ] 
-            [ h1 [ ] 
-                [ span [] [ text "Pins " ]
-                , small [] [ text "Select the pins to add to your grocery list.."]
-                ] 
-            ]
-           
-        , list pins 
-        ]
+        [ list pins ]
 
 
 list : List Pin -> Html Msg

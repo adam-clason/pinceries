@@ -17,7 +17,8 @@ view groceryList =
     in
         div [ class "mini-grocery-list" ]
             [ div [ id "grocery-list" ]
-                [ ul [ class "vertical menu" ]
+                [ h2 [ class "grocery-list-title"] [ text "Grocery List" ] 
+                , ul [ class "vertical menu" ]
                     (List.map category categories)  
                 ]   
             ]

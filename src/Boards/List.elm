@@ -11,18 +11,12 @@ import Boards.Models exposing (Board)
 view : List Board -> Html Msg
 view boards =
     div [ class "container" ]
-        [ h1 [ class "columns" ] 
-            [ span [] [ text "Boards " ]
-            , small [] [ text "Select a board"]
-            ] 
-        , 
-
-        list boards ]
+        [ list boards ]
 
 
 list : List Board -> Html Msg
 list boards =
-    div [ class "row small-up-2 medium-up-3 larg-up-4" ]
+    div [ class "row small-up-3 medium-up-5 larg-up-6" ]
         (List.map boardRow boards)
 
 
