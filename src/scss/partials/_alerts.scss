@@ -1,0 +1,14 @@
+.alert-box {
+	text-align: center;
+    line-height: 40px;
+
+    .fa.fa-warning {
+    	font-size: 22px;
+    	padding-right: 5px;
+    	color: #B90919;
+    }
+
+    span, .fa.fa-warning {
+    	vertical-align: middle; 
+    }	
+}

@@ -4,13 +4,37 @@ import Process
 import Task exposing (Task)
 import Basics exposing (Never)
 import Time
-import Dict
-import Groceries.Messages exposing (Msg(..))
+import Navigation
+import Storage
+import Http exposing (Error(..))
+import Jwt exposing (JwtError(..))
+import Cmd.Extra 
+import Groceries.Messages exposing (InternalMsg(..), OutMsg(..), Msg(..))
 import Groceries.Models exposing (..)
 import Groceries.Commands exposing (saveGroceryList)
 import Pins.Models exposing (Pin)
 
-update : Msg -> GroceryList -> (GroceryList, Cmd Msg)
+
+type alias Translator parentMsg = Msg -> parentMsg
+
+type alias TranslationDictionary msg =
+  { onInternalMessage: InternalMsg -> msg
+  , onAuthError: msg
+  }
+
+
+translator : TranslationDictionary parentMsg -> Translator parentMsg
+translator { onInternalMessage, onAuthError } msg =
+    case msg of 
+        ForSelf internal ->
+            onInternalMessage internal 
+
+        ForParent AuthorizationError ->
+            onAuthError 
+
+
+
+update : InternalMsg -> GroceryList -> (GroceryList, Cmd Msg)
 update message groceryList = 
     case message of 
         AddToGroceryList pin ->
@@ -20,17 +44,17 @@ update message groceryList =
                 updatedCount = 
                     List.length updatedIngredientsList
                 updatedModel =
-                    { groceryList | list = updatedIngredientsList, show = True, count = updatedCount }
+                    { groceryList | list = updatedIngredientsList, count = updatedCount }
 
             in 
-                ( updatedModel, Cmd.batch [ delayHideList Hide, saveGroceryList updatedModel ])
+                ( updatedModel, Cmd.batch [ showSlideout "", saveGroceryList updatedModel ])
 
         RemoveIngredient ingredient ->
             let 
                 updatedIngredientsList = 
                     List.filter (\i -> (i.name /= ingredient.name) ||  (i.amount /= ingredient.amount))  groceryList.list
                 updatedModel = 
-                    { groceryList | list = updatedIngredientsList,  show = True }
+                    { groceryList | list = updatedIngredientsList }
 
             in
                 ( updatedModel , saveGroceryList updatedModel)
@@ -38,27 +62,37 @@ update message groceryList =
         FetchResult result ->
             case result of 
                 Ok updatedModel ->
-                    (updatedModel, Cmd.none)
+                    (updatedModel, initSlideout "")
 
-                Err _ ->
-                    (groceryList, Cmd.none)
+                Err error ->
+
+                    let 
+                        authErrorCommands =
+                            [ Storage.setAccessToken ""
+                            , Storage.setJwt ""
+                            , Cmd.Extra.message (ForParent AuthorizationError)
+                            , Navigation.newUrl "/"
+                            ] 
+                    in 
+                        case error of 
+                            Unauthorized -> 
+                                (groceryList, Cmd.batch authErrorCommands)
+
+                            HttpError httpError ->
+                                case httpError of 
+                                    Timeout -> 
+                                        (groceryList, Cmd.none)
+
+                                    BadStatus response ->       
+                                        (groceryList, Cmd.batch authErrorCommands)
+                                    
+                                    _ ->
+                                        (groceryList, Cmd.none)
+                            _ ->
+                                (groceryList, Cmd.none)
 
         SaveResult _ -> 
             ( groceryList, Cmd.none )
-
-        Show -> 
-            ( { groceryList | show = True, hovering = True }, Cmd.none)
-
-        HoverOut ->
-            ( { groceryList | show = False }, Cmd.none)
-
-        Hide -> 
-            let hideList 
-                = case groceryList.hovering of 
-                    True -> False
-                    False -> True
-            in
-                ( { groceryList | show = not hideList }, Cmd.none)
 
 
 addIngredients : Pin -> IngredientsList -> IngredientsList
@@ -93,15 +127,18 @@ foldAddIngredients addedIngredient ingredientsList =
             addedIngredient :: ingredientsList
 
 
+port initSlideout : String -> Cmd msg 
+port showSlideout : String -> Cmd msg
+
 delayHideList : msg -> Cmd msg
 delayHideList msg =
     Process.sleep (Time.second * 3)
     |> Task.andThen (always <| Task.succeed msg)
     |> Task.perform identity
 
+
 never : Never -> a
 never n = never n
-
 
 
 

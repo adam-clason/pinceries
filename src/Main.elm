@@ -2,16 +2,15 @@ module Main exposing (..)
 
 import Navigation
 import Storage
-import Messages exposing (Msg(..), translationDictionary)
+import Messages exposing (Msg(..))
 import Models exposing (Model, Flags, initialModel)
 import View exposing (view)
-import Update exposing (update, commandFromRoute)
+import Update exposing (update, initCommand)
 import Boards.Commands exposing (fetchAll)
 import Pins.Commands exposing (fetchPins)
 import Pins.Update
 import Routing exposing (Route(..), InnerRoute(..))
 
-pinsTranslator = Pins.Update.translator translationDictionary
 
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
@@ -21,7 +20,7 @@ init flags location =
         model =
             initialModel flags currentRoute
         command = 
-            commandFromRoute model currentRoute
+            initCommand model currentRoute
 
     in
         ( model, command )

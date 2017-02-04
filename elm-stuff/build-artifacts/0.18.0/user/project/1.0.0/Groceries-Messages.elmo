@@ -1,6 +1,3 @@
-var _user$project$Groceries_Messages$Hide = {ctor: 'Hide'};
-var _user$project$Groceries_Messages$HoverOut = {ctor: 'HoverOut'};
-var _user$project$Groceries_Messages$Show = {ctor: 'Show'};
 var _user$project$Groceries_Messages$SaveResult = function (a) {
 	return {ctor: 'SaveResult', _0: a};
 };
@@ -12,4 +9,11 @@ var _user$project$Groceries_Messages$RemoveIngredient = function (a) {
 };
 var _user$project$Groceries_Messages$AddToGroceryList = function (a) {
 	return {ctor: 'AddToGroceryList', _0: a};
+};
+var _user$project$Groceries_Messages$AuthorizationError = {ctor: 'AuthorizationError'};
+var _user$project$Groceries_Messages$ForParent = function (a) {
+	return {ctor: 'ForParent', _0: a};
+};
+var _user$project$Groceries_Messages$ForSelf = function (a) {
+	return {ctor: 'ForSelf', _0: a};
 };

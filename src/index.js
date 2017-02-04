@@ -28,3 +28,51 @@ app.ports.setAccessToken.subscribe(function (token) {
 app.ports.setJwt.subscribe(function (jwt) {
 	localStorage.setItem('jwt', jwt);
 });
+
+
+(function() {
+	var slideout = null; 
+
+	app.ports.initSlideout.subscribe(function(val) {
+
+		slideout = new Slideout({
+			'panel' : document.getElementById('content'),
+			'menu' : document.getElementById('grocery-list'),
+			'side' : 'right'
+		});
+
+		document.querySelector('.mini-list-link').addEventListener('click', function() {
+		  slideout.toggle();
+		});
+
+		var fixed = document.querySelector('.top-bar');
+
+		slideout.on('translate', function(translated) {
+		  fixed.style.transform = 'translateX(' + (translated * -1) + 'px)';
+		});
+
+		slideout.on('beforeopen', function () {
+		  fixed.style.transition = 'transform 300ms ease';
+		  fixed.style.transform = 'translateX(-256px)';
+		});
+
+		slideout.on('beforeclose', function () {
+		  fixed.style.transition = 'transform 300ms ease';
+		  fixed.style.transform = 'translateX(0px)';
+		});
+
+		slideout.on('open', function () {
+		  fixed.style.transition = '';
+		});
+
+		slideout.on('close', function () {
+		  fixed.style.transition = '';
+		});
+
+		slideout.open();
+
+	});
+
+
+})();
+

@@ -1,47 +1,59 @@
-var _user$project$Update$pinsTranslator = _user$project$Pins_Update$translator(_user$project$Messages$translationDictionary);
-var _user$project$Update$commandFromRoute = F2(
+var _user$project$Update$authenticated = function (model) {
+	return (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(model.accessToken),
+		0) > 0) && (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(model.jwt),
+		0) > 0);
+};
+var _user$project$Update$groceriesTranslator = _user$project$Groceries_Update$translator(_user$project$Messages$groceriesTranslationDictionary);
+var _user$project$Update$pinsTranslator = _user$project$Pins_Update$translator(_user$project$Messages$pinsTranslationDictionary);
+var _user$project$Update$initCommand = F2(
 	function (model, currentRoute) {
 		var _p0 = currentRoute;
 		switch (_p0.ctor) {
 			case 'Authenticated':
-				var _p1 = _p0._0;
-				switch (_p1.ctor) {
-					case 'BoardsRoute':
-						return _elm_lang$core$Platform_Cmd$batch(
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Platform_Cmd$map,
-									_user$project$Messages$BoardsMsg,
-									_user$project$Boards_Commands$fetchAll(model)),
-								_1: {
+				if (_user$project$Update$authenticated(model)) {
+					var _p1 = _p0._0;
+					switch (_p1.ctor) {
+						case 'BoardsRoute':
+							return _elm_lang$core$Platform_Cmd$batch(
+								{
 									ctor: '::',
 									_0: A2(
 										_elm_lang$core$Platform_Cmd$map,
-										_user$project$Messages$GroceriesMsg,
-										_user$project$Groceries_Commands$fetchGroceryList(model.groceryList)),
-									_1: {ctor: '[]'}
-								}
-							});
-					case 'BoardRoute':
-						return _elm_lang$core$Platform_Cmd$batch(
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Platform_Cmd$map,
-									_user$project$Update$pinsTranslator,
-									A2(_user$project$Pins_Commands$fetchPins, model, _p1._0)),
-								_1: {
+										_user$project$Messages$BoardsMsg,
+										_user$project$Boards_Commands$fetchAll(model)),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$core$Platform_Cmd$map,
+											_user$project$Update$groceriesTranslator,
+											_user$project$Groceries_Commands$fetchGroceryList(model.groceryList)),
+										_1: {ctor: '[]'}
+									}
+								});
+						case 'BoardRoute':
+							return _elm_lang$core$Platform_Cmd$batch(
+								{
 									ctor: '::',
 									_0: A2(
 										_elm_lang$core$Platform_Cmd$map,
-										_user$project$Messages$GroceriesMsg,
-										_user$project$Groceries_Commands$fetchGroceryList(model.groceryList)),
-									_1: {ctor: '[]'}
-								}
-							});
-					default:
-						return _elm_lang$core$Platform_Cmd$none;
+										_user$project$Update$pinsTranslator,
+										A2(_user$project$Pins_Commands$fetchPins, model, _p1._0)),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$core$Platform_Cmd$map,
+											_user$project$Update$groceriesTranslator,
+											_user$project$Groceries_Commands$fetchGroceryList(model.groceryList)),
+										_1: {ctor: '[]'}
+									}
+								});
+						default:
+							return _elm_lang$core$Platform_Cmd$none;
+					}
+				} else {
+					return _elm_lang$core$Platform_Cmd$none;
 				}
 			case 'Anonymous':
 				var _p2 = _p0._0;
@@ -63,14 +75,54 @@ var _user$project$Update$commandFromRoute = F2(
 				return _elm_lang$core$Platform_Cmd$none;
 		}
 	});
+var _user$project$Update$commandFromRoute = F2(
+	function (model, currentRoute) {
+		var _p3 = currentRoute;
+		switch (_p3.ctor) {
+			case 'Authenticated':
+				var _p4 = _p3._0;
+				switch (_p4.ctor) {
+					case 'BoardsRoute':
+						return A2(
+							_elm_lang$core$Platform_Cmd$map,
+							_user$project$Messages$BoardsMsg,
+							_user$project$Boards_Commands$fetchAll(model));
+					case 'BoardRoute':
+						return A2(
+							_elm_lang$core$Platform_Cmd$map,
+							_user$project$Update$pinsTranslator,
+							A2(_user$project$Pins_Commands$fetchPins, model, _p4._0));
+					default:
+						return _elm_lang$core$Platform_Cmd$none;
+				}
+			case 'Anonymous':
+				var _p5 = _p3._0;
+				if (_p5.ctor === 'Authorize') {
+					if (_p5._0.ctor === 'Just') {
+						var fetchJwt = _user$project$Commands$fetchPinceriesApiJwt(model);
+						var fetchToken = A2(_user$project$Commands$fetchAccessToken, model, _p5._0._0);
+						return A2(
+							_elm_lang$core$Task$attempt,
+							_user$project$Messages$Authorized,
+							A2(_elm_lang$core$Task$andThen, fetchJwt, fetchToken));
+					} else {
+						return _elm_lang$core$Platform_Cmd$none;
+					}
+				} else {
+					return _elm_lang$core$Platform_Cmd$none;
+				}
+			default:
+				return _elm_lang$core$Platform_Cmd$none;
+		}
+	});
 var _user$project$Update$update = F2(
 	function (msg, model) {
-		var _p3 = msg;
-		switch (_p3.ctor) {
+		var _p6 = msg;
+		switch (_p6.ctor) {
 			case 'BoardsMsg':
-				var _p4 = A2(_user$project$Boards_Update$update, _p3._0, model.boards);
-				var updatedBoards = _p4._0;
-				var cmd = _p4._1;
+				var _p7 = A2(_user$project$Boards_Update$update, _p6._0, model.boards);
+				var updatedBoards = _p7._0;
+				var cmd = _p7._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -79,9 +131,9 @@ var _user$project$Update$update = F2(
 					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Messages$BoardsMsg, cmd)
 				};
 			case 'PinsMsg':
-				var _p5 = A2(_user$project$Pins_Update$update, _p3._0, model.pins);
-				var updatedPins = _p5._0;
-				var cmd = _p5._1;
+				var _p8 = A2(_user$project$Pins_Update$update, _p6._0, model.pins);
+				var updatedPins = _p8._0;
+				var cmd = _p8._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -90,19 +142,30 @@ var _user$project$Update$update = F2(
 					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Update$pinsTranslator, cmd)
 				};
 			case 'GroceriesMsg':
-				var _p6 = A2(_user$project$Groceries_Update$update, _p3._0, model.groceryList);
-				var updatedGroceryList = _p6._0;
-				var cmd = _p6._1;
+				var _p9 = A2(_user$project$Groceries_Update$update, _p6._0, model.groceryList);
+				var updatedGroceryList = _p9._0;
+				var cmd = _p9._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{groceryList: updatedGroceryList}),
-					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Messages$GroceriesMsg, cmd)
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Update$groceriesTranslator, cmd)
+				};
+			case 'AlertsMsg':
+				var _p10 = A2(_user$project$Alerts_Update$update, _p6._0, model.alerts);
+				var updatedAlerts = _p10._0;
+				var cmd = _p10._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{alerts: updatedAlerts}),
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Messages$AlertsMsg, cmd)
 				};
 			case 'UrlChange':
 				var updatedRoute = _user$project$Routing$routeFromMaybe(
-					_user$project$Routing$parser(_p3._0));
+					_user$project$Routing$parser(_p6._0));
 				var routeCommand = A2(_user$project$Update$commandFromRoute, model, updatedRoute);
 				return {
 					ctor: '_Tuple2',
@@ -111,28 +174,40 @@ var _user$project$Update$update = F2(
 						{route: updatedRoute}),
 					_1: routeCommand
 				};
-			default:
-				if (_p3._0.ctor === 'Ok') {
-					var _p8 = _p3._0._0;
-					var userResult = _user$project$Models$userFromJwt(_p8.jwt);
-					var _p7 = userResult;
-					if (_p7.ctor === 'Ok') {
+			case 'Authorized':
+				if (_p6._0.ctor === 'Ok') {
+					var _p13 = _p6._0._0;
+					var userResult = _user$project$Models$userFromJwt(_p13.jwt);
+					var _p11 = userResult;
+					if (_p11.ctor === 'Ok') {
+						var _p12 = _p11._0;
+						var groceryList = model.groceryList;
+						var updatedGroceryList = _elm_lang$core$Native_Utils.update(
+							groceryList,
+							{id: _p12.activeGroceryListId, jwt: _p13.jwt});
+						var updatedModel = _elm_lang$core$Native_Utils.update(
+							model,
+							{user: _p12, groceryList: updatedGroceryList, accessToken: _p13.accessToken, jwt: _p13.jwt});
 						var commands = {
 							ctor: '::',
-							_0: _user$project$Storage$setAccessToken(_p8.accessToken),
+							_0: _user$project$Storage$setAccessToken(_p13.accessToken),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Storage$setJwt(_p8.jwt),
+								_0: _user$project$Storage$setJwt(_p13.jwt),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$navigation$Navigation$newUrl('#boards'),
-									_1: {ctor: '[]'}
+									_0: A2(
+										_elm_lang$core$Platform_Cmd$map,
+										_user$project$Update$groceriesTranslator,
+										_user$project$Groceries_Commands$fetchGroceryList(updatedModel.groceryList)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$navigation$Navigation$newUrl('/#boards'),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						};
-						var updatedModel = _elm_lang$core$Native_Utils.update(
-							model,
-							{user: _p7._0, accessToken: _p8.accessToken, jwt: _p8.jwt});
 						return {
 							ctor: '_Tuple2',
 							_0: updatedModel,
@@ -144,5 +219,14 @@ var _user$project$Update$update = F2(
 				} else {
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{jwt: '', accessToken: ''}),
+					_1: _user$project$Cmd_Extra$message(
+						_user$project$Messages$AlertsMsg(_user$project$Alerts_Messages$AuthorizationError))
+				};
 		}
 	});

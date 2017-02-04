@@ -1,16 +1,21 @@
+var _user$project$Messages$AuthorizationError = {ctor: 'AuthorizationError'};
 var _user$project$Messages$Authorized = function (a) {
 	return {ctor: 'Authorized', _0: a};
 };
 var _user$project$Messages$UrlChange = function (a) {
 	return {ctor: 'UrlChange', _0: a};
 };
+var _user$project$Messages$AlertsMsg = function (a) {
+	return {ctor: 'AlertsMsg', _0: a};
+};
 var _user$project$Messages$GroceriesMsg = function (a) {
 	return {ctor: 'GroceriesMsg', _0: a};
 };
+var _user$project$Messages$groceriesTranslationDictionary = {onInternalMessage: _user$project$Messages$GroceriesMsg, onAuthError: _user$project$Messages$AuthorizationError};
 var _user$project$Messages$PinsMsg = function (a) {
 	return {ctor: 'PinsMsg', _0: a};
 };
-var _user$project$Messages$translationDictionary = {
+var _user$project$Messages$pinsTranslationDictionary = {
 	onInternalMessage: _user$project$Messages$PinsMsg,
 	onAddToGroceryList: function (a) {
 		return _user$project$Messages$GroceriesMsg(

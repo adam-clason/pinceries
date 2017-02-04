@@ -10,7 +10,7 @@ import Http exposing (jsonBody)
 fetchGroceryList : GroceryList -> Cmd Msg    
 fetchGroceryList model  =
     Jwt.get model.jwt (fetchGroceryListUrl model) (fetchGroceryListDecoder model)
-        |> Jwt.send FetchResult
+        |> Jwt.send (\a -> ForSelf (FetchResult a))
 
 fetchGroceryListUrl : GroceryList -> String
 fetchGroceryListUrl model = 
@@ -22,7 +22,7 @@ fetchGroceryListDecoder currentModel =
     map8 GroceryList
         (succeed currentModel.id)
         (succeed currentModel.name)
-        (list ingredientDecoder)
+        (at ["ingredients"] (list ingredientDecoder))
         (succeed currentModel.count)
         (succeed currentModel.show)
         (succeed currentModel.hovering)
@@ -40,7 +40,7 @@ ingredientDecoder =
 saveGroceryList : GroceryList -> Cmd Msg
 saveGroceryList model =
     Jwt.post model.jwt (saveGroceryListUrl model) (saveGroceryListJsonBody model) addIngredientsResponseDecoder 
-        |> Jwt.send SaveResult
+        |> Jwt.send (\a -> ForSelf (SaveResult a))
 
 saveGroceryListJsonBody : GroceryList -> Http.Body
 saveGroceryListJsonBody model =
@@ -61,8 +61,6 @@ saveGroceryListJsonBody model =
           )
         ]
     |> jsonBody
-
-
 
 
 saveGroceryListUrl : GroceryList -> String 

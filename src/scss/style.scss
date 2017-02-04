@@ -1,8 +1,13 @@
+@import "partials/fonts";
 @import "settings";
 @import "foundation";
 
+
 @include foundation-everything;
 
+
+@import "partials/global-elements";
+@import "partials/alerts";
 @import "partials/nav";
 @import "partials/pins";
 @import "partials/boards";

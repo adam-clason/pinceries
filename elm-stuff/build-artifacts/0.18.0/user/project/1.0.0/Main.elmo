@@ -6,7 +6,7 @@ var _user$project$Main$init = F2(
 		var currentRoute = _user$project$Routing$routeFromMaybe(
 			_user$project$Routing$parser(location));
 		var model = A2(_user$project$Models$initialModel, flags, currentRoute);
-		var command = A2(_user$project$Update$commandFromRoute, model, currentRoute);
+		var command = A2(_user$project$Update$initCommand, model, currentRoute);
 		return {ctor: '_Tuple2', _0: model, _1: command};
 	});
 var _user$project$Main$main = A2(
@@ -35,4 +35,3 @@ var _user$project$Main$main = A2(
 				A2(_elm_lang$core$Json_Decode$field, 'jwt', _elm_lang$core$Json_Decode$string));
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'accessToken', _elm_lang$core$Json_Decode$string)));
-var _user$project$Main$pinsTranslator = _user$project$Pins_Update$translator(_user$project$Messages$translationDictionary);

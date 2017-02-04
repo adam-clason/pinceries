@@ -27,6 +27,7 @@ var _user$project$Models$initialModel = F2(
 		return {
 			accessToken: flags.accessToken,
 			jwt: flags.jwt,
+			alerts: {ctor: '[]'},
 			user: initUser,
 			pinceriesApiBaseUrl: flags.pinceriesApiBaseUrl,
 			pinterestRedirectUrl: flags.pinterestRedirectUrl,
@@ -45,10 +46,27 @@ var _user$project$Models$initialModel = F2(
 			route: route
 		};
 	});
-var _user$project$Models$Model = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {accessToken: a, jwt: b, user: c, boards: d, pins: e, groceryList: f, route: g, pinceriesApiBaseUrl: h, pinterestRedirectUrl: i};
-	});
+var _user$project$Models$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {accessToken: a, jwt: b, alerts: c, user: d, boards: e, pins: f, groceryList: g, route: h, pinceriesApiBaseUrl: i, pinterestRedirectUrl: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$Models$Flags = F4(
 	function (a, b, c, d) {
 		return {accessToken: a, jwt: b, pinceriesApiBaseUrl: c, pinterestRedirectUrl: d};

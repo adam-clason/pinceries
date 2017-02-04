@@ -114,93 +114,129 @@ var _user$project$View$accessView = A2(
 		_0: _elm_lang$html$Html$text('ACCESSING PLZ'),
 		_1: {ctor: '[]'}
 	});
+var _user$project$View$alerts = function (model) {
+	return A2(
+		_elm_lang$html$Html$map,
+		_user$project$Messages$AlertsMsg,
+		_user$project$Alerts_View$view(model.alerts));
+};
+var _user$project$View$groceriesTranslator = _user$project$Groceries_Update$translator(_user$project$Messages$groceriesTranslationDictionary);
 var _user$project$View$groceryList = function (model) {
 	return A2(
 		_elm_lang$html$Html$map,
-		_user$project$Messages$GroceriesMsg,
+		_user$project$View$groceriesTranslator,
 		_user$project$Groceries_List$view(model.groceryList));
 };
 var _user$project$View$navbar = function (model) {
 	return A2(
-		_elm_lang$html$Html$nav,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('top-bar'),
-			_1: {ctor: '[]'}
-		},
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$nav,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('top-bar-left'),
+					_0: _elm_lang$html$Html_Attributes$class('top-bar'),
 					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$ul,
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('dropdown menu'),
+							_0: _elm_lang$html$Html_Attributes$class('top-bar-left'),
 							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$li,
+								_elm_lang$html$Html$ul,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('menu-text'),
+									_0: _elm_lang$html$Html_Attributes$class('dropdown menu'),
 									_1: {ctor: '[]'}
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Pinceries'),
+									_0: A2(
+										_elm_lang$html$Html$li,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('menu-text'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Pinceries'),
+											_1: {ctor: '[]'}
+										}),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('top-bar-right'),
-						_1: {ctor: '[]'}
-					},
-					{
+					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$ul,
+							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('menu dropdown'),
+								_0: _elm_lang$html$Html_Attributes$class('top-bar-right'),
 								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$li,
-									{ctor: '[]'},
+									_elm_lang$html$Html$ul,
 									{
 										ctor: '::',
-										_0: _user$project$View$groceryList(model),
+										_0: _elm_lang$html$Html_Attributes$class('menu dropdown'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$li,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('mini-list-link'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$i,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('fa fa-shopping-cart'),
+																_1: {ctor: '[]'}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
 							}),
 						_1: {ctor: '[]'}
-					}),
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$View$groceryList(model),
 				_1: {ctor: '[]'}
 			}
 		});
 };
-var _user$project$View$pinsTranslator = _user$project$Pins_Update$translator(_user$project$Messages$translationDictionary);
+var _user$project$View$pinsTranslator = _user$project$Pins_Update$translator(_user$project$Messages$pinsTranslationDictionary);
 var _user$project$View$page = function (model) {
 	var _p0 = model.route;
 	switch (_p0.ctor) {
@@ -223,7 +259,7 @@ var _user$project$View$page = function (model) {
 					case 'GroceriesRoute':
 						return A2(
 							_elm_lang$html$Html$map,
-							_user$project$Messages$GroceriesMsg,
+							_user$project$View$groceriesTranslator,
 							_user$project$Groceries_List$view(model.groceryList));
 					default:
 						return _user$project$View$accessView;
@@ -245,7 +281,7 @@ var _user$project$View$page = function (model) {
 				case 'GroceriesRoute':
 					return A2(
 						_elm_lang$html$Html$map,
-						_user$project$Messages$GroceriesMsg,
+						_user$project$View$groceriesTranslator,
 						_user$project$Groceries_List$view(model.groceryList));
 				default:
 					return _user$project$View$accessView;
@@ -263,7 +299,22 @@ var _user$project$View$view = function (model) {
 			_0: _user$project$View$navbar(model),
 			_1: {
 				ctor: '::',
-				_0: _user$project$View$page(model),
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$id('content'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _user$project$View$alerts(model),
+						_1: {
+							ctor: '::',
+							_0: _user$project$View$page(model),
+							_1: {ctor: '[]'}
+						}
+					}),
 				_1: {ctor: '[]'}
 			}
 		});

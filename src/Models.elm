@@ -2,6 +2,7 @@ module Models exposing (..)
 
 import Boards.Models exposing (Board)
 import Pins.Models exposing (Pin)
+import Alerts.Models exposing (AlertsList)
 import Groceries.Models exposing (..)
 import Jwt exposing (decodeToken, JwtError)
 import Json.Decode exposing (..)
@@ -19,6 +20,7 @@ type alias User =
 type alias Model =
     { accessToken : String
     , jwt : String
+    , alerts : AlertsList
     , user : User
     , boards : List Board
     , pins : List Pin
@@ -49,6 +51,7 @@ initialModel flags route =
     in 
         { accessToken = flags.accessToken
         , jwt = flags.jwt
+        , alerts = []
         , user = initUser
         , pinceriesApiBaseUrl = flags.pinceriesApiBaseUrl
         , pinterestRedirectUrl = flags.pinterestRedirectUrl

@@ -1,3 +1,41 @@
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.slideout-menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 256px;
+  min-height: 100vh;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  z-index: 0;
+  display: none;
+}
+
+.slideout-menu-left {
+  left: 0;
+}
+
+.slideout-menu-right {
+  right: 0;
+}
+
+.slideout-panel {
+  position: relative;
+  z-index: 1;
+  will-change: transform;
+  background-color: #FFF; /* A background-color is required */
+  min-height: 100vh;
+}
+
+.slideout-open .slideout-menu {
+  display: block;
+}
+
+
 .top-bar {
 	position: fixed;
 	width: 100%;
@@ -5,96 +43,64 @@
 	background-color: black;
 	color: white;
 
-	.mini-grocery-list {
-		background-color: black;
-		position: relative; 
-
-		.fa-shopping-cart {
-			font-size: 36px;
-		}
-
-		.count-container {
-			display: inline-block;
-    		margin-left: 13px;
-
-    		.count-wrapper {
-    			display: table;
-
-    			.count {
-    			    display: table-cell;
-				    width: 25px;
-				    height: 25px;
-				    text-align: center;
-				    border-radius: 50%;
-				    background-color: red;
-				    font-size: 13px;
-				    line-height: 25px;
-    			}
-    		}
-		}
-
-		.grocery-list-wrapper {
-
-			.vertical.menu {
-				background-color: white;
-				position: absolute;
-				right: 0;
-				top: 51px;
-				width: 300px;
-				box-shadow: -3px 3px 2px gray;
-
-				ul { 
-					background-color: white;
-				}
-
-				> li > a {
-					font-weight: bold;
-					
-				}
-
-				li a {
-					color: black;
-				}
-
-				.ingredients {
-					list-style-type: none;
-				}
-			}
-
-			&.show {
-				&:before {
-					content: "";
-				    width: 0;
-				    height: 0;
-				    z-index: 2;
-				    border-left: 13px solid transparent;
-				    position: absolute;
-				    border-right: 13px solid transparent;
-				    border-bottom: 13px solid white;
-				    right: 43px;
-				}
-				.vertical.menu {
-					overflow-y: scroll;
-					transition-property: all;
-					transition-duration: 1s;
-					transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-					max-height: 60vh;
-				}
-			}
-			&.slide-up {
-				.vertical.menu {
-					transition-property: all;
-					transition-duration: .5s;
-					transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-					max-height: 0;
-					overflow: hidden;
-				}
-
+	.top-bar-left {
+		.dropdown {
+			background-color: black; 
+			.menu-text {
+				font-family: "fertigo_proregular", sans-serif; 
+				font-size: 28px;
 			}
 		}
 	}
 
+	.mini-list-link {
+		cursor: pointer;
+		background-color: black;
+		.fa-shopping-cart {
+			font-size: 36px;
+		}
+	}
 }
+
+.mini-grocery-list {
+	background-color: black;
+	position: relative; 
+
+	.vertical.menu {
+		background-color: #f2f0f0;
+
+		> li > a {
+			font-weight: 900;
+			color: #727171;
+			text-transform: uppercase;
+			font-size:12px;
+
+			.category-name {
+				padding-bottom: 7px;
+    			display: block;
+			}
+
+			ul {
+				margin: 0;
+				list-style-type: none;
+				a {
+					line-height: 1.7;
+					font-size: 14px;
+					font-weight: 100;
+					color: #727171;
+					text-transform: none;
+				}
+			}
+
+		
+		}
+
+		.ingredients {
+			list-style-type: none;
+		}
+	}
+}
+
 
 .container {
 	padding-top: 54px;

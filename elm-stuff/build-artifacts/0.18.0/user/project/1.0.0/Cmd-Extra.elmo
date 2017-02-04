@@ -1,0 +1,6 @@
+var _user$project$Cmd_Extra$message = function (x) {
+	return A2(
+		_elm_lang$core$Task$perform,
+		_elm_lang$core$Basics$identity,
+		_elm_lang$core$Task$succeed(x));
+};

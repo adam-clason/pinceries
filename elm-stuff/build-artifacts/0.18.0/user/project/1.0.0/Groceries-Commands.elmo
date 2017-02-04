@@ -80,7 +80,10 @@ var _user$project$Groceries_Commands$saveGroceryListJsonBody = function (model) 
 var _user$project$Groceries_Commands$saveGroceryList = function (model) {
 	return A2(
 		_simonh1000$elm_jwt$Jwt$send,
-		_user$project$Groceries_Messages$SaveResult,
+		function (a) {
+			return _user$project$Groceries_Messages$ForSelf(
+				_user$project$Groceries_Messages$SaveResult(a));
+		},
 		A4(
 			_simonh1000$elm_jwt$Jwt$post,
 			model.jwt,
@@ -101,7 +104,14 @@ var _user$project$Groceries_Commands$fetchGroceryListDecoder = function (current
 		_user$project$Groceries_Models$GroceryList,
 		_elm_lang$core$Json_Decode$succeed(currentModel.id),
 		_elm_lang$core$Json_Decode$succeed(currentModel.name),
-		_elm_lang$core$Json_Decode$list(_user$project$Groceries_Commands$ingredientDecoder),
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'ingredients',
+				_1: {ctor: '[]'}
+			},
+			_elm_lang$core$Json_Decode$list(_user$project$Groceries_Commands$ingredientDecoder)),
 		_elm_lang$core$Json_Decode$succeed(currentModel.count),
 		_elm_lang$core$Json_Decode$succeed(currentModel.show),
 		_elm_lang$core$Json_Decode$succeed(currentModel.hovering),
@@ -117,7 +127,10 @@ var _user$project$Groceries_Commands$fetchGroceryListUrl = function (model) {
 var _user$project$Groceries_Commands$fetchGroceryList = function (model) {
 	return A2(
 		_simonh1000$elm_jwt$Jwt$send,
-		_user$project$Groceries_Messages$FetchResult,
+		function (a) {
+			return _user$project$Groceries_Messages$ForSelf(
+				_user$project$Groceries_Messages$FetchResult(a));
+		},
 		A3(
 			_simonh1000$elm_jwt$Jwt$get,
 			model.jwt,

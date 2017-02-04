@@ -1,0 +1,3 @@
+var _user$project$Alerts_Models$Alert = function (a) {
+	return {message: a};
+};

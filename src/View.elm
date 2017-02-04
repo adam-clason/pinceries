@@ -1,25 +1,32 @@
 module View exposing (..)
 
 import String
-import Html exposing (Html, a, div, text, nav, button, span, ul, li, form, p, h3, img)
-import Html.Attributes exposing (class, attribute, href, action, type_, src)
-import Messages exposing (Msg(..), translationDictionary)
+import Html exposing (Html, a, div, text, nav, button, span, ul, li, form, p, h3, img, i)
+import Html.Attributes exposing (class, attribute, href, action, type_, src, id)
+import Messages exposing (Msg(..), pinsTranslationDictionary, groceriesTranslationDictionary)
 import Models exposing (Model)
 import Boards.List
 import Pins.List
 import Groceries.List
+import Alerts.View
 import Pins.Update exposing (..)
+import Groceries.Update exposing (..)
+import Alerts.Update exposing (..)
 
 import Routing exposing (Route(..), InnerRoute(..))
 
 
-pinsTranslator = Pins.Update.translator translationDictionary
+pinsTranslator = Pins.Update.translator pinsTranslationDictionary
+groceriesTranslator = Groceries.Update.translator groceriesTranslationDictionary
 
 view : Model -> Html Msg
 view model =
     div []
         [ navbar model
-        , page model 
+        , div [ id "content" ] 
+            [ alerts model 
+            , page model 
+            ]
         ]
 
 
@@ -39,7 +46,7 @@ page model =
                         Html.map pinsTranslator (Pins.List.view model.pins)
 
                     GroceriesRoute ->
-                        Html.map GroceriesMsg (Groceries.List.view model.groceryList)
+                        Html.map groceriesTranslator (Groceries.List.view model.groceryList)
 
                     Authorize authCode ->
                         accessView
@@ -53,7 +60,7 @@ page model =
                     Html.map pinsTranslator (Pins.List.view model.pins)
 
                 GroceriesRoute ->
-                    Html.map GroceriesMsg (Groceries.List.view model.groceryList)
+                    Html.map groceriesTranslator (Groceries.List.view model.groceryList)
 
                 Authorize authCode ->
                     accessView
@@ -64,7 +71,8 @@ page model =
 
 navbar : Model -> Html Msg
 navbar model = 
-    nav [ class "top-bar" ]
+    div [] 
+    [ nav [ class "top-bar" ]
         [ div [ class "top-bar-left" ] 
             [ ul [ class "dropdown menu" ]
                 [ li [ class "menu-text" ] [ text "Pinceries"] ]
@@ -72,16 +80,25 @@ navbar model =
         , div [ class "top-bar-right" ]
             [ ul [ class "menu dropdown" ] 
                 [ li [] 
-                    [ groceryList model ]
+                    [ div [ class "mini-list-link" ]
+                        [ i [ class "fa fa-shopping-cart" ] [] 
+                        ]  
+                    ]
 
                 ]
             ]
         ]
+    , groceryList model
+    ]
+    
 
+alerts : Model -> Html Msg 
+alerts model = 
+    Html.map AlertsMsg (Alerts.View.view model.alerts)
 
 groceryList : Model -> Html Msg
 groceryList model = 
-    Html.map GroceriesMsg (Groceries.List.view model.groceryList)
+    Html.map groceriesTranslator (Groceries.List.view model.groceryList)
 
 
 accessView : Html msg

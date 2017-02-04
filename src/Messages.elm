@@ -7,16 +7,22 @@ import Navigation
 import Boards.Messages
 import Pins.Messages
 import Groceries.Messages
+import Alerts.Messages  
 
 type Msg
     = BoardsMsg Boards.Messages.Msg
     | PinsMsg Pins.Messages.InternalMsg
-    | GroceriesMsg Groceries.Messages.Msg
+    | GroceriesMsg Groceries.Messages.InternalMsg
+    | AlertsMsg Alerts.Messages.Msg
     | UrlChange Navigation.Location
     | Authorized (Result Http.Error AuthorizeInfo)
+    | AuthorizationError
 
 
-translationDictionary
+pinsTranslationDictionary
     = { onInternalMessage = PinsMsg 
       , onAddToGroceryList = \a -> GroceriesMsg (Groceries.Messages.AddToGroceryList a) }
 
+groceriesTranslationDictionary
+    = { onInternalMessage = GroceriesMsg
+      , onAuthError = AuthorizationError }

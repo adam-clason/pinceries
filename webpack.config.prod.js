@@ -7,12 +7,7 @@ module.exports = {
 			'./src/index.js'
 		],
 		vendor: [
-			"!!script!jquery/dist/jquery.min.js",
-			"!!script!foundation-sites/dist/foundation.min.js",
-			"!!script!foundation-sites/dist/plugins/foundation.util.keyboard.js",
-			"!!script!foundation-sites/dist/plugins/foundation.util.motion.js",
-			"!!script!foundation-sites/dist/plugins/foundation.util.nest.js",
-			"!!script!foundation-sites/dist/plugins/foundation.drilldown.js"
+			"!!script!slideout/dist/slideout.min.js"
 		]
 	},
 

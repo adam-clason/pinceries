@@ -9,12 +9,7 @@ module.exports = {
 			'./src/index.js'
 		],
 		vendor: [
-			"!!script!jquery/dist/jquery.min.js",
-			"!!script!foundation-sites/dist/foundation.min.js",
-			"!!script!foundation-sites/dist/plugins/foundation.util.keyboard.js",
-			"!!script!foundation-sites/dist/plugins/foundation.util.motion.js",
-			"!!script!foundation-sites/dist/plugins/foundation.util.nest.js",
-			"!!script!foundation-sites/dist/plugins/foundation.drilldown.js"
+			"!!script!slideout/dist/slideout.min.js"
 		]
 	},
 
@@ -48,13 +43,14 @@ module.exports = {
 				exclude: [/elm-stuff/, /node_modules/],
 				loader: 'elm-webpack'
 			},
+			//{
+			//	test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+			//	loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+			//},
 			{
-				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader: 'url-loader?limit=10000&mimetype=application/font-woff',
-			},
-			{
-				test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				test: /\.(eot|svg|ttf|woff|woff2)$/,
 				loader: 'file-loader',
+				include: path.join(__dirname, '/src/assets/fonts')
 			},
 			{
 				test: /\.png$/,

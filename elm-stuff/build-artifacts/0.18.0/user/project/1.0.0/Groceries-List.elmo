@@ -1,4 +1,25 @@
-var _user$project$Groceries_List$category = function (ingredient) {
+var _user$project$Groceries_List$categorize = F2(
+	function (ingredient, acc) {
+		return A3(
+			_elm_lang$core$Dict$update,
+			ingredient.category,
+			function (maybe) {
+				var _p0 = maybe;
+				if (_p0.ctor === 'Just') {
+					return _elm_lang$core$Maybe$Just(
+						{ctor: '::', _0: ingredient, _1: _p0._0});
+				} else {
+					return _elm_lang$core$Maybe$Just(
+						{
+							ctor: '::',
+							_0: ingredient,
+							_1: {ctor: '[]'}
+						});
+				}
+			},
+			acc);
+	});
+var _user$project$Groceries_List$ingredientLi = function (ingredient) {
 	return A2(
 		_elm_lang$html$Html$li,
 		{ctor: '[]'},
@@ -12,107 +33,80 @@ var _user$project$Groceries_List$category = function (ingredient) {
 					_0: _elm_lang$html$Html$text(
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							ingredient.name,
-							A2(_elm_lang$core$Basics_ops['++'], ' ', ingredient.amount))),
+							ingredient.amount,
+							A2(_elm_lang$core$Basics_ops['++'], ' ', ingredient.name))),
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Groceries_List$groceryListClassName = function (showMenu) {
-	return _elm_lang$core$Native_Utils.eq(showMenu, true) ? 'grocery-list-wrapper show' : 'grocery-list-wrapper slide-up';
+var _user$project$Groceries_List$category = function (_p1) {
+	var _p2 = _p1;
+	return A2(
+		_elm_lang$html$Html$li,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$a,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('category-name'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_p2._0),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$ul,
+							{ctor: '[]'},
+							A2(_elm_lang$core$List$map, _user$project$Groceries_List$ingredientLi, _p2._1)),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
 };
 var _user$project$Groceries_List$view = function (groceryList) {
+	var categories = _elm_lang$core$Dict$toList(
+		A3(_elm_lang$core$List$foldr, _user$project$Groceries_List$categorize, _elm_lang$core$Dict$empty, groceryList.list));
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _elm_lang$html$Html_Attributes$class('mini-grocery-list'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onMouseOver(_user$project$Groceries_Messages$Show),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onMouseOut(_user$project$Groceries_Messages$Show),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(_user$project$Groceries_Messages$Show),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
+			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$i,
+				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('fa fa-shopping-cart'),
+					_0: _elm_lang$html$Html_Attributes$id('grocery-list'),
 					_1: {ctor: '[]'}
 				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('count-container'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('count-wrapper'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$span,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('count'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(
-											_elm_lang$core$Basics$toString(groceryList.count)),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
+				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$div,
+						_elm_lang$html$Html$ul,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class(
-								_user$project$Groceries_List$groceryListClassName(groceryList.show)),
+							_0: _elm_lang$html$Html_Attributes$class('vertical menu'),
 							_1: {ctor: '[]'}
 						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$ul,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('vertical menu'),
-									_1: {ctor: '[]'}
-								},
-								A2(_elm_lang$core$List$map, _user$project$Groceries_List$category, groceryList.list)),
-							_1: {ctor: '[]'}
-						}),
+						A2(_elm_lang$core$List$map, _user$project$Groceries_List$category, categories)),
 					_1: {ctor: '[]'}
-				}
-			}
+				}),
+			_1: {ctor: '[]'}
 		});
 };

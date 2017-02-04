@@ -1,0 +1,10 @@
+var _user$project$Alerts_Update$update = F2(
+	function (message, alerts) {
+		var _p0 = message;
+		var updatedAlerts = {
+			ctor: '::',
+			_0: _user$project$Alerts_Models$Alert('There was an error authorizing your account. Please re-authorize your account with Pinterest'),
+			_1: alerts
+		};
+		return {ctor: '_Tuple2', _0: updatedAlerts, _1: _elm_lang$core$Platform_Cmd$none};
+	});

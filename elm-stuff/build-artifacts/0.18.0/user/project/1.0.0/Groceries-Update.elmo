@@ -46,23 +46,43 @@ var _user$project$Groceries_Update$addIngredients = F2(
 			pin.ingredients);
 		return A3(_elm_lang$core$List$foldl, _user$project$Groceries_Update$foldAddIngredients, ingredientsList, addedIngredients);
 	});
+var _user$project$Groceries_Update$translator = F2(
+	function (_p0, msg) {
+		var _p1 = _p0;
+		var _p2 = msg;
+		if (_p2.ctor === 'ForSelf') {
+			return _p1.onInternalMessage(_p2._0);
+		} else {
+			return _p1.onAuthError;
+		}
+	});
+var _user$project$Groceries_Update$initSlideout = _elm_lang$core$Native_Platform.outgoingPort(
+	'initSlideout',
+	function (v) {
+		return v;
+	});
+var _user$project$Groceries_Update$showSlideout = _elm_lang$core$Native_Platform.outgoingPort(
+	'showSlideout',
+	function (v) {
+		return v;
+	});
 var _user$project$Groceries_Update$update = F2(
 	function (message, groceryList) {
-		var _p0 = message;
-		switch (_p0.ctor) {
+		var _p3 = message;
+		switch (_p3.ctor) {
 			case 'AddToGroceryList':
-				var updatedIngredientsList = A2(_user$project$Groceries_Update$addIngredients, _p0._0, groceryList.list);
+				var updatedIngredientsList = A2(_user$project$Groceries_Update$addIngredients, _p3._0, groceryList.list);
 				var updatedCount = _elm_lang$core$List$length(updatedIngredientsList);
 				var updatedModel = _elm_lang$core$Native_Utils.update(
 					groceryList,
-					{list: updatedIngredientsList, show: true, count: updatedCount});
+					{list: updatedIngredientsList, count: updatedCount});
 				return {
 					ctor: '_Tuple2',
 					_0: updatedModel,
 					_1: _elm_lang$core$Platform_Cmd$batch(
 						{
 							ctor: '::',
-							_0: _user$project$Groceries_Update$delayHideList(_user$project$Groceries_Messages$Hide),
+							_0: _user$project$Groceries_Update$showSlideout(''),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Groceries_Commands$saveGroceryList(updatedModel),
@@ -71,61 +91,79 @@ var _user$project$Groceries_Update$update = F2(
 						})
 				};
 			case 'RemoveIngredient':
-				var _p1 = _p0._0;
+				var _p4 = _p3._0;
 				var updatedIngredientsList = A2(
 					_elm_lang$core$List$filter,
 					function (i) {
-						return (!_elm_lang$core$Native_Utils.eq(i.name, _p1.name)) || (!_elm_lang$core$Native_Utils.eq(i.amount, _p1.amount));
+						return (!_elm_lang$core$Native_Utils.eq(i.name, _p4.name)) || (!_elm_lang$core$Native_Utils.eq(i.amount, _p4.amount));
 					},
 					groceryList.list);
 				var updatedModel = _elm_lang$core$Native_Utils.update(
 					groceryList,
-					{list: updatedIngredientsList, show: true});
+					{list: updatedIngredientsList});
 				return {
 					ctor: '_Tuple2',
 					_0: updatedModel,
 					_1: _user$project$Groceries_Commands$saveGroceryList(updatedModel)
 				};
 			case 'FetchResult':
-				var _p2 = _p0._0;
-				if (_p2.ctor === 'Ok') {
-					return {ctor: '_Tuple2', _0: _p2._0, _1: _elm_lang$core$Platform_Cmd$none};
+				var _p5 = _p3._0;
+				if (_p5.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _p5._0,
+						_1: _user$project$Groceries_Update$initSlideout('')
+					};
 				} else {
-					return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
-				}
-			case 'SaveResult':
-				return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
-			case 'Show':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						groceryList,
-						{show: true, hovering: true}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'HoverOut':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						groceryList,
-						{show: false}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				var hideList = function () {
-					var _p3 = groceryList.hovering;
-					if (_p3 === true) {
-						return false;
-					} else {
-						return true;
+					var authErrorCommands = {
+						ctor: '::',
+						_0: _user$project$Storage$setAccessToken(''),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Storage$setJwt(''),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Cmd_Extra$message(
+									_user$project$Groceries_Messages$ForParent(_user$project$Groceries_Messages$AuthorizationError)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$navigation$Navigation$newUrl('/'),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					};
+					var _p6 = _p5._0;
+					switch (_p6.ctor) {
+						case 'Unauthorized':
+							return {
+								ctor: '_Tuple2',
+								_0: groceryList,
+								_1: _elm_lang$core$Platform_Cmd$batch(authErrorCommands)
+							};
+						case 'HttpError':
+							var _p7 = _p6._0;
+							switch (_p7.ctor) {
+								case 'Timeout':
+									return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
+								case 'BadStatus':
+									return {
+										ctor: '_Tuple2',
+										_0: groceryList,
+										_1: _elm_lang$core$Platform_Cmd$batch(authErrorCommands)
+									};
+								default:
+									return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
+							}
+						default:
+							return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
 					}
-				}();
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						groceryList,
-						{show: !hideList}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				}
+			default:
+				return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
 		}
+	});
+var _user$project$Groceries_Update$TranslationDictionary = F2(
+	function (a, b) {
+		return {onInternalMessage: a, onAuthError: b};
 	});
