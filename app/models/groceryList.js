@@ -6,6 +6,7 @@ var Ingredient = new Schema({
 	amount : String,
 	category: String,
 	count: Number,
+	pinId: String
 });
 
 var GroceryList = mongoose.model('GroceryList', new Schema({
