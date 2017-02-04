@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "main": "server.js",
+  "engines" : {
+    "node" : "6.9.5",
+    "npm" : "3.10.10"
+  },
   "scripts": {
     "start": "node server",
     "build": "webpack --config webpack.config.prod.js",
