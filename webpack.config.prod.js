@@ -56,7 +56,7 @@ module.exports = {
 				include: path.join(__dirname, '/src/assets/fonts')
 			},
 			{
-				test: /\.png$/,
+				test: /\.(png|svg)$/,
 				loader: 'file-loader?name=[name].[ext]',
 			},
 
