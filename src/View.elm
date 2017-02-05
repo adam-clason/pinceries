@@ -43,7 +43,7 @@ page model =
                         Html.map BoardsMsg (Boards.List.view model.boards)
 
                     BoardRoute id ->
-                        Html.map pinsTranslator (Pins.List.view model.pins)
+                        Html.map pinsTranslator (Pins.List.view model.pins model.groceryList)
 
                     GroceriesRoute ->
                         Html.map groceriesTranslator (Groceries.List.view model.groceryList)
@@ -57,7 +57,7 @@ page model =
                     Html.map BoardsMsg (Boards.List.view model.boards)
 
                 BoardRoute id ->
-                    Html.map pinsTranslator (Pins.List.view model.pins)
+                    Html.map pinsTranslator (Pins.List.view model.pins model.groceryList)
 
                 GroceriesRoute ->
                     Html.map groceriesTranslator (Groceries.List.view model.groceryList)
@@ -82,6 +82,7 @@ navbar model =
                 [ li [] 
                     [ div [ class "mini-list-link" ]
                         [ i [ class "fa fa-shopping-cart" ] [] 
+                        , span [ class "count" ] [ text (toString (List.length model.groceryList.list)) ]
                         ]  
                     ]
 
@@ -103,8 +104,8 @@ groceryList model =
 
 accessView : Html msg
 accessView =
-    div [ class "container"]
-        [ text "ACCESSING PLZ"
+    div [ class "loading-container"]
+        [ img [ src "./spin.svg" ] []
         ]
 
 loginView : Model -> Html msg 

@@ -10,6 +10,7 @@ type InternalMsg
 
 type OutMsg 
     = AddToGroceryList Pin
+    | RemoveFromGroceryList Pin
 
 type Msg 
     = ForSelf InternalMsg 

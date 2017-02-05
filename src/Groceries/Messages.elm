@@ -7,6 +7,7 @@ import Groceries.Models exposing (Ingredient, GroceryList, ApiResponse)
 
 type InternalMsg 
     = AddToGroceryList Pin
+    | RemoveFromGroceryList Pin
     | RemoveIngredient Ingredient
     | FetchResult (Result JwtError GroceryList)
     | SaveResult (Result JwtError ApiResponse)

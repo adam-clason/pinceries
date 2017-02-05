@@ -7,23 +7,26 @@ import Groceries.Messages
 import Pins.Models exposing (Pin)
 
 
-
 type alias Translator parentMsg = Msg -> parentMsg
 
 type alias TranslationDictionary msg =
   { onInternalMessage: InternalMsg -> msg
   , onAddToGroceryList: Pin -> msg
+  , onRemoveFromGroceryList: Pin -> msg
   }
 
 
 translator : TranslationDictionary parentMsg -> Translator parentMsg
-translator { onInternalMessage, onAddToGroceryList } msg =
+translator { onInternalMessage, onAddToGroceryList, onRemoveFromGroceryList } msg =
     case msg of 
         ForSelf internal ->
             onInternalMessage internal 
 
         ForParent (AddToGroceryList pin) ->
             onAddToGroceryList pin 
+
+        ForParent (RemoveFromGroceryList pin) ->
+            onRemoveFromGroceryList pin
 
 
 update : InternalMsg -> List Pin -> ( List Pin, Cmd Msg )

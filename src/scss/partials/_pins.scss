@@ -17,7 +17,36 @@
 	.pin-image {
 		max-height: 350px;
 		overflow: hidden;
+		
+		&.not-available {
+			background-color: gray;
+			z-index: 2;
+			position: relative;
+			text-align: center;
+
+			.msg {
+				color: gray;
+			    position: absolute;
+			    top: 50%;
+			    left: 50%;
+			    z-index: 4;
+			    transform: translateX(-50%) translateY(-50%);
+			    font-size: 42px;
+			    width: 80%;
+			    font-weight: bold;
+			    text-transform: uppercase;
+			    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+			}
+
+			img {
+				z-index: 1;
+	    		opacity: .3;
+			}
+		}
 	}
 
+	.fa {
+		padding-left: 5px;
+	}
 
 }

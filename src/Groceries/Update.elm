@@ -49,6 +49,16 @@ update message groceryList =
             in 
                 ( updatedModel, Cmd.batch [ showSlideout "", saveGroceryList updatedModel ])
 
+        RemoveFromGroceryList pin ->
+            let
+                updatedIngredientsList = 
+                    removeIngredients pin groceryList.list
+                updatedModel =
+                    { groceryList | list = updatedIngredientsList }
+
+            in
+                ( updatedModel, saveGroceryList updatedModel )
+
         RemoveIngredient ingredient ->
             let 
                 updatedIngredientsList = 
@@ -100,11 +110,19 @@ addIngredients pin ingredientsList =
     let 
         addedIngredients = 
             List.concatMap (\c -> 
-                    (List.map (\i -> Ingredient i.amount i.name c.category 1 ) c.ingredients)) pin.ingredients
+                    (List.map (\i -> Ingredient i.amount i.name c.category 1 pin.id ) c.ingredients)) pin.ingredients
 
           
     in 
         List.foldl foldAddIngredients ingredientsList addedIngredients
+
+removeIngredients : Pin -> IngredientsList -> IngredientsList
+removeIngredients pin ingredientsList =
+    let 
+        updatedIngredientsList = 
+            List.filter (\i -> i.pinId /= pin.id) ingredientsList
+    in 
+        updatedIngredientsList
 
 
 foldAddIngredients : Ingredient -> IngredientsList -> IngredientsList

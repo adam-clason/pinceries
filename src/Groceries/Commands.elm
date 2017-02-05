@@ -31,11 +31,12 @@ fetchGroceryListDecoder currentModel =
 
 ingredientDecoder : Decoder Ingredient
 ingredientDecoder = 
-    map4 Ingredient
+    map5 Ingredient
         (field "name" string)
         (field "amount" string)
         (field "category" string)
         (field "count" int)
+        (field "pinId" string)
 
 saveGroceryList : GroceryList -> Cmd Msg
 saveGroceryList model =
@@ -56,6 +57,7 @@ saveGroceryListJsonBody model =
                             , ("amount", Json.Encode.string i.amount)
                             , ("category", Json.Encode.string i.category)
                             , ("count", Json.Encode.int i.count)
+                            , ("pinId", Json.Encode.string i.pinId)
                             ]
                 ) model.list
           )

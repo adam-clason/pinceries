@@ -6,6 +6,9 @@ require('./index.html');
 require('./assets/images/groceries_bg.png');
 require('./assets/images/pinterest_badge.png');
 
+require('./assets/images/spin.svg');
+
+
 require('font-awesome-webpack');
 require('./scss/style.scss');
 
@@ -38,7 +41,8 @@ app.ports.setJwt.subscribe(function (jwt) {
 		slideout = new Slideout({
 			'panel' : document.getElementById('content'),
 			'menu' : document.getElementById('grocery-list'),
-			'side' : 'right'
+			'side' : 'right',
+			'padding' : 356
 		});
 
 		document.querySelector('.mini-list-link').addEventListener('click', function() {
@@ -53,7 +57,7 @@ app.ports.setJwt.subscribe(function (jwt) {
 
 		slideout.on('beforeopen', function () {
 		  fixed.style.transition = 'transform 300ms ease';
-		  fixed.style.transform = 'translateX(-256px)';
+		  fixed.style.transform = 'translateX(-356px)';
 		});
 
 		slideout.on('beforeclose', function () {
@@ -68,8 +72,6 @@ app.ports.setJwt.subscribe(function (jwt) {
 		slideout.on('close', function () {
 		  fixed.style.transition = '';
 		});
-
-		slideout.open();
 
 	});
 

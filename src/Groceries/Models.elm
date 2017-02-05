@@ -22,6 +22,7 @@ type alias Ingredient =
     , amount : String
     , category : String
     , count : Int
+    , pinId : String
     }
 
 type alias ApiResponse = 

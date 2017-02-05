@@ -21,7 +21,8 @@ type Msg
 
 pinsTranslationDictionary
     = { onInternalMessage = PinsMsg 
-      , onAddToGroceryList = \a -> GroceriesMsg (Groceries.Messages.AddToGroceryList a) }
+      , onAddToGroceryList = \a -> GroceriesMsg (Groceries.Messages.AddToGroceryList a) 
+      , onRemoveFromGroceryList = \a -> GroceriesMsg (Groceries.Messages.RemoveFromGroceryList a) }
 
 groceriesTranslationDictionary
     = { onInternalMessage = GroceriesMsg
