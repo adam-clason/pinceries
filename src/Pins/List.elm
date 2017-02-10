@@ -2,27 +2,33 @@ module Pins.List exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
-import Html.Attributes exposing (classList, type_, class, src, value, href, style)
+import Html.Attributes exposing (classList, type_, class, src, value, href, style, attribute)
 import Pins.Models exposing (..)
 import Pins.Messages exposing (..)
 import Groceries.Models exposing (..)
 
-view : List Pin -> GroceryList -> Html Msg
+view : PinsList -> GroceryList -> Html Msg
 view pins groceryList =
     div [ class "container" ]
         [ list pins groceryList ]
 
 
-list : List Pin -> GroceryList ->  Html Msg
-list pins groceryList =
+list : PinsList -> GroceryList ->  Html Msg
+list pinsList groceryList =
 
     let   
         thumbnailView =
             pinThumbnail groceryList
     in
-        div [ class "row small-up-2 medium-up-3 larg-up-4" ]
-            (List.map thumbnailView pins)
-
+        div [ ]
+            [ div [ class "row small-up-2 medium-up-3 larg-up-4" ] (List.map thumbnailView pinsList.pins)
+            , div [ class "row bottom small-up-1 medium-up-1 large-up-1", attribute "data-nexturl" pinsList.nextUrl ] 
+                [ div [ class "column spinner hidden" ] 
+                    [ img [ src "./spin.svg" ] [] 
+                    ] 
+                ] 
+            ]
+           
 
 pinThumbnail : GroceryList -> Pin -> Html Msg
 pinThumbnail groceryList pin  =

@@ -10,8 +10,10 @@ import Html.Attributes exposing (attribute, class)
 
 view : AlertsList -> Html Msg
 view alerts =
-    div [ class "container" ] (List.map alert alerts)
-    
+    if List.length alerts > 0 then
+        div [ class "container" ] (List.map alert alerts)
+    else 
+        Html.text ""
 
 alert : Alert -> Html Msg 
 alert alert = 

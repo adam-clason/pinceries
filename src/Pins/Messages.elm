@@ -1,12 +1,12 @@
 module Pins.Messages exposing (..)
 
 import Http
-import Pins.Models exposing (PinId, Pin)
+import Pins.Models exposing (PinsList, PinId, Pin)
 
-type alias PinsList = List Pin
 
 type InternalMsg
     = FetchAllDone (Result Http.Error PinsList)
+    | NextPage String
 
 type OutMsg 
     = AddToGroceryList Pin

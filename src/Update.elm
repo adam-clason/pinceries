@@ -37,11 +37,11 @@ update msg model =
 
         PinsMsg subMsg -> 
             let 
-                ( updatedPins, cmd) =
-                    Pins.Update.update subMsg model.pins
+                ( updatedPinsList, cmd) =
+                    Pins.Update.update subMsg model.pinsList
             in
         
-                ( { model | pins = updatedPins }, Cmd.map pinsTranslator cmd)
+                ( { model | pinsList = updatedPinsList }, Cmd.map pinsTranslator cmd)
 
 
         GroceriesMsg subMsg -> 
@@ -62,10 +62,12 @@ update msg model =
             let 
                 updatedRoute = 
                     Routing.routeFromMaybe <| Routing.parser location
-                routeCommand =
-                    commandFromRoute model updatedRoute
+                updatedModel = 
+                    { model | route = updatedRoute }
+                modelAndCommands =
+                    modelAndCommandsFromRoute updatedModel updatedRoute
             in
-                ( { model | route = updatedRoute }, routeCommand)
+                modelAndCommands
 
         Authorized (Ok authorizeInfo) ->
             let 
@@ -79,11 +81,17 @@ update msg model =
                             groceryList =
                                 model.groceryList
 
+                            pinsList = 
+                                model.pinsList 
+
                             updatedGroceryList = 
                                 { groceryList | id = updatedUser.activeGroceryListId, jwt = authorizeInfo.jwt }
 
+                            updatedPinsList = 
+                                { pinsList | accessToken = authorizeInfo.accessToken }
+
                             updatedModel =
-                                { model | user = updatedUser, groceryList = updatedGroceryList, accessToken = authorizeInfo.accessToken, jwt = authorizeInfo.jwt }
+                                { model | user = updatedUser, groceryList = updatedGroceryList, pinsList = updatedPinsList, accessToken = authorizeInfo.accessToken, jwt = authorizeInfo.jwt }
 
                             commands =
                                 [ Storage.setAccessToken authorizeInfo.accessToken
@@ -104,29 +112,44 @@ update msg model =
             ({ model | jwt = "", accessToken = "" }, Cmd.Extra.message (AlertsMsg Alerts.Messages.AuthorizationError))
 
 
-initCommand : Model -> Route ->  Cmd Msg
-initCommand model currentRoute  =
+initModelAndCommands : Model -> Route ->  (Model, Cmd Msg)
+initModelAndCommands model currentRoute  =
     case currentRoute of 
         Authenticated innerRoute ->
             if authenticated model then
              case innerRoute of 
                 BoardsRoute ->
-                    Cmd.batch 
-                        [ Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
-                        , Cmd.map groceriesTranslator (Groceries.Commands.fetchGroceryList model.groceryList)
-                        ]
-                        
+
+                    let 
+                        routeCommands = 
+                            Cmd.batch 
+                                [ Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
+                                , Cmd.map groceriesTranslator (Groceries.Commands.fetchGroceryList model.groceryList)
+                                ]
+                    in 
+                        (model, routeCommands)
+
     
                 BoardRoute id ->
-                    Cmd.batch 
-                        [ Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
-                        , Cmd.map groceriesTranslator (Groceries.Commands.fetchGroceryList model.groceryList)
-                        ]
+                    let 
+                        pinsList =
+                            model.pinsList 
+                        updatedPinsList = 
+                            { pinsList | boardId = id }
+                        routeCommands = 
+                            Cmd.batch 
+                                [ Cmd.map pinsTranslator (Pins.Commands.fetchPins updatedPinsList "")
+                                , Cmd.map groceriesTranslator (Groceries.Commands.fetchGroceryList model.groceryList)
+                                ]
+                        updatedModel = 
+                            { model | pinsList = updatedPinsList }
+                    in 
+                        (updatedModel, routeCommands)
 
                 _ ->
-                    Cmd.none
+                    (model, Cmd.none)
             else 
-                Cmd.none
+                (model, Cmd.none)
 
 
         Anonymous innerRoute ->
@@ -138,33 +161,40 @@ initCommand model currentRoute  =
                         fetchJwt =
                             Commands.fetchPinceriesApiJwt model
                     in
-                        fetchToken 
-                            |> Task.andThen fetchJwt 
-                            |> Task.attempt Authorized 
+                        (model, fetchToken |> Task.andThen fetchJwt |> Task.attempt Authorized)
 
                 Authorize Nothing ->
-                    Cmd.none
+                    (model, Cmd.none)
 
                 _ ->
-                    Cmd.none
+                    (model, Cmd.none) 
 
         NotFoundRoute ->
-            Cmd.none
+            (model, Cmd.none)
 
 
-commandFromRoute : Model -> Route ->  Cmd Msg
-commandFromRoute model currentRoute  =
+modelAndCommandsFromRoute : Model -> Route ->  (Model, Cmd Msg)
+modelAndCommandsFromRoute model currentRoute =
     case currentRoute of 
         Authenticated innerRoute ->
              case innerRoute of 
                 BoardsRoute ->
-                    Cmd.map BoardsMsg (Boards.Commands.fetchAll model)
+                    (model, Cmd.map BoardsMsg (Boards.Commands.fetchAll model))
                         
                 BoardRoute id ->
-                    Cmd.map pinsTranslator (Pins.Commands.fetchPins model id)
-                       
+                    let 
+                        pinsList = 
+                            model.pinsList
+                        updatedPinsList = 
+                            { pinsList | boardId = id }
+                        commands = 
+                            Cmd.map pinsTranslator (Pins.Commands.fetchPins updatedPinsList "")
+                        updatedModel =
+                            { model | pinsList = updatedPinsList }
+                    in
+                        (updatedModel, commands) 
                 _ ->
-                    Cmd.none
+                    (model, Cmd.none)
 
         Anonymous innerRoute ->
              case innerRoute of 
@@ -175,18 +205,16 @@ commandFromRoute model currentRoute  =
                         fetchJwt =
                             Commands.fetchPinceriesApiJwt model
                     in
-                        fetchToken 
-                            |> Task.andThen fetchJwt 
-                            |> Task.attempt Authorized 
+                        (model, fetchToken |> Task.andThen fetchJwt |> Task.attempt Authorized)
 
                 Authorize Nothing ->
-                    Cmd.none
+                    (model, Cmd.none)
 
                 _ ->
-                    Cmd.none
+                    (model, Cmd.none)
 
         NotFoundRoute ->
-            Cmd.none
+            (model, Cmd.none)
 
 
 authenticated : Model -> Bool

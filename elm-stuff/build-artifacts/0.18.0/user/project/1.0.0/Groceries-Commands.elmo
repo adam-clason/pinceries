@@ -64,7 +64,15 @@ var _user$project$Groceries_Commands$saveGroceryListJsonBody = function (model) 
 																_0: 'count',
 																_1: _elm_lang$core$Json_Encode$int(i.count)
 															},
-															_1: {ctor: '[]'}
+															_1: {
+																ctor: '::',
+																_0: {
+																	ctor: '_Tuple2',
+																	_0: 'pinId',
+																	_1: _elm_lang$core$Json_Encode$string(i.pinId)
+																},
+																_1: {ctor: '[]'}
+															}
 														}
 													}
 												}
@@ -91,13 +99,14 @@ var _user$project$Groceries_Commands$saveGroceryList = function (model) {
 			_user$project$Groceries_Commands$saveGroceryListJsonBody(model),
 			_user$project$Groceries_Commands$addIngredientsResponseDecoder));
 };
-var _user$project$Groceries_Commands$ingredientDecoder = A5(
-	_elm_lang$core$Json_Decode$map4,
+var _user$project$Groceries_Commands$ingredientDecoder = A6(
+	_elm_lang$core$Json_Decode$map5,
 	_user$project$Groceries_Models$Ingredient,
 	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'amount', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'category', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'count', _elm_lang$core$Json_Decode$int));
+	A2(_elm_lang$core$Json_Decode$field, 'count', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'pinId', _elm_lang$core$Json_Decode$string));
 var _user$project$Groceries_Commands$fetchGroceryListDecoder = function (currentModel) {
 	return A9(
 		_elm_lang$core$Json_Decode$map8,

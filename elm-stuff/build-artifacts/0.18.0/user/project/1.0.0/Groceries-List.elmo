@@ -98,14 +98,29 @@ var _user$project$Groceries_List$view = function (groceryList) {
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$ul,
+						_elm_lang$html$Html$h2,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('vertical menu'),
+							_0: _elm_lang$html$Html_Attributes$class('grocery-list-title'),
 							_1: {ctor: '[]'}
 						},
-						A2(_elm_lang$core$List$map, _user$project$Groceries_List$category, categories)),
-					_1: {ctor: '[]'}
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Grocery List'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$ul,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('vertical menu'),
+								_1: {ctor: '[]'}
+							},
+							A2(_elm_lang$core$List$map, _user$project$Groceries_List$category, categories)),
+						_1: {ctor: '[]'}
+					}
 				}),
 			_1: {ctor: '[]'}
 		});

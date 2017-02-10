@@ -31,6 +31,16 @@ var _user$project$Groceries_Update$foldAddIngredients = F2(
 			},
 			ingredientsList) : {ctor: '::', _0: addedIngredient, _1: ingredientsList};
 	});
+var _user$project$Groceries_Update$removeIngredients = F2(
+	function (pin, ingredientsList) {
+		var updatedIngredientsList = A2(
+			_elm_lang$core$List$filter,
+			function (i) {
+				return !_elm_lang$core$Native_Utils.eq(i.pinId, pin.id);
+			},
+			ingredientsList);
+		return updatedIngredientsList;
+	});
 var _user$project$Groceries_Update$addIngredients = F2(
 	function (pin, ingredientsList) {
 		var addedIngredients = A2(
@@ -39,7 +49,7 @@ var _user$project$Groceries_Update$addIngredients = F2(
 				return A2(
 					_elm_lang$core$List$map,
 					function (i) {
-						return A4(_user$project$Groceries_Models$Ingredient, i.amount, i.name, c.category, 1);
+						return A5(_user$project$Groceries_Models$Ingredient, i.amount, i.name, c.category, 1, pin.id);
 					},
 					c.ingredients);
 			},
@@ -89,6 +99,16 @@ var _user$project$Groceries_Update$update = F2(
 								_1: {ctor: '[]'}
 							}
 						})
+				};
+			case 'RemoveFromGroceryList':
+				var updatedIngredientsList = A2(_user$project$Groceries_Update$removeIngredients, _p3._0, groceryList.list);
+				var updatedModel = _elm_lang$core$Native_Utils.update(
+					groceryList,
+					{list: updatedIngredientsList});
+				return {
+					ctor: '_Tuple2',
+					_0: updatedModel,
+					_1: _user$project$Groceries_Commands$saveGroceryList(updatedModel)
 				};
 			case 'RemoveIngredient':
 				var _p4 = _p3._0;

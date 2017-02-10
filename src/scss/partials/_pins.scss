@@ -25,7 +25,7 @@
 			text-align: center;
 
 			.msg {
-				color: gray;
+				color: black;
 			    position: absolute;
 			    top: 50%;
 			    left: 50%;
@@ -35,7 +35,6 @@
 			    width: 80%;
 			    font-weight: bold;
 			    text-transform: uppercase;
-			    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 			}
 
 			img {
@@ -48,5 +47,10 @@
 	.fa {
 		padding-left: 5px;
 	}
+
+}
+
+.spinner {
+	text-align: center;
 
 }

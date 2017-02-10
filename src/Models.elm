@@ -1,7 +1,7 @@
 module Models exposing (..)
 
 import Boards.Models exposing (Board)
-import Pins.Models exposing (Pin)
+import Pins.Models exposing (PinsList)
 import Alerts.Models exposing (AlertsList)
 import Groceries.Models exposing (..)
 import Jwt exposing (decodeToken, JwtError)
@@ -23,7 +23,7 @@ type alias Model =
     , alerts : AlertsList
     , user : User
     , boards : List Board
-    , pins : List Pin
+    , pinsList : PinsList
     , groceryList : GroceryList
     , route : Routing.Route
     , pinceriesApiBaseUrl : String
@@ -56,7 +56,7 @@ initialModel flags route =
         , pinceriesApiBaseUrl = flags.pinceriesApiBaseUrl
         , pinterestRedirectUrl = flags.pinterestRedirectUrl
         , boards = []
-        , pins = [] 
+        , pinsList = PinsList flags.accessToken "" [] ""
         , groceryList = GroceryList initUser.activeGroceryListId "" [] 0 False False flags.pinceriesApiBaseUrl flags.jwt
         , route = route
         }

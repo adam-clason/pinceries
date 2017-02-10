@@ -43,7 +43,7 @@ page model =
                         Html.map BoardsMsg (Boards.List.view model.boards)
 
                     BoardRoute id ->
-                        Html.map pinsTranslator (Pins.List.view model.pins model.groceryList)
+                        Html.map pinsTranslator (Pins.List.view model.pinsList model.groceryList)
 
                     GroceriesRoute ->
                         Html.map groceriesTranslator (Groceries.List.view model.groceryList)
@@ -57,7 +57,7 @@ page model =
                     Html.map BoardsMsg (Boards.List.view model.boards)
 
                 BoardRoute id ->
-                    Html.map pinsTranslator (Pins.List.view model.pins model.groceryList)
+                    Html.map pinsTranslator (Pins.List.view model.pinsList model.groceryList)
 
                 GroceriesRoute ->
                     Html.map groceriesTranslator (Groceries.List.view model.groceryList)
@@ -114,7 +114,7 @@ loginView model =
         [ div [ class "login-form" ]
             [ h3 [] [ text "Hi There!"]
             , p [] [ text "We are here to help you gather your next grocery list as easily and quickly as possible. Please login with Pinterest to get started!" ]
-            , a [ href ("https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=" ++ model.pinterestRedirectUrl), class "button" ] 
+            , a [ href ("https://api.pinterest.com/oauth?response_type=code&client_id=4869855014851457651&state=kh123&scope=read_public&redirect_uri=" ++ model.pinterestRedirectUrl), class "button" ] 
                 [ span [] [ text "Login with Pinterest" ]
                 , img [ src "./pinterest_badge.png" ] [] 
                 ] 

@@ -5,7 +5,7 @@ import Storage
 import Messages exposing (Msg(..))
 import Models exposing (Model, Flags, initialModel)
 import View exposing (view)
-import Update exposing (update, initCommand)
+import Update exposing (update, initModelAndCommands, pinsTranslator)
 import Boards.Commands exposing (fetchAll)
 import Pins.Commands exposing (fetchPins)
 import Pins.Update
@@ -19,16 +19,16 @@ init flags location =
             Routing.parser location |> Routing.routeFromMaybe
         model =
             initialModel flags currentRoute
-        command = 
-            initCommand model currentRoute
+        modelAndCommands = 
+            initModelAndCommands model currentRoute
 
     in
-        ( model, command )
+        modelAndCommands
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.map pinsTranslator Pins.Update.subscriptions 
 
 -- MAIN
 

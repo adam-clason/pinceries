@@ -60,30 +60,47 @@ var _user$project$Pins_Commands$memberDecoder = A6(
 				_1: {ctor: '[]'}
 			}
 		}));
-var _user$project$Pins_Commands$collectionDecoder = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'data',
-		_1: {ctor: '[]'}
-	},
-	_elm_lang$core$Json_Decode$list(_user$project$Pins_Commands$memberDecoder));
+var _user$project$Pins_Commands$pinsListDecoder = function (pinsList) {
+	return A5(
+		_elm_lang$core$Json_Decode$map4,
+		_user$project$Pins_Models$PinsList,
+		_elm_lang$core$Json_Decode$succeed(pinsList.accessToken),
+		_elm_lang$core$Json_Decode$succeed(pinsList.boardId),
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'data',
+				_1: {ctor: '[]'}
+			},
+			_elm_lang$core$Json_Decode$list(_user$project$Pins_Commands$memberDecoder)),
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'page',
+				_1: {ctor: '[]'}
+			},
+			A2(_elm_lang$core$Json_Decode$field, 'next', _elm_lang$core$Json_Decode$string)));
+};
 var _user$project$Pins_Commands$fetchPinsUrl = F2(
-	function (accessToken, boardId) {
-		var url = A2(
+	function (pinsList, nextUrl) {
+		var url = (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$String$length(nextUrl),
+			0) > 0) ? nextUrl : A2(
 			_elm_lang$core$Basics_ops['++'],
 			'https://api.pinterest.com/v1/boards/',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				boardId,
+				pinsList.boardId,
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'/pins/?access_token=',
-					A2(_elm_lang$core$Basics_ops['++'], accessToken, '&fields=id%2Clink%2Cnote%2Curl%2Cmetadata%2Cimage'))));
+					A2(_elm_lang$core$Basics_ops['++'], pinsList.accessToken, '&fields=id%2Clink%2Cnote%2Curl%2Cmetadata%2Cimage'))));
 		return url;
 	});
 var _user$project$Pins_Commands$fetchPins = F2(
-	function (model, boardId) {
+	function (pinsList, nextUrl) {
 		return A2(
 			_elm_lang$http$Http$send,
 			function (a) {
@@ -92,6 +109,6 @@ var _user$project$Pins_Commands$fetchPins = F2(
 			},
 			A2(
 				_elm_lang$http$Http$get,
-				A2(_user$project$Pins_Commands$fetchPinsUrl, model.accessToken, boardId),
-				_user$project$Pins_Commands$collectionDecoder));
+				A2(_user$project$Pins_Commands$fetchPinsUrl, pinsList, nextUrl),
+				_user$project$Pins_Commands$pinsListDecoder(pinsList)));
 	});

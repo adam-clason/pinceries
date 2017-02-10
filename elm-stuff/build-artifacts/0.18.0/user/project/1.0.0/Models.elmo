@@ -32,7 +32,12 @@ var _user$project$Models$initialModel = F2(
 			pinceriesApiBaseUrl: flags.pinceriesApiBaseUrl,
 			pinterestRedirectUrl: flags.pinterestRedirectUrl,
 			boards: {ctor: '[]'},
-			pins: {ctor: '[]'},
+			pinsList: A4(
+				_user$project$Pins_Models$PinsList,
+				flags.accessToken,
+				'',
+				{ctor: '[]'},
+				''),
 			groceryList: A8(
 				_user$project$Groceries_Models$GroceryList,
 				initUser.activeGroceryListId,
@@ -56,7 +61,7 @@ var _user$project$Models$Model = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {accessToken: a, jwt: b, alerts: c, user: d, boards: e, pins: f, groceryList: g, route: h, pinceriesApiBaseUrl: i, pinterestRedirectUrl: j};
+										return {accessToken: a, jwt: b, alerts: c, user: d, boards: e, pinsList: f, groceryList: g, route: h, pinceriesApiBaseUrl: i, pinterestRedirectUrl: j};
 									};
 								};
 							};

@@ -1,23 +1,66 @@
-var _user$project$Pins_Update$update = F2(
-	function (message, pins) {
-		var _p0 = message;
-		if (_p0._0.ctor === 'Ok') {
-			return {ctor: '_Tuple2', _0: _p0._0._0, _1: _elm_lang$core$Platform_Cmd$none};
-		} else {
-			return {ctor: '_Tuple2', _0: pins, _1: _elm_lang$core$Platform_Cmd$none};
-		}
-	});
 var _user$project$Pins_Update$translator = F2(
-	function (_p1, msg) {
-		var _p2 = _p1;
-		var _p3 = msg;
-		if (_p3.ctor === 'ForSelf') {
-			return _p2.onInternalMessage(_p3._0);
+	function (_p0, msg) {
+		var _p1 = _p0;
+		var _p2 = msg;
+		if (_p2.ctor === 'ForSelf') {
+			return _p1.onInternalMessage(_p2._0);
 		} else {
-			return _p2.onAddToGroceryList(_p3._0._0);
+			if (_p2._0.ctor === 'AddToGroceryList') {
+				return _p1.onAddToGroceryList(_p2._0._0);
+			} else {
+				return _p1.onRemoveFromGroceryList(_p2._0._0);
+			}
 		}
 	});
-var _user$project$Pins_Update$TranslationDictionary = F2(
-	function (a, b) {
-		return {onInternalMessage: a, onAddToGroceryList: b};
+var _user$project$Pins_Update$nextPage = _elm_lang$core$Native_Platform.incomingPort('nextPage', _elm_lang$core$Json_Decode$string);
+var _user$project$Pins_Update$subscriptions = _user$project$Pins_Update$nextPage(
+	function (msg) {
+		return _user$project$Pins_Messages$ForSelf(
+			_user$project$Pins_Messages$NextPage(msg));
+	});
+var _user$project$Pins_Update$pageLoaded = _elm_lang$core$Native_Platform.outgoingPort(
+	'pageLoaded',
+	function (v) {
+		return v;
+	});
+var _user$project$Pins_Update$update = F2(
+	function (message, pinsList) {
+		var _p3 = message;
+		if (_p3.ctor === 'FetchAllDone') {
+			if (_p3._0.ctor === 'Ok') {
+				var _p4 = _p3._0._0;
+				var updatedPinsList = _elm_lang$core$Native_Utils.update(
+					pinsList,
+					{
+						nextUrl: _p4.nextUrl,
+						pins: _elm_lang$core$List$concat(
+							{
+								ctor: '::',
+								_0: pinsList.pins,
+								_1: {
+									ctor: '::',
+									_0: _p4.pins,
+									_1: {ctor: '[]'}
+								}
+							})
+					});
+				return {
+					ctor: '_Tuple2',
+					_0: updatedPinsList,
+					_1: _user$project$Pins_Update$pageLoaded('')
+				};
+			} else {
+				return {ctor: '_Tuple2', _0: pinsList, _1: _elm_lang$core$Platform_Cmd$none};
+			}
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: pinsList,
+				_1: A2(_user$project$Pins_Commands$fetchPins, pinsList, _p3._0)
+			};
+		}
+	});
+var _user$project$Pins_Update$TranslationDictionary = F3(
+	function (a, b, c) {
+		return {onInternalMessage: a, onAddToGroceryList: b, onRemoveFromGroceryList: c};
 	});

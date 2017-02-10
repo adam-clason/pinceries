@@ -7,6 +7,9 @@ var _user$project$Groceries_Messages$FetchResult = function (a) {
 var _user$project$Groceries_Messages$RemoveIngredient = function (a) {
 	return {ctor: 'RemoveIngredient', _0: a};
 };
+var _user$project$Groceries_Messages$RemoveFromGroceryList = function (a) {
+	return {ctor: 'RemoveFromGroceryList', _0: a};
+};
 var _user$project$Groceries_Messages$AddToGroceryList = function (a) {
 	return {ctor: 'AddToGroceryList', _0: a};
 };

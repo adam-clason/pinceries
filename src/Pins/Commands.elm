@@ -4,25 +4,32 @@ import Http
 import Json.Decode exposing (..)
 import Task
 import Models exposing (Model)
-import Pins.Models exposing (PinId, Pin, Category, Ingredient)
+import Pins.Models exposing (PinsList, PinId, Pin, Category, Ingredient)
 import Boards.Models exposing (BoardId, Board)
 import Pins.Messages exposing (..)
 
-fetchPins : Model -> BoardId -> Cmd Msg
-fetchPins model boardId =
-    Http.get (fetchPinsUrl model.accessToken boardId) collectionDecoder 
+fetchPins : PinsList -> String -> Cmd Msg
+fetchPins pinsList nextUrl =
+    Http.get (fetchPinsUrl pinsList nextUrl) (pinsListDecoder pinsList)
         |> Http.send (\a -> ForSelf (FetchAllDone a))
 
-fetchPinsUrl : String -> BoardId -> String
-fetchPinsUrl accessToken boardId =
+fetchPinsUrl : PinsList -> String -> String
+fetchPinsUrl pinsList nextUrl =
     let url = 
-        "https://api.pinterest.com/v1/boards/" ++ boardId ++ "/pins/?access_token=" ++ accessToken ++ "&fields=id%2Clink%2Cnote%2Curl%2Cmetadata%2Cimage"
+        if String.length nextUrl > 0 then 
+            nextUrl
+        else 
+            "https://api.pinterest.com/v1/boards/" ++ pinsList.boardId ++ "/pins/?access_token=" ++ pinsList.accessToken ++ "&fields=id%2Clink%2Cnote%2Curl%2Cmetadata%2Cimage"
     in
         url
 
-collectionDecoder : Decoder (List Pin)
-collectionDecoder =
-    at ["data"] ( list memberDecoder)
+pinsListDecoder : PinsList -> Decoder (PinsList)
+pinsListDecoder pinsList  =
+    map4 PinsList
+        (succeed pinsList.accessToken)
+        (succeed pinsList.boardId)
+        (at ["data"] (list memberDecoder))
+        (at ["page"] (field "next" string))
 
 
 memberDecoder : Decoder Pin

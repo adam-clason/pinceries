@@ -76,7 +76,7 @@ var _user$project$Boards_List$list = function (boards) {
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('row small-up-2 medium-up-3 larg-up-4'),
+			_0: _elm_lang$html$Html_Attributes$class('row small-up-3 medium-up-5 larg-up-6'),
 			_1: {ctor: '[]'}
 		},
 		A2(_elm_lang$core$List$map, _user$project$Boards_List$boardRow, boards));
@@ -91,40 +91,7 @@ var _user$project$Boards_List$view = function (boards) {
 		},
 		{
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$h1,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('columns'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$span,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Boards '),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$small,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Select a board'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _user$project$Boards_List$list(boards),
-				_1: {ctor: '[]'}
-			}
+			_0: _user$project$Boards_List$list(boards),
+			_1: {ctor: '[]'}
 		});
 };

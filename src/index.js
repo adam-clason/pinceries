@@ -73,6 +73,33 @@ app.ports.setJwt.subscribe(function (jwt) {
 		  fixed.style.transition = '';
 		});
 
+
+		var bottom = null
+
+		app.ports.pageLoaded.subscribe(function() {
+			bottom = document.querySelector('.bottom');
+		});
+
+		window.onscroll = function() {
+
+			if (bottom) {
+				var elementTop = bottom.getBoundingClientRect().top,
+					elementBottom = bottom.getBoundingClientRect().bottom;
+
+				var isVisible = (elementTop >= 0 && elementBottom <= window.innerHeight);
+
+				if (isVisible) {
+					var cursor = bottom.dataset.nexturl; 
+					
+					bottom = null;
+
+					app.ports.nextPage.send(cursor);
+
+				}
+			}
+			
+		};
+
 	});
 
 

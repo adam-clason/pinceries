@@ -1,3 +1,7 @@
+var _user$project$Pins_Models$PinsList = F4(
+	function (a, b, c, d) {
+		return {accessToken: a, boardId: b, pins: c, nextUrl: d};
+	});
 var _user$project$Pins_Models$Pin = F5(
 	function (a, b, c, d, e) {
 		return {id: a, url: b, img: c, note: d, ingredients: e};

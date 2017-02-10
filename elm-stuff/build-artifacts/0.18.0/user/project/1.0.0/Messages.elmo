@@ -20,6 +20,10 @@ var _user$project$Messages$pinsTranslationDictionary = {
 	onAddToGroceryList: function (a) {
 		return _user$project$Messages$GroceriesMsg(
 			_user$project$Groceries_Messages$AddToGroceryList(a));
+	},
+	onRemoveFromGroceryList: function (a) {
+		return _user$project$Messages$GroceriesMsg(
+			_user$project$Groceries_Messages$RemoveFromGroceryList(a));
 	}
 };
 var _user$project$Messages$BoardsMsg = function (a) {

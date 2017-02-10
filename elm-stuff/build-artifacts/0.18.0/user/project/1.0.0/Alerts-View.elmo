@@ -46,12 +46,14 @@ var _user$project$Alerts_View$alert = function (alert) {
 		});
 };
 var _user$project$Alerts_View$view = function (alerts) {
-	return A2(
+	return (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$List$length(alerts),
+		0) > 0) ? A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _elm_lang$html$Html_Attributes$class('container'),
 			_1: {ctor: '[]'}
 		},
-		A2(_elm_lang$core$List$map, _user$project$Alerts_View$alert, alerts));
+		A2(_elm_lang$core$List$map, _user$project$Alerts_View$alert, alerts)) : _elm_lang$html$Html$text('');
 };

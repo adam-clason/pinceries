@@ -65,7 +65,7 @@ var _user$project$View$loginView = function (model) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$href(
-										A2(_elm_lang$core$Basics_ops['++'], 'https://api.pinterest.com/oauth?response_type=code&client_id=4869854870047304425&state=kh123&scope=read_public&redirect_uri=', model.pinterestRedirectUrl)),
+										A2(_elm_lang$core$Basics_ops['++'], 'https://api.pinterest.com/oauth?response_type=code&client_id=4869855014851457651&state=kh123&scope=read_public&redirect_uri=', model.pinterestRedirectUrl)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$class('button'),
@@ -106,12 +106,19 @@ var _user$project$View$accessView = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('container'),
+		_0: _elm_lang$html$Html_Attributes$class('loading-container'),
 		_1: {ctor: '[]'}
 	},
 	{
 		ctor: '::',
-		_0: _elm_lang$html$Html$text('ACCESSING PLZ'),
+		_0: A2(
+			_elm_lang$html$Html$img,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$src('./spin.svg'),
+				_1: {ctor: '[]'}
+			},
+			{ctor: '[]'}),
 		_1: {ctor: '[]'}
 	});
 var _user$project$View$alerts = function (model) {
@@ -218,7 +225,24 @@ var _user$project$View$navbar = function (model) {
 																_1: {ctor: '[]'}
 															},
 															{ctor: '[]'}),
-														_1: {ctor: '[]'}
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$span,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$class('count'),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text(
+																		_elm_lang$core$Basics$toString(
+																			_elm_lang$core$List$length(model.groceryList.list))),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
 													}),
 												_1: {ctor: '[]'}
 											}),
@@ -255,7 +279,7 @@ var _user$project$View$page = function (model) {
 						return A2(
 							_elm_lang$html$Html$map,
 							_user$project$View$pinsTranslator,
-							_user$project$Pins_List$view(model.pins));
+							A2(_user$project$Pins_List$view, model.pinsList, model.groceryList));
 					case 'GroceriesRoute':
 						return A2(
 							_elm_lang$html$Html$map,
@@ -277,7 +301,7 @@ var _user$project$View$page = function (model) {
 					return A2(
 						_elm_lang$html$Html$map,
 						_user$project$View$pinsTranslator,
-						_user$project$Pins_List$view(model.pins));
+						A2(_user$project$Pins_List$view, model.pinsList, model.groceryList));
 				case 'GroceriesRoute':
 					return A2(
 						_elm_lang$html$Html$map,

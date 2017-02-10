@@ -19,7 +19,7 @@ fetchAccessTokenUrl =
 
 fetchAccessTokenBody : String -> Http.Body
 fetchAccessTokenBody authCode =
-    Http.stringBody "application/x-www-form-urlencoded" ("grant_type=authorization_code&client_id=4869854870047304425&client_secret=8c6a41e11b9c6594d5d52da8c98c929fb9a43c6c23197a7a20792d3118454f7c&code=" ++ authCode) 
+    Http.stringBody "application/x-www-form-urlencoded" ("grant_type=authorization_code&client_id=4869855014851457651&client_secret=a27b2684e0d64199dc3f634894ee0fb687b04a3ca9ad5f6fb67fce91255cf42d&code=" ++ authCode) 
 
 accessTokenDecoder : Decoder String
 accessTokenDecoder =

@@ -1,5 +1,11 @@
+var _user$project$Pins_Messages$NextPage = function (a) {
+	return {ctor: 'NextPage', _0: a};
+};
 var _user$project$Pins_Messages$FetchAllDone = function (a) {
 	return {ctor: 'FetchAllDone', _0: a};
+};
+var _user$project$Pins_Messages$RemoveFromGroceryList = function (a) {
+	return {ctor: 'RemoveFromGroceryList', _0: a};
 };
 var _user$project$Pins_Messages$AddToGroceryList = function (a) {
 	return {ctor: 'AddToGroceryList', _0: a};

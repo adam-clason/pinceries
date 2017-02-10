@@ -3,6 +3,12 @@ module Pins.Models exposing (..)
 type alias PinId 
     = String
 
+type alias PinsList = 
+    { accessToken : String
+    , boardId  : String
+    , pins : List Pin
+    , nextUrl : String
+    }
 
 type alias Pin =
     { id : PinId
