@@ -23,20 +23,22 @@ fetchGroceryListDecoder currentModel =
         (succeed currentModel.id)
         (succeed currentModel.name)
         (at ["ingredients"] (list ingredientDecoder))
-        (succeed currentModel.count)
-        (succeed currentModel.show)
-        (succeed currentModel.hovering)
+        (succeed currentModel.pins)
+        (succeed currentModel.arrangeBy)
         (succeed currentModel.apiUrl)
         (succeed currentModel.jwt)
+        (succeed currentModel.accessToken)
 
 ingredientDecoder : Decoder Ingredient
 ingredientDecoder = 
-    map5 Ingredient
+    map7 Ingredient
+        (field "_id" string)
         (field "name" string)
         (field "amount" string)
         (field "category" string)
         (field "count" int)
         (field "pinId" string)
+        (field "checked" bool)
 
 saveGroceryList : GroceryList -> Cmd Msg
 saveGroceryList model =
@@ -58,6 +60,7 @@ saveGroceryListJsonBody model =
                             , ("category", Json.Encode.string i.category)
                             , ("count", Json.Encode.int i.count)
                             , ("pinId", Json.Encode.string i.pinId)
+                            , ("checked", Json.Encode.bool i.checked)
                             ]
                 ) model.list
           )

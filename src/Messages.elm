@@ -2,7 +2,6 @@ module Messages exposing (..)
 
 import Http
 import Models exposing (AuthorizeInfo)
-import Pins.Models exposing (Pin)
 import Navigation
 import Boards.Messages
 import Pins.Messages
@@ -22,7 +21,8 @@ type Msg
 pinsTranslationDictionary
     = { onInternalMessage = PinsMsg 
       , onAddToGroceryList = \a -> GroceriesMsg (Groceries.Messages.AddToGroceryList a) 
-      , onRemoveFromGroceryList = \a -> GroceriesMsg (Groceries.Messages.RemoveFromGroceryList a) }
+      , onRemoveFromGroceryList = \a -> GroceriesMsg (Groceries.Messages.RemoveFromGroceryList a) 
+      , onPinterestApiError = AlertsMsg Alerts.Messages.PinterestApiError}
 
 groceriesTranslationDictionary
     = { onInternalMessage = GroceriesMsg

@@ -71,7 +71,15 @@ var _user$project$Groceries_Commands$saveGroceryListJsonBody = function (model) 
 																	_0: 'pinId',
 																	_1: _elm_lang$core$Json_Encode$string(i.pinId)
 																},
-																_1: {ctor: '[]'}
+																_1: {
+																	ctor: '::',
+																	_0: {
+																		ctor: '_Tuple2',
+																		_0: 'checked',
+																		_1: _elm_lang$core$Json_Encode$bool(i.checked)
+																	},
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													}
@@ -99,14 +107,16 @@ var _user$project$Groceries_Commands$saveGroceryList = function (model) {
 			_user$project$Groceries_Commands$saveGroceryListJsonBody(model),
 			_user$project$Groceries_Commands$addIngredientsResponseDecoder));
 };
-var _user$project$Groceries_Commands$ingredientDecoder = A6(
-	_elm_lang$core$Json_Decode$map5,
+var _user$project$Groceries_Commands$ingredientDecoder = A8(
+	_elm_lang$core$Json_Decode$map7,
 	_user$project$Groceries_Models$Ingredient,
+	A2(_elm_lang$core$Json_Decode$field, '_id', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'amount', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'category', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'count', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'pinId', _elm_lang$core$Json_Decode$string));
+	A2(_elm_lang$core$Json_Decode$field, 'pinId', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'checked', _elm_lang$core$Json_Decode$bool));
 var _user$project$Groceries_Commands$fetchGroceryListDecoder = function (currentModel) {
 	return A9(
 		_elm_lang$core$Json_Decode$map8,
@@ -121,11 +131,11 @@ var _user$project$Groceries_Commands$fetchGroceryListDecoder = function (current
 				_1: {ctor: '[]'}
 			},
 			_elm_lang$core$Json_Decode$list(_user$project$Groceries_Commands$ingredientDecoder)),
-		_elm_lang$core$Json_Decode$succeed(currentModel.count),
-		_elm_lang$core$Json_Decode$succeed(currentModel.show),
-		_elm_lang$core$Json_Decode$succeed(currentModel.hovering),
+		_elm_lang$core$Json_Decode$succeed(currentModel.pins),
+		_elm_lang$core$Json_Decode$succeed(currentModel.arrangeBy),
 		_elm_lang$core$Json_Decode$succeed(currentModel.apiUrl),
-		_elm_lang$core$Json_Decode$succeed(currentModel.jwt));
+		_elm_lang$core$Json_Decode$succeed(currentModel.jwt),
+		_elm_lang$core$Json_Decode$succeed(currentModel.accessToken));
 };
 var _user$project$Groceries_Commands$fetchGroceryListUrl = function (model) {
 	return A2(

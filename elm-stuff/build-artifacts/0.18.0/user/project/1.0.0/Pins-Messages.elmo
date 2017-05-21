@@ -4,6 +4,7 @@ var _user$project$Pins_Messages$NextPage = function (a) {
 var _user$project$Pins_Messages$FetchAllDone = function (a) {
 	return {ctor: 'FetchAllDone', _0: a};
 };
+var _user$project$Pins_Messages$PinterestApiError = {ctor: 'PinterestApiError'};
 var _user$project$Pins_Messages$RemoveFromGroceryList = function (a) {
 	return {ctor: 'RemoveFromGroceryList', _0: a};
 };

@@ -1,12 +1,13 @@
-var _user$project$Pins_Commands$ingredientDecoder = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_user$project$Pins_Models$Ingredient,
+var _user$project$Pins_Commands$ingredientDecoder = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_user$project$Pinterest_Models$Ingredient,
+	_elm_lang$core$Json_Decode$succeed(''),
 	A2(_elm_lang$core$Json_Decode$field, 'amount', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string));
 var _user$project$Pins_Commands$categoryDecoder = _elm_lang$core$Json_Decode$list(
 	A3(
 		_elm_lang$core$Json_Decode$map2,
-		_user$project$Pins_Models$Category,
+		_user$project$Pinterest_Models$Category,
 		A2(_elm_lang$core$Json_Decode$field, 'category', _elm_lang$core$Json_Decode$string),
 		A2(
 			_elm_lang$core$Json_Decode$at,
@@ -16,9 +17,9 @@ var _user$project$Pins_Commands$categoryDecoder = _elm_lang$core$Json_Decode$lis
 				_1: {ctor: '[]'}
 			},
 			_elm_lang$core$Json_Decode$list(_user$project$Pins_Commands$ingredientDecoder))));
-var _user$project$Pins_Commands$memberDecoder = A6(
+var _user$project$Pins_Commands$pinDecoder = A6(
 	_elm_lang$core$Json_Decode$map5,
-	_user$project$Pins_Models$Pin,
+	_user$project$Pinterest_Models$Pin,
 	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'url', _elm_lang$core$Json_Decode$string),
 	A2(
@@ -73,7 +74,7 @@ var _user$project$Pins_Commands$pinsListDecoder = function (pinsList) {
 				_0: 'data',
 				_1: {ctor: '[]'}
 			},
-			_elm_lang$core$Json_Decode$list(_user$project$Pins_Commands$memberDecoder)),
+			_elm_lang$core$Json_Decode$list(_user$project$Pins_Commands$pinDecoder)),
 		A2(
 			_elm_lang$core$Json_Decode$at,
 			{

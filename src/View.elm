@@ -8,6 +8,7 @@ import Models exposing (Model)
 import Boards.List
 import Pins.List
 import Groceries.List
+import Groceries.Edit
 import Alerts.View
 import Pins.Update exposing (..)
 import Groceries.Update exposing (..)
@@ -43,10 +44,10 @@ page model =
                         Html.map BoardsMsg (Boards.List.view model.boards)
 
                     BoardRoute id ->
-                        Html.map pinsTranslator (Pins.List.view model.pinsList model.groceryList)
+                        Html.map pinsTranslator (Pins.List.view model.pinsList model.groceryList.list)
 
                     GroceriesRoute ->
-                        Html.map groceriesTranslator (Groceries.List.view model.groceryList)
+                        Html.map groceriesTranslator (Groceries.Edit.view model.groceryList)
 
                     Authorize authCode ->
                         accessView
@@ -57,10 +58,10 @@ page model =
                     Html.map BoardsMsg (Boards.List.view model.boards)
 
                 BoardRoute id ->
-                    Html.map pinsTranslator (Pins.List.view model.pinsList model.groceryList)
+                    Html.map pinsTranslator (Pins.List.view model.pinsList model.groceryList.list)
 
                 GroceriesRoute ->
-                    Html.map groceriesTranslator (Groceries.List.view model.groceryList)
+                    Html.map groceriesTranslator (Groceries.Edit.view model.groceryList)
 
                 Authorize authCode ->
                     accessView
@@ -113,7 +114,7 @@ loginView model =
     div [ class "login-container" ] 
         [ div [ class "login-form" ]
             [ h3 [] [ text "Hi There!"]
-            , p [] [ text "We are here to help you gather your next grocery list as easily and quickly as possible. Please login with Pinterest to get started!" ]
+            , p [] [ text "Pinceries helps you gather your next grocery list as easily and quickly as possible. Please login with Pinterest to get started!" ]
             , a [ href ("https://api.pinterest.com/oauth?response_type=code&client_id=4869855014851457651&state=kh123&scope=read_public&redirect_uri=" ++ model.pinterestRedirectUrl), class "button" ] 
                 [ span [] [ text "Login with Pinterest" ]
                 , img [ src "./pinterest_badge.png" ] [] 

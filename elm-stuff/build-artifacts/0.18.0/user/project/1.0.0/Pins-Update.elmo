@@ -5,10 +5,13 @@ var _user$project$Pins_Update$translator = F2(
 		if (_p2.ctor === 'ForSelf') {
 			return _p1.onInternalMessage(_p2._0);
 		} else {
-			if (_p2._0.ctor === 'AddToGroceryList') {
-				return _p1.onAddToGroceryList(_p2._0._0);
-			} else {
-				return _p1.onRemoveFromGroceryList(_p2._0._0);
+			switch (_p2._0.ctor) {
+				case 'AddToGroceryList':
+					return _p1.onAddToGroceryList(_p2._0._0);
+				case 'RemoveFromGroceryList':
+					return _p1.onRemoveFromGroceryList(_p2._0._0);
+				default:
+					return _p1.onPinterestApiError;
 			}
 		}
 	});
@@ -50,7 +53,12 @@ var _user$project$Pins_Update$update = F2(
 					_1: _user$project$Pins_Update$pageLoaded('')
 				};
 			} else {
-				return {ctor: '_Tuple2', _0: pinsList, _1: _elm_lang$core$Platform_Cmd$none};
+				return {
+					ctor: '_Tuple2',
+					_0: pinsList,
+					_1: _user$project$Cmd_Extra$message(
+						_user$project$Pins_Messages$ForParent(_user$project$Pins_Messages$PinterestApiError))
+				};
 			}
 		} else {
 			return {
@@ -60,7 +68,7 @@ var _user$project$Pins_Update$update = F2(
 			};
 		}
 	});
-var _user$project$Pins_Update$TranslationDictionary = F3(
-	function (a, b, c) {
-		return {onInternalMessage: a, onAddToGroceryList: b, onRemoveFromGroceryList: c};
+var _user$project$Pins_Update$TranslationDictionary = F4(
+	function (a, b, c, d) {
+		return {onInternalMessage: a, onAddToGroceryList: b, onRemoveFromGroceryList: c, onPinterestApiError: d};
 	});

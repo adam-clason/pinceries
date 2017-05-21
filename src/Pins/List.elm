@@ -6,19 +6,22 @@ import Html.Attributes exposing (classList, type_, class, src, value, href, styl
 import Pins.Models exposing (..)
 import Pins.Messages exposing (..)
 import Groceries.Models exposing (..)
+import Pinterest.Models exposing (Pin)
 
-view : PinsList -> GroceryList -> Html Msg
-view pins groceryList =
-    div [ class "container" ]
-        [ list pins groceryList ]
+view : PinsList -> List Groceries.Models.Ingredient -> Html Msg
+view pins ingredients =
+    div [ class "pins-container clearfix container" ]
+        [ h1 [] [] 
+        , div [ class "column grid-container"] [ list pins ingredients ] 
+        ] 
 
 
-list : PinsList -> GroceryList ->  Html Msg
-list pinsList groceryList =
+list : PinsList -> List Groceries.Models.Ingredient ->  Html Msg
+list pinsList ingredients =
 
     let   
         thumbnailView =
-            pinThumbnail groceryList
+            pinThumbnail ingredients
     in
         div [ ]
             [ div [ class "row small-up-2 medium-up-3 larg-up-4" ] (List.map thumbnailView pinsList.pins)
@@ -30,12 +33,12 @@ list pinsList groceryList =
             ]
            
 
-pinThumbnail : GroceryList -> Pin -> Html Msg
-pinThumbnail groceryList pin  =
+pinThumbnail : List Groceries.Models.Ingredient -> Pin -> Html Msg
+pinThumbnail ingredients pin  =
 
     let 
         pinInGroceryList =
-           List.any (\i -> i.pinId == pin.id) groceryList.list 
+           List.any (\i -> i.pinId == pin.id) ingredients 
         pinHasIngredientsMetadata = 
             List.length pin.ingredients > 0 
 
@@ -46,7 +49,7 @@ pinThumbnail groceryList pin  =
                 , img [ src pin.img ] [] 
                 ]
             , div [ class "caption" ] 
-                [ h5 [] [ text pin.note ] ]
+                [ p [] [ text pin.note ] ]
             , addRemoveButton pinInGroceryList pinHasIngredientsMetadata pin
             ]
  

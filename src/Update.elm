@@ -103,10 +103,10 @@ update msg model =
                             (updatedModel, Cmd.batch commands)   
 
                     Err jwtError ->
-                        (model, Cmd.none)
+                        ({ model | jwt = "", accessToken = "" }, Cmd.Extra.message (AlertsMsg Alerts.Messages.AuthorizationError))
 
         Authorized (Err error) ->
-            ( model, Cmd.none ) 
+            ({ model | jwt = "", accessToken = "" }, Cmd.Extra.message (AlertsMsg Alerts.Messages.AuthorizationError))
 
         AuthorizationError ->
             ({ model | jwt = "", accessToken = "" }, Cmd.Extra.message (AlertsMsg Alerts.Messages.AuthorizationError))
@@ -119,7 +119,6 @@ initModelAndCommands model currentRoute  =
             if authenticated model then
              case innerRoute of 
                 BoardsRoute ->
-
                     let 
                         routeCommands = 
                             Cmd.batch 
@@ -135,7 +134,7 @@ initModelAndCommands model currentRoute  =
                         pinsList =
                             model.pinsList 
                         updatedPinsList = 
-                            { pinsList | boardId = id }
+                            { pinsList | boardId = id, pins = [] }
                         routeCommands = 
                             Cmd.batch 
                                 [ Cmd.map pinsTranslator (Pins.Commands.fetchPins updatedPinsList "")
@@ -145,6 +144,9 @@ initModelAndCommands model currentRoute  =
                             { model | pinsList = updatedPinsList }
                     in 
                         (updatedModel, routeCommands)
+
+                GroceriesRoute ->
+                    (model, Cmd.map groceriesTranslator (Groceries.Commands.fetchGroceryList model.groceryList))
 
                 _ ->
                     (model, Cmd.none)
@@ -186,13 +188,17 @@ modelAndCommandsFromRoute model currentRoute =
                         pinsList = 
                             model.pinsList
                         updatedPinsList = 
-                            { pinsList | boardId = id }
+                            { pinsList | pins = [], boardId = id }
                         commands = 
                             Cmd.map pinsTranslator (Pins.Commands.fetchPins updatedPinsList "")
                         updatedModel =
                             { model | pinsList = updatedPinsList }
                     in
                         (updatedModel, commands) 
+
+                GroceriesRoute -> 
+                    (model, Cmd.map groceriesTranslator (Groceries.Commands.fetchGroceryList model.groceryList))
+                    
                 _ ->
                     (model, Cmd.none)
 

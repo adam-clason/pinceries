@@ -34,17 +34,17 @@ app.ports.setJwt.subscribe(function (jwt) {
 
 
 (function() {
-	var slideout = null; 
+	var slideout = null;
 
-	app.ports.initSlideout.subscribe(function(val) {
+	app.ports.initSlideoutPort.subscribe(function(val) {
 
 		slideout = new Slideout({
 			'panel' : document.getElementById('content'),
 			'menu' : document.getElementById('grocery-list'),
 			'side' : 'right',
 			'padding' : 356
-		});
-
+		}); 
+		
 		document.querySelector('.mini-list-link').addEventListener('click', function() {
 		  slideout.toggle();
 		});
@@ -73,34 +73,48 @@ app.ports.setJwt.subscribe(function (jwt) {
 		  fixed.style.transition = '';
 		});
 
+	});
 
-		var bottom = null
+	app.ports.closeSlideoutPort.subscribe(function() {
+		slideout && slideout.close();
+	});
 
-		app.ports.pageLoaded.subscribe(function() {
-			bottom = document.querySelector('.bottom');
-		});
+	app.ports.groceryListChangedPort.subscribe(function() {
+		var elementCount = document.querySelector('.mini-list-link .count');
 
-		window.onscroll = function() {
+		elementCount.className += " added";
 
-			if (bottom) {
-				var elementTop = bottom.getBoundingClientRect().top,
-					elementBottom = bottom.getBoundingClientRect().bottom;
-
-				var isVisible = (elementTop >= 0 && elementBottom <= window.innerHeight);
-
-				if (isVisible) {
-					var cursor = bottom.dataset.nexturl; 
-					
-					bottom = null;
-
-					app.ports.nextPage.send(cursor);
-
-				}
-			}
-			
-		};
+		setTimeout(function() {
+			elementCount.className = elementCount.className.replace(/\sadded/, "");
+		}, 1000);
 
 	});
+
+	var bottom = null;
+
+	app.ports.pageLoaded.subscribe(function() {
+		bottom = document.querySelector('.bottom');
+	});
+
+	window.onscroll = function() {
+
+		if (bottom) {
+			var elementTop = bottom.getBoundingClientRect().top,
+				elementBottom = bottom.getBoundingClientRect().bottom;
+
+			var isVisible = (elementTop >= 0 && elementBottom <= window.innerHeight);
+
+			if (isVisible) {
+				var cursor = bottom.dataset.nexturl; 
+				
+				bottom = null;
+
+				app.ports.nextPage.send(cursor);
+
+			}
+		}
+		
+	};
 
 
 })();

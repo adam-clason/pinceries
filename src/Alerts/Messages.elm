@@ -2,4 +2,6 @@ module Alerts.Messages exposing (..)
 
 
 type Msg 
-    = AuthorizationError
+    = ClearAlerts
+    | AuthorizationError
+    | PinterestApiError

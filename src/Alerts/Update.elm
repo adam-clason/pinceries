@@ -12,3 +12,12 @@ update message alerts =
                 (Alert "There was an error authorizing your account. Please re-authorize your account with Pinterest") :: alerts
             in 
                 (updatedAlerts, Cmd.none)
+
+        PinterestApiError -> 
+            let updatedAlerts =
+                (Alert "There was an error with the Pinterest API. Please try again later") :: alerts
+            in 
+                (updatedAlerts, Cmd.none)
+
+        ClearAlerts ->
+            ([], Cmd.none)

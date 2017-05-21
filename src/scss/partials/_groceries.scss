@@ -1,0 +1,68 @@
+.grocery-list-container {
+	
+	.options, .options .option {
+		display: inline-block;
+	}
+
+
+	.options-label {
+		padding-right: 5px;
+	}
+	
+	.options {
+
+		.option {
+			background-color: #f2f0f0;
+			padding: 7px;
+			cursor: pointer;
+
+			&.selected, &:hover {
+				background-color: #dcdcdc;
+			}
+		}
+
+	}
+
+	ul {
+		list-style-type: none;
+		font-family: $body-font-family;
+		margin: 0;
+
+		li.flex-row {
+			padding: 10px 0; 
+		}
+
+		.grocery-flex-container {
+			display: flex;
+			flex-wrap: wrap;
+
+			.category-name {
+				font-weight: 900;
+				color: #727171;
+				padding-right: 30px;
+				background-color: #f2f0f0;
+				text-align: center;
+				padding: 10% 0;
+				overflow: hidden; 
+				position:relative;
+
+				img {
+					position: absolute;
+					top: 0;
+					left: 0;
+				}
+			}
+
+			.category-name, .category-name .img {
+				width: 200px;
+			}
+
+			.ingredients {
+				padding-left: 15px;
+			}
+		}
+
+		
+	}
+
+}

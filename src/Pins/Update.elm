@@ -2,11 +2,12 @@ port module Pins.Update exposing (..)
 
 import Http
 import Navigation
+import Cmd.Extra
 import Pins.Commands exposing (fetchPins)
 import Pins.Messages exposing (InternalMsg(..), Msg(..), OutMsg(..))
 import Groceries.Messages
 import Pins.Models exposing (..)
-
+import Pinterest.Models exposing (Pin)
 
 type alias Translator parentMsg = Msg -> parentMsg
 
@@ -14,11 +15,12 @@ type alias TranslationDictionary msg =
   { onInternalMessage: InternalMsg -> msg
   , onAddToGroceryList: Pin -> msg
   , onRemoveFromGroceryList: Pin -> msg
+  , onPinterestApiError: msg
   }
 
 
 translator : TranslationDictionary parentMsg -> Translator parentMsg
-translator { onInternalMessage, onAddToGroceryList, onRemoveFromGroceryList } msg =
+translator { onInternalMessage, onAddToGroceryList, onRemoveFromGroceryList, onPinterestApiError } msg =
     case msg of 
         ForSelf internal ->
             onInternalMessage internal 
@@ -28,6 +30,9 @@ translator { onInternalMessage, onAddToGroceryList, onRemoveFromGroceryList } ms
 
         ForParent (RemoveFromGroceryList pin) ->
             onRemoveFromGroceryList pin
+
+        ForParent (PinterestApiError) -> 
+            onPinterestApiError
 
 
 update : InternalMsg -> PinsList -> ( PinsList, Cmd Msg )
@@ -41,10 +46,10 @@ update message pinsList =
                 ( updatedPinsList, pageLoaded "" )
 
         FetchAllDone (Err  _) ->
-            ( pinsList, Cmd.none )
+            ( pinsList, Cmd.Extra.message (ForParent PinterestApiError) )
 
         NextPage cursor -> 
-            ( pinsList, fetchPins pinsList cursor)
+            ( pinsList, fetchPins pinsList cursor )
 
 
 port nextPage : (String -> msg) -> Sub msg

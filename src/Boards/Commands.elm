@@ -2,7 +2,6 @@ module Boards.Commands exposing (..)
 
 import Http
 import Json.Decode as Decode exposing (..)
-import Task
 import Models exposing (Model)
 import Boards.Models exposing (BoardId, Board)
 import Boards.Messages exposing (..)

@@ -1,13 +1,15 @@
 module Models exposing (..)
 
 import Boards.Models exposing (Board)
-import Pins.Models exposing (PinsList)
 import Alerts.Models exposing (AlertsList)
+import Pins.Models exposing (PinsList)
 import Groceries.Models exposing (..)
+import Pinterest.Commands exposing (..)
 import Jwt exposing (decodeToken, JwtError)
 import Json.Decode exposing (..)
 import Routing
 import Dict
+
 
 
 type alias User = 
@@ -57,7 +59,7 @@ initialModel flags route =
         , pinterestRedirectUrl = flags.pinterestRedirectUrl
         , boards = []
         , pinsList = PinsList flags.accessToken "" [] ""
-        , groceryList = GroceryList initUser.activeGroceryListId "" [] 0 False False flags.pinceriesApiBaseUrl flags.jwt
+        , groceryList = GroceryList initUser.activeGroceryListId "" [] Dict.empty Category flags.pinceriesApiBaseUrl flags.jwt flags.accessToken 
         , route = route
         }
 

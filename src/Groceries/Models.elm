@@ -1,28 +1,32 @@
 module Groceries.Models exposing (..)
 
 import Dict exposing (Dict)
-import Pins.Models exposing (PinId)
+import Pinterest.Models exposing (Pin)
 
-type alias IngredientsList 
-    = List Ingredient
+type alias PinsDict 
+    = Dict String Pin
+
+type ArrangeBy = Category | Pin
 
 type alias GroceryList =
     { id : String
     , name : String
-    , list : IngredientsList
-    , count : Int
-    , show : Bool
-    , hovering : Bool  
+    , list : List Ingredient
+    , pins : PinsDict
+    , arrangeBy : ArrangeBy  
     , apiUrl : String
     , jwt : String
+    , accessToken : String
     }
 
 type alias Ingredient = 
-    { name : String 
+    { id : String
+    , name : String 
     , amount : String
     , category : String
     , count : Int
     , pinId : String
+    , checked : Bool
     }
 
 type alias ApiResponse = 

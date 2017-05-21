@@ -4,7 +4,7 @@ import Jwt exposing (decodeToken, JwtError)
 import Http
 import Json.Decode exposing (..)
 import Task exposing (Task)
-import Pins.Models exposing (PinId, Pin, Category, Ingredient)
+import Pinterest.Models exposing (Pin, Category, Ingredient)
 import Boards.Models exposing (BoardId, Board)
 import Messages exposing (Msg(..))
 import Models exposing (Model, AuthorizeInfo, User)
@@ -49,7 +49,6 @@ fetchPinceriesApiJwtDecoder accessToken =
 
 decodeJwt : String -> Result JwtError User
 decodeJwt jwt =
-
     let 
         jwtDecoder = 
             map4 User

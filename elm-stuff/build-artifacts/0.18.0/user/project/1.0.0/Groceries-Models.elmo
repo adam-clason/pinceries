@@ -1,12 +1,14 @@
 var _user$project$Groceries_Models$GroceryList = F8(
 	function (a, b, c, d, e, f, g, h) {
-		return {id: a, name: b, list: c, count: d, show: e, hovering: f, apiUrl: g, jwt: h};
+		return {id: a, name: b, list: c, pins: d, arrangeBy: e, apiUrl: f, jwt: g, accessToken: h};
 	});
-var _user$project$Groceries_Models$Ingredient = F5(
-	function (a, b, c, d, e) {
-		return {name: a, amount: b, category: c, count: d, pinId: e};
+var _user$project$Groceries_Models$Ingredient = F7(
+	function (a, b, c, d, e, f, g) {
+		return {id: a, name: b, amount: c, category: d, count: e, pinId: f, checked: g};
 	});
 var _user$project$Groceries_Models$ApiResponse = F2(
 	function (a, b) {
 		return {success: a, message: b};
 	});
+var _user$project$Groceries_Models$Pin = {ctor: 'Pin'};
+var _user$project$Groceries_Models$Category = {ctor: 'Category'};

@@ -1,7 +1,6 @@
 module Pins.Models exposing (..)
 
-type alias PinId 
-    = String
+import Pinterest.Models exposing (Pin)
 
 type alias PinsList = 
     { accessToken : String
@@ -10,20 +9,3 @@ type alias PinsList =
     , nextUrl : String
     }
 
-type alias Pin =
-    { id : PinId
-    , url : String
-    , img : String
-    , note : String
-    , ingredients : List Category
-    }
-
-type alias Category =
-    { category : String
-    , ingredients : List Ingredient
-    } 
-
-type alias Ingredient = 
-    { amount : String  
-    , name : String
-    }

@@ -3,7 +3,7 @@ module Groceries.List exposing (..)
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Events exposing (onClick, onMouseOver, onMouseOut)
-import Html.Attributes exposing (id, attribute, type_, class, src, value, href, style)
+import Html.Attributes exposing (id, attribute, type_, class, src, value, href, style, type_)
 import Groceries.Models exposing (..)
 import Groceries.Messages exposing (..)
 
@@ -20,6 +20,9 @@ view groceryList =
                 [ h2 [ class "grocery-list-title"] [ text "Grocery List" ] 
                 , ul [ class "vertical menu" ]
                     (List.map category categories)  
+                , div [ class "grocery-list-actions" ]
+                    [ button [ type_ "button", class "button", onClick (ForSelf ShowGroceryList)] [ text "View Grocery List" ] 
+                    ] 
                 ]   
             ]
        

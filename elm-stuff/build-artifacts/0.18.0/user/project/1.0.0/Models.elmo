@@ -43,11 +43,11 @@ var _user$project$Models$initialModel = F2(
 				initUser.activeGroceryListId,
 				'',
 				{ctor: '[]'},
-				0,
-				false,
-				false,
+				_elm_lang$core$Dict$empty,
+				_user$project$Groceries_Models$Category,
 				flags.pinceriesApiBaseUrl,
-				flags.jwt),
+				flags.jwt,
+				flags.accessToken),
 			route: route
 		};
 	});

@@ -1,1 +1,3 @@
+var _user$project$Alerts_Messages$PinterestApiError = {ctor: 'PinterestApiError'};
 var _user$project$Alerts_Messages$AuthorizationError = {ctor: 'AuthorizationError'};
+var _user$project$Alerts_Messages$ClearAlerts = {ctor: 'ClearAlerts'};

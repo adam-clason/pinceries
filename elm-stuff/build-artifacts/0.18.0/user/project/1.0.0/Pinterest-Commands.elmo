@@ -1,0 +1,128 @@
+var _user$project$Pinterest_Commands$ingredientDecoder = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_user$project$Pinterest_Models$Ingredient,
+	_elm_lang$core$Json_Decode$succeed(''),
+	A2(_elm_lang$core$Json_Decode$field, 'amount', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string));
+var _user$project$Pinterest_Commands$categoryDecoder = _elm_lang$core$Json_Decode$list(
+	A3(
+		_elm_lang$core$Json_Decode$map2,
+		_user$project$Pinterest_Models$Category,
+		A2(_elm_lang$core$Json_Decode$field, 'category', _elm_lang$core$Json_Decode$string),
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'ingredients',
+				_1: {ctor: '[]'}
+			},
+			_elm_lang$core$Json_Decode$list(_user$project$Pinterest_Commands$ingredientDecoder))));
+var _user$project$Pinterest_Commands$pinDecoder = A6(
+	_elm_lang$core$Json_Decode$map5,
+	_user$project$Pinterest_Models$Pin,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'data',
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$string)),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'data',
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'url', _elm_lang$core$Json_Decode$string)),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'data',
+			_1: {
+				ctor: '::',
+				_0: 'image',
+				_1: {
+					ctor: '::',
+					_0: 'original',
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'url', _elm_lang$core$Json_Decode$string)),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'data',
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'note', _elm_lang$core$Json_Decode$string)),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'data',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$oneOf(
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Json_Decode$at,
+					{
+						ctor: '::',
+						_0: 'metadata',
+						_1: {
+							ctor: '::',
+							_0: 'recipe',
+							_1: {
+								ctor: '::',
+								_0: 'ingredients',
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					_user$project$Pinterest_Commands$categoryDecoder),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Json_Decode$succeed(
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			})));
+var _user$project$Pinterest_Commands$fetchPinsForIngredientsUrl = F2(
+	function (accessToken, pinId) {
+		var url = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'https://api.pinterest.com/v1/pins/',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				pinId,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'/?access_token=',
+					A2(_elm_lang$core$Basics_ops['++'], accessToken, '&fields=id%2Clink%2Cnote%2Curl%2Cmedia%2Cmetadata%2Cimage'))));
+		return url;
+	});
+var _user$project$Pinterest_Commands$fetchPinsForIngredients = F3(
+	function (accessToken, generator, pinIds) {
+		var httpRequests = A2(
+			_elm_lang$core$List$map,
+			function (pid) {
+				return A2(
+					_elm_lang$http$Http$get,
+					A2(_user$project$Pinterest_Commands$fetchPinsForIngredientsUrl, accessToken, pid),
+					_user$project$Pinterest_Commands$pinDecoder);
+			},
+			pinIds);
+		var commands = A2(
+			_elm_lang$core$List$map,
+			function (r) {
+				return A2(_elm_lang$http$Http$send, generator, r);
+			},
+			httpRequests);
+		return _elm_lang$core$Platform_Cmd$batch(commands);
+	});

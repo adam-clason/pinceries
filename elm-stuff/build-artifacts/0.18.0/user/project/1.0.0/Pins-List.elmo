@@ -81,7 +81,7 @@ var _user$project$Pins_List$notAvailableMessage = function (pinHasIngredientsMet
 		}) : _elm_lang$html$Html$text('');
 };
 var _user$project$Pins_List$pinThumbnail = F2(
-	function (groceryList, pin) {
+	function (ingredients, pin) {
 		var pinHasIngredientsMetadata = _elm_lang$core$Native_Utils.cmp(
 			_elm_lang$core$List$length(pin.ingredients),
 			0) > 0;
@@ -90,7 +90,7 @@ var _user$project$Pins_List$pinThumbnail = F2(
 			function (i) {
 				return _elm_lang$core$Native_Utils.eq(i.pinId, pin.id);
 			},
-			groceryList.list);
+			ingredients);
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -144,7 +144,7 @@ var _user$project$Pins_List$pinThumbnail = F2(
 						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$h5,
+								_elm_lang$html$Html$p,
 								{ctor: '[]'},
 								{
 									ctor: '::',
@@ -162,8 +162,8 @@ var _user$project$Pins_List$pinThumbnail = F2(
 			});
 	});
 var _user$project$Pins_List$list = F2(
-	function (pinsList, groceryList) {
-		var thumbnailView = _user$project$Pins_List$pinThumbnail(groceryList);
+	function (pinsList, ingredients) {
+		var thumbnailView = _user$project$Pins_List$pinThumbnail(ingredients);
 		return A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
@@ -218,17 +218,35 @@ var _user$project$Pins_List$list = F2(
 			});
 	});
 var _user$project$Pins_List$view = F2(
-	function (pins, groceryList) {
+	function (pins, ingredients) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('container'),
+				_0: _elm_lang$html$Html_Attributes$class('pins-container clearfix container'),
 				_1: {ctor: '[]'}
 			},
 			{
 				ctor: '::',
-				_0: A2(_user$project$Pins_List$list, pins, groceryList),
-				_1: {ctor: '[]'}
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('column grid-container'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(_user$project$Pins_List$list, pins, ingredients),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
 			});
 	});

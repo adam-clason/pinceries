@@ -1,0 +1,12 @@
+var _user$project$Pinterest_Models$Pin = F5(
+	function (a, b, c, d, e) {
+		return {id: a, url: b, img: c, note: d, ingredients: e};
+	});
+var _user$project$Pinterest_Models$Category = F2(
+	function (a, b) {
+		return {category: a, ingredients: b};
+	});
+var _user$project$Pinterest_Models$Ingredient = F3(
+	function (a, b, c) {
+		return {pinId: a, amount: b, name: c};
+	});

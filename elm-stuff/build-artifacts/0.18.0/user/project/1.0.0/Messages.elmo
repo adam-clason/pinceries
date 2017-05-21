@@ -24,7 +24,8 @@ var _user$project$Messages$pinsTranslationDictionary = {
 	onRemoveFromGroceryList: function (a) {
 		return _user$project$Messages$GroceriesMsg(
 			_user$project$Groceries_Messages$RemoveFromGroceryList(a));
-	}
+	},
+	onPinterestApiError: _user$project$Messages$AlertsMsg(_user$project$Alerts_Messages$PinterestApiError)
 };
 var _user$project$Messages$BoardsMsg = function (a) {
 	return {ctor: 'BoardsMsg', _0: a};

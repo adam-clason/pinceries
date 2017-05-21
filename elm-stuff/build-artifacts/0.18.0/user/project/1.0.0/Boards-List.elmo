@@ -76,7 +76,7 @@ var _user$project$Boards_List$list = function (boards) {
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('row small-up-3 medium-up-5 larg-up-6'),
+			_0: _elm_lang$html$Html_Attributes$class('row small-up-3 medium-up-5 large-up-6'),
 			_1: {ctor: '[]'}
 		},
 		A2(_elm_lang$core$List$map, _user$project$Boards_List$boardRow, boards));

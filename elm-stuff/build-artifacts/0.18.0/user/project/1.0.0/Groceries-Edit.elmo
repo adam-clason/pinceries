@@ -1,0 +1,317 @@
+var _user$project$Groceries_Edit$foldrPin = F2(
+	function (ingredient, acc) {
+		return A3(
+			_elm_lang$core$Dict$update,
+			ingredient.pinId,
+			function (maybe) {
+				var _p0 = maybe;
+				if (_p0.ctor === 'Just') {
+					return _elm_lang$core$Maybe$Just(
+						{ctor: '::', _0: ingredient, _1: _p0._0});
+				} else {
+					return _elm_lang$core$Maybe$Just(
+						{
+							ctor: '::',
+							_0: ingredient,
+							_1: {ctor: '[]'}
+						});
+				}
+			},
+			acc);
+	});
+var _user$project$Groceries_Edit$groupByPin = function (groceryList) {
+	return _elm_lang$core$Dict$toList(
+		A3(_elm_lang$core$List$foldr, _user$project$Groceries_Edit$foldrPin, _elm_lang$core$Dict$empty, groceryList.list));
+};
+var _user$project$Groceries_Edit$ingredientLi = function (ingredient) {
+	return A2(
+		_elm_lang$html$Html$li,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$a,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$id(ingredient.id),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$label,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$for(ingredient.id),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										ingredient.amount,
+										A2(_elm_lang$core$Basics_ops['++'], ' ', ingredient.name))),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Groceries_Edit$category = F2(
+	function (groceryList, _p1) {
+		var _p2 = _p1;
+		var ingredientPin = A2(_elm_lang$core$Dict$get, _p2._0, groceryList.pins);
+		var pinHtml = function () {
+			var _p3 = ingredientPin;
+			if (_p3.ctor === 'Just') {
+				var _p4 = _p3._0;
+				return A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('cat-name'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p4.note),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$img,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$src(_p4.img),
+									_1: {ctor: '[]'}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}
+					});
+			} else {
+				return _elm_lang$html$Html$text('');
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$li,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('flex-row'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('grocery-flex-container'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('category-name'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: pinHtml,
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('ingredients'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$ul,
+										{ctor: '[]'},
+										A2(_elm_lang$core$List$map, _user$project$Groceries_Edit$ingredientLi, _p2._1)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Groceries_Edit$groceryListContents = function (groceryList) {
+	var ingredients = function () {
+		var _p5 = groceryList.arrangeBy;
+		if (_p5.ctor === 'Pin') {
+			return _user$project$Groceries_Edit$groupByPin(groceryList);
+		} else {
+			return _user$project$Groceries_Edit$groupByPin(groceryList);
+		}
+	}();
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$ul,
+				{ctor: '[]'},
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$Groceries_Edit$category(groceryList),
+					ingredients)),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Groceries_Edit$arrangeBy = function (arrangeBy) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('arrange-by '),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('options-label'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Arrange By:'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('options'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$classList(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'option', _1: true},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'selected',
+												_1: _elm_lang$core$Native_Utils.eq(arrangeBy, _user$project$Groceries_Models$Category)
+											},
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Groceries_Messages$ForSelf(
+											_user$project$Groceries_Messages$SwitchTo(_user$project$Groceries_Models$Category))),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Category'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$classList(
+										{
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'option', _1: true},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'selected',
+													_1: _elm_lang$core$Native_Utils.eq(arrangeBy, _user$project$Groceries_Models$Pin)
+												},
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Groceries_Messages$ForSelf(
+												_user$project$Groceries_Messages$SwitchTo(_user$project$Groceries_Models$Pin))),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Pin'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Groceries_Edit$view = function (groceryList) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('grocery-list-container container clearfix row'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('columns small-10 small-centered'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _user$project$Groceries_Edit$arrangeBy(groceryList.arrangeBy),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Groceries_Edit$groceryListContents(groceryList),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};

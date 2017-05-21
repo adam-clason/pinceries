@@ -49,7 +49,7 @@ var _user$project$Groceries_Update$addIngredients = F2(
 				return A2(
 					_elm_lang$core$List$map,
 					function (i) {
-						return A5(_user$project$Groceries_Models$Ingredient, i.amount, i.name, c.category, 1, pin.id);
+						return A7(_user$project$Groceries_Models$Ingredient, '', i.name, i.amount, c.category, 1, pin.id, false);
 					},
 					c.ingredients);
 			},
@@ -66,16 +66,24 @@ var _user$project$Groceries_Update$translator = F2(
 			return _p1.onAuthError;
 		}
 	});
-var _user$project$Groceries_Update$initSlideout = _elm_lang$core$Native_Platform.outgoingPort(
-	'initSlideout',
+var _user$project$Groceries_Update$initSlideoutPort = _elm_lang$core$Native_Platform.outgoingPort(
+	'initSlideoutPort',
 	function (v) {
 		return v;
 	});
-var _user$project$Groceries_Update$showSlideout = _elm_lang$core$Native_Platform.outgoingPort(
-	'showSlideout',
+var _user$project$Groceries_Update$initSlideout = _user$project$Groceries_Update$initSlideoutPort('');
+var _user$project$Groceries_Update$closeSlideoutPort = _elm_lang$core$Native_Platform.outgoingPort(
+	'closeSlideoutPort',
 	function (v) {
 		return v;
 	});
+var _user$project$Groceries_Update$closeSlideout = _user$project$Groceries_Update$closeSlideoutPort('');
+var _user$project$Groceries_Update$groceryListChangedPort = _elm_lang$core$Native_Platform.outgoingPort(
+	'groceryListChangedPort',
+	function (v) {
+		return v;
+	});
+var _user$project$Groceries_Update$groceryListChanged = _user$project$Groceries_Update$groceryListChangedPort('');
 var _user$project$Groceries_Update$update = F2(
 	function (message, groceryList) {
 		var _p3 = message;
@@ -85,14 +93,14 @@ var _user$project$Groceries_Update$update = F2(
 				var updatedCount = _elm_lang$core$List$length(updatedIngredientsList);
 				var updatedModel = _elm_lang$core$Native_Utils.update(
 					groceryList,
-					{list: updatedIngredientsList, count: updatedCount});
+					{list: updatedIngredientsList});
 				return {
 					ctor: '_Tuple2',
 					_0: updatedModel,
 					_1: _elm_lang$core$Platform_Cmd$batch(
 						{
 							ctor: '::',
-							_0: _user$project$Groceries_Update$showSlideout(''),
+							_0: _user$project$Groceries_Update$groceryListChanged,
 							_1: {
 								ctor: '::',
 								_0: _user$project$Groceries_Commands$saveGroceryList(updatedModel),
@@ -108,7 +116,16 @@ var _user$project$Groceries_Update$update = F2(
 				return {
 					ctor: '_Tuple2',
 					_0: updatedModel,
-					_1: _user$project$Groceries_Commands$saveGroceryList(updatedModel)
+					_1: _elm_lang$core$Platform_Cmd$batch(
+						{
+							ctor: '::',
+							_0: _user$project$Groceries_Update$groceryListChanged,
+							_1: {
+								ctor: '::',
+								_0: _user$project$Groceries_Commands$saveGroceryList(updatedModel),
+								_1: {ctor: '[]'}
+							}
+						})
 				};
 			case 'RemoveIngredient':
 				var _p4 = _p3._0;
@@ -126,13 +143,93 @@ var _user$project$Groceries_Update$update = F2(
 					_0: updatedModel,
 					_1: _user$project$Groceries_Commands$saveGroceryList(updatedModel)
 				};
-			case 'FetchResult':
+			case 'PinRetrievedResult':
 				var _p5 = _p3._0;
 				if (_p5.ctor === 'Ok') {
+					var _p6 = _p5._0;
+					var updatedPinList = A3(
+						_elm_lang$core$Dict$update,
+						_p6.id,
+						function (p) {
+							return _elm_lang$core$Maybe$Just(_p6);
+						},
+						groceryList.pins);
+					var updatedModel = _elm_lang$core$Native_Utils.update(
+						groceryList,
+						{pins: updatedPinList});
+					return {ctor: '_Tuple2', _0: updatedModel, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			case 'ShowGroceryList':
+				return {
+					ctor: '_Tuple2',
+					_0: groceryList,
+					_1: _elm_lang$core$Platform_Cmd$batch(
+						{
+							ctor: '::',
+							_0: _elm_lang$navigation$Navigation$newUrl('/#groceries'),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Groceries_Update$closeSlideout,
+								_1: {ctor: '[]'}
+							}
+						})
+				};
+			case 'SwitchTo':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						groceryList,
+						{arrangeBy: _p3._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'FetchResult':
+				var _p7 = _p3._0;
+				if (_p7.ctor === 'Ok') {
+					var _p12 = _p7._0;
+					var step = F2(
+						function (next, _p8) {
+							var _p9 = _p8;
+							var _p11 = _p9._0;
+							var _p10 = _p9._1;
+							return A2(_elm_lang$core$Set$member, next.pinId, _p11) ? {ctor: '_Tuple2', _0: _p11, _1: _p10} : {
+								ctor: '_Tuple2',
+								_0: A2(_elm_lang$core$Set$insert, next.pinId, _p11),
+								_1: {ctor: '::', _0: next.pinId, _1: _p10}
+							};
+						});
+					var uniquePins = _user$project$Util_Functions$snd(
+						A3(
+							_elm_lang$core$List$foldl,
+							step,
+							{
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Set$empty,
+								_1: {ctor: '[]'}
+							},
+							_p12.list));
+					var fetchPinsCmd = A3(
+						_user$project$Pinterest_Commands$fetchPinsForIngredients,
+						groceryList.accessToken,
+						function (msg) {
+							return _user$project$Groceries_Messages$ForSelf(
+								_user$project$Groceries_Messages$PinRetrievedResult(msg));
+						},
+						uniquePins);
 					return {
 						ctor: '_Tuple2',
-						_0: _p5._0,
-						_1: _user$project$Groceries_Update$initSlideout('')
+						_0: _p12,
+						_1: _elm_lang$core$Platform_Cmd$batch(
+							{
+								ctor: '::',
+								_0: _user$project$Groceries_Update$initSlideout,
+								_1: {
+									ctor: '::',
+									_0: fetchPinsCmd,
+									_1: {ctor: '[]'}
+								}
+							})
 					};
 				} else {
 					var authErrorCommands = {
@@ -153,8 +250,8 @@ var _user$project$Groceries_Update$update = F2(
 							}
 						}
 					};
-					var _p6 = _p5._0;
-					switch (_p6.ctor) {
+					var _p13 = _p7._0;
+					switch (_p13.ctor) {
 						case 'Unauthorized':
 							return {
 								ctor: '_Tuple2',
@@ -162,8 +259,8 @@ var _user$project$Groceries_Update$update = F2(
 								_1: _elm_lang$core$Platform_Cmd$batch(authErrorCommands)
 							};
 						case 'HttpError':
-							var _p7 = _p6._0;
-							switch (_p7.ctor) {
+							var _p14 = _p13._0;
+							switch (_p14.ctor) {
 								case 'Timeout':
 									return {ctor: '_Tuple2', _0: groceryList, _1: _elm_lang$core$Platform_Cmd$none};
 								case 'BadStatus':

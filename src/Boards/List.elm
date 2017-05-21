@@ -16,7 +16,7 @@ view boards =
 
 list : List Board -> Html Msg
 list boards =
-    div [ class "row small-up-3 medium-up-5 larg-up-6" ]
+    div [ class "row small-up-3 medium-up-5 large-up-6" ]
         (List.map boardRow boards)
 
 

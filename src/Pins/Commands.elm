@@ -3,9 +3,11 @@ module Pins.Commands exposing (..)
 import Http
 import Json.Decode exposing (..)
 import Task
+import Process exposing (spawn)
 import Models exposing (Model)
-import Pins.Models exposing (PinsList, PinId, Pin, Category, Ingredient)
+import Pins.Models exposing (PinsList)
 import Boards.Models exposing (BoardId, Board)
+import Pinterest.Models exposing (Pin, Ingredient, Category)
 import Pins.Messages exposing (..)
 
 fetchPins : PinsList -> String -> Cmd Msg
@@ -28,12 +30,13 @@ pinsListDecoder pinsList  =
     map4 PinsList
         (succeed pinsList.accessToken)
         (succeed pinsList.boardId)
-        (at ["data"] (list memberDecoder))
+        (at ["data"] (list pinDecoder))
         (at ["page"] (field "next" string))
 
 
-memberDecoder : Decoder Pin
-memberDecoder =
+
+pinDecoder : Decoder Pin
+pinDecoder =
     map5 Pin
         (field "id" string)
         (field "url" string)
@@ -51,7 +54,8 @@ categoryDecoder =
 
 ingredientDecoder: Decoder Ingredient
 ingredientDecoder =
-    map2 Ingredient
+    map3 Ingredient
+        (succeed "")
         (field "amount" string)
         (field "name" string)
 

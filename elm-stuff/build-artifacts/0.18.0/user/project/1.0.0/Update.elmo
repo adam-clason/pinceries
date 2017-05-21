@@ -37,7 +37,10 @@ var _user$project$Update$initModelAndCommands = F2(
 							var pinsList = model.pinsList;
 							var updatedPinsList = _elm_lang$core$Native_Utils.update(
 								pinsList,
-								{boardId: _p1._0});
+								{
+									boardId: _p1._0,
+									pins: {ctor: '[]'}
+								});
 							var routeCommands = _elm_lang$core$Platform_Cmd$batch(
 								{
 									ctor: '::',
@@ -58,6 +61,15 @@ var _user$project$Update$initModelAndCommands = F2(
 								model,
 								{pinsList: updatedPinsList});
 							return {ctor: '_Tuple2', _0: updatedModel, _1: routeCommands};
+						case 'GroceriesRoute':
+							return {
+								ctor: '_Tuple2',
+								_0: model,
+								_1: A2(
+									_elm_lang$core$Platform_Cmd$map,
+									_user$project$Update$groceriesTranslator,
+									_user$project$Groceries_Commands$fetchGroceryList(model.groceryList))
+							};
 						default:
 							return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 					}
@@ -108,7 +120,10 @@ var _user$project$Update$modelAndCommandsFromRoute = F2(
 						var pinsList = model.pinsList;
 						var updatedPinsList = _elm_lang$core$Native_Utils.update(
 							pinsList,
-							{boardId: _p4._0});
+							{
+								pins: {ctor: '[]'},
+								boardId: _p4._0
+							});
 						var commands = A2(
 							_elm_lang$core$Platform_Cmd$map,
 							_user$project$Update$pinsTranslator,
@@ -117,6 +132,15 @@ var _user$project$Update$modelAndCommandsFromRoute = F2(
 							model,
 							{pinsList: updatedPinsList});
 						return {ctor: '_Tuple2', _0: updatedModel, _1: commands};
+					case 'GroceriesRoute':
+						return {
+							ctor: '_Tuple2',
+							_0: model,
+							_1: A2(
+								_elm_lang$core$Platform_Cmd$map,
+								_user$project$Update$groceriesTranslator,
+								_user$project$Groceries_Commands$fetchGroceryList(model.groceryList))
+						};
 					default:
 						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
@@ -244,10 +268,24 @@ var _user$project$Update$update = F2(
 							_1: _elm_lang$core$Platform_Cmd$batch(commands)
 						};
 					} else {
-						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{jwt: '', accessToken: ''}),
+							_1: _user$project$Cmd_Extra$message(
+								_user$project$Messages$AlertsMsg(_user$project$Alerts_Messages$AuthorizationError))
+						};
 					}
 				} else {
-					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{jwt: '', accessToken: ''}),
+						_1: _user$project$Cmd_Extra$message(
+							_user$project$Messages$AlertsMsg(_user$project$Alerts_Messages$AuthorizationError))
+					};
 				}
 			default:
 				return {

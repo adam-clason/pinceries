@@ -1,7 +1,8 @@
 module Pins.Messages exposing (..)
 
 import Http
-import Pins.Models exposing (PinsList, PinId, Pin)
+import Pins.Models exposing (PinsList)
+import Pinterest.Models exposing (Pin)
 
 
 type InternalMsg
@@ -11,6 +12,7 @@ type InternalMsg
 type OutMsg 
     = AddToGroceryList Pin
     | RemoveFromGroceryList Pin
+    | PinterestApiError
 
 type Msg 
     = ForSelf InternalMsg 
