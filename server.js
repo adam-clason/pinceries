@@ -108,7 +108,7 @@ apiRoutes.post('/authenticate', function(req, res) {
 								groceryList.save(function(err) {
 
 									if (err) {
-										res.json({ success : false, message: "There was an error creating the User"});
+										res.status(500).json({ success : false, message: "There was an error creating the User"});
 									} else {
 										var jwtToken = jwt.sign(jwtUser, app.get('secret'), {
 											expiresIn: 60*40*24
@@ -142,7 +142,7 @@ apiRoutes.post('/authenticate', function(req, res) {
 							});
 						}
 					} else {
-						res.json({ success: false, message: "There was an internal error authorizing this user"});
+						res.status(500).json({ success: false, message: "There was an internal error authorizing this user"});
 					}
 					
 				});
@@ -151,7 +151,7 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 
 		}).on('error', function(err) {
-			res.json({ success: false, message: "There as an error authorizing this user"});
+			res.status(500).json({ success: false, message: "There as an error authorizing this user"});
 		}).end();
 
 
@@ -214,7 +214,7 @@ apiRoutes.post('/groceries/:listId', function(req, res) {
 
 				groceryList.save(function(err) {
 					if (err) {
-						res.json({ success: false, message: "Error saving grocery list" });
+						res.status(500).json({ success: false, message: "Error saving grocery list" });
 					} else {
 						res.json({ success: true, message: "Success!" });
 					}
@@ -228,7 +228,7 @@ apiRoutes.post('/groceries/:listId', function(req, res) {
 
 				groceryList.save(function(err) {
 					if (err) {
-						res.json({ success: false, message: "Error saving grocery list" });
+						res.status(500).json({ success: false, message: "Error saving grocery list" });
 					} else {
 						res.json({ success: true, message: "Success!" });
 					}
@@ -272,7 +272,7 @@ apiRoutes.post('/groceries/:listId/ingredients', function(req, res) {
 
 			groceryList.save(function(err, updated) {
 				if (err) {
-					res.json({ success: false, message: ""})
+					res.status(500).json({ success: false, message: ""})
 				} else {
 					res.json({ success: true, message: "Saved ingredients successfully!" });
 				}
@@ -282,11 +282,44 @@ apiRoutes.post('/groceries/:listId/ingredients', function(req, res) {
 		} else {
 			res.status(404).json({
 				success: false,
-				message: "Error updating grocery list"
+				message: "Grocery List Not Found"
 			})
 		}
 	});
 
+});
+
+apiRoutes.post('/groceries/:listId/ingredients/:ingredientId', function(req, res) {
+	GroceryList.findOne({
+		_id : req.params.listId,
+		userId : req.user.id
+	}, function(err, groceryList) {
+		if (groceryList) {
+
+			groceryList.ingredients = groceryList.ingredients.map(function(ingredient) {
+				if (ingredient._id == req.params.ingredientId ) {
+					return req.body; 
+				} else {
+					return ingredient; 
+				}
+			});
+
+			groceryList.save(function(err, updated) {
+				if (err) {
+					res.status(500).json({ success: false, message: ""})
+				} else {
+					res.json({ success: true, message: "Saved ingredients successfully!" });
+				}
+ 
+			});
+
+		} else {
+			res.status(404).json({
+				success: false,
+				message: "Grocery List Not Found"
+			})
+		}
+	});
 });
 
 
